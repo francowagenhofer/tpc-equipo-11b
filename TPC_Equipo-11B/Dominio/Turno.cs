@@ -8,16 +8,26 @@ namespace Dominio {
     public class Turno {
 
         public int Id { get; set; }
-        public int Numero { get; set; }
+        
+        public string Codigo { get; set; }
+        
         public int PacienteId { get; set; }
+        
         public int MedicoId { get; set; }
-        public int Especialidad { get; set; }
+
         public DateTime FechaHora { get; set; }
-        public string ObservacionesPaciente { get; set; }
-        public string ObservacionesMedico { get; set; }
-        public EstadoTurno Estado { get; set; } = EstadoTurno.nuevo;
+
+        public int EstadoTurnoId { get; set; }
+
+        public DateTime FechaCreacion { get; set; }
+
         public DateTime FechaModificacion { get; set; } = DateTime.Now;
-        public DateTime? FechaModificacion { get; set; }
+
+        public Paciente Paciente { get; set; }
+
+        public Medico Medico { get; set; }
+
+        public EstadoTurno EstadoTurno { get; set; }
 
     }
 }
