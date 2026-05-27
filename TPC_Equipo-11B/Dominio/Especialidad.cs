@@ -5,13 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Dominio {
-    public class Especialidad {
+    public class Especialidad 
+    {
 
         public int Id { get; set; }
         public string Nombre { get; set; }
+        public string Descripcion { get; set; }
         public bool Activo { get; set; }
+        public virtual ICollection<MedicoEspecialidad> MedicoEspecialidades { get; set; }
 
+        public Especialidad() {
 
+            MedicoEspecialidades = new HashSet<MedicoEspecialidad>();
+        
+        }
 
     }
 }
