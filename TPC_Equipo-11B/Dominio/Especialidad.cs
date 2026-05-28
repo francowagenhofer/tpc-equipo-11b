@@ -15,14 +15,14 @@ namespace Dominio {
         public string Descripcion { get; set; } 
 
         public bool Activo { get; set; }
-        public virtual ICollection<MedicoEspecialidad> MedicoEspecialidades { get; set; }
 
-        public Especialidad() {
+        //public virtual ICollection<MedicoEspecialidad> MedicoEspecialidades { get; set; }
 
-            MedicoEspecialidades = new HashSet<MedicoEspecialidad>();
+        //public Especialidad() {
+
+        //    MedicoEspecialidades = new HashSet<MedicoEspecialidad>();
         
-        }
-
+        //}
 
     }
 }

@@ -17,16 +17,16 @@ namespace Dominio {
         public string Direccion { get; set; }      
         public string ObraSocial { get; set; }      
         public bool Activo { get; set; } = true;
-        public virtual ICollection<Turno> Turnos { get; set; }
-        public virtual ICollection<HistoriaClinica> HistoriasClinicas { get; set; }
 
+        //public virtual ICollection<Turno> Turnos { get; set; }
+        //public virtual ICollection<HistoriaClinica> HistoriasClinicas { get; set; }
 
-        public Paciente() {
+        //public Paciente() {
 
-            Turnos = new HashSet<Turno>();
-            HistoriasClinicas = new HashSet<HistoriaClinica>();
+        //    Turnos = new HashSet<Turno>();
+        //    HistoriasClinicas = new HashSet<HistoriaClinica>();
         
-        }
+        //}
 
     }
 }
