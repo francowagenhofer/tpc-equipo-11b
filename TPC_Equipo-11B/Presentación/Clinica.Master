@@ -43,33 +43,35 @@
                     </li>
 
                     <li>
-                        <a href="Pacientes.aspx" class="opcion-menu">
-                            <i class="bi bi-people"></i>
-                            <span>Pacientes</span> 
+                        <a href="Especialidades.aspx" class="opcion-menu">
+                            <i class="bi bi-journal-medical"></i>
+                            <span>Especialidades</span>
                         </a>
                     </li>
-
                     <li>
                         <a href="Medicos.aspx" class="opcion-menu">
                             <i class="bi bi-heart-pulse"></i>
                             <span>Médicos</span>
                         </a>
                     </li>
-
+                    <li>
+                        <a href="Pacientes.aspx" class="opcion-menu">
+                            <i class="bi bi-people"></i>
+                            <span>Pacientes</span>
+                        </a>
+                    </li>
                     <li>
                         <a href="Turnos.aspx" class="opcion-menu">
                             <i class="bi bi-calendar-check"></i>
                             <span>Turnos</span>
                         </a>
                     </li>
-
                     <li>
-                        <a href="Especialidades.aspx" class="opcion-menu">
+                        <a href="Usuarios.aspx" class="opcion-menu">
                             <i class="bi bi-journal-medical"></i>
-                            <span>Especialidades</span>
+                            <span>Usuarios</span>
                         </a>
                     </li>
-
                 </ul>
 
                 <div class="menu-salir">
@@ -87,8 +89,8 @@
                 <!-- BARRA SUPERIOR -->
                 <header class="barra-superior">
 
-                    <div class="titulo-sistema">
-                        Sistema Clínica
+                    <div class="titulo-pagina">
+                        Home
                     </div>
 
                     <div class="usuario-sistema">
@@ -102,6 +104,7 @@
                 <main class="contenido">
 
                     <asp:ContentPlaceHolder ID="contenido" runat="server" />
+                    
                     <footer class="footer">
                         Sistema Clínica - 2026
                     </footer>

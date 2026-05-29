@@ -11,7 +11,7 @@ namespace Presentación
 {
 
 
-    public partial class Turnos
+    public partial class Especialidades
     {
     }
 }
