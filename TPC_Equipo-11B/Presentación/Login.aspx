@@ -6,30 +6,51 @@
     <title>Login - Clínica</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="Assets/CSS/master.css" rel="stylesheet" />
-    <link href="Assets/CSS/login.css" rel="stylesheet" />
-
+    <link href="Assets/CSS/Acceso.css" rel="stylesheet" />
 </head>
 
 <body>
 
     <form id="form1" runat="server">
 
-        <div class="contenedor-login">
+        <div class="contenedor-acceso">
 
-            <div class="login-card">
+            <div class="tarjeta-acceso">
 
-                <h3 class="text-center mb-3">Iniciar Sesión</h3>
+                <h3 class="titulo-acceso">Sistema Clínica</h3>
 
-                <asp:TextBox ID="txtUsuario" runat="server" CssClass="form-control mb-2" placeholder="Usuario" />
-                <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" CssClass="form-control mb-3" placeholder="Contraseña" />
+                <p class="text-center text-muted mb-3">
+                    Iniciar sesión
+                </p>
 
-                <asp:Button ID="btnLogin" runat="server" Text="Ingresar" CssClass="btn-login" />
+                <div class="mb-3">
+                    <asp:TextBox ID="TextBox1"
+                        runat="server"
+                        CssClass="form-control"
+                        placeholder="Usuario" />
+                </div>
+
+                <div class="mb-3">
+                    <asp:TextBox ID="TextBox2"
+                        runat="server"
+                        TextMode="Password"
+                        CssClass="form-control"
+                        placeholder="Contraseña" />
+                </div>
+
+                <asp:Button ID="Button1"
+                    runat="server"
+                    Text="Ingresar"
+                    CssClass="boton-acceso" />
+
+                <div class="link-acceso">
+                    ¿No tenés cuenta?
+            <a href="Registro.aspx">Registrarse</a>
+                </div>
 
             </div>
 
         </div>
-
     </form>
 
 </body>
