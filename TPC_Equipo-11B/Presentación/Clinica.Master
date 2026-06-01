@@ -102,14 +102,12 @@
 
                 <!-- CONTENIDO DINAMICO -->
                 <main class="contenido">
-
                     <asp:ContentPlaceHolder ID="contenido" runat="server" />
-                    
-                    <footer class="footer">
-                        Sistema Clínica - 2026
-                    </footer>
-
                 </main>
+
+                <footer class="footer">
+                    Sistema Clínica - 2026
+                </footer>
 
             </div>
 

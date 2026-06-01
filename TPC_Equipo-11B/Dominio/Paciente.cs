@@ -18,15 +18,5 @@ namespace Dominio {
         public string ObraSocial { get; set; }      
         public bool Activo { get; set; } = true;
 
-        //public virtual ICollection<Turno> Turnos { get; set; }
-        //public virtual ICollection<HistoriaClinica> HistoriasClinicas { get; set; }
-
-        //public Paciente() {
-
-        //    Turnos = new HashSet<Turno>();
-        //    HistoriasClinicas = new HashSet<HistoriaClinica>();
-        
-        //}
-
     }
 }

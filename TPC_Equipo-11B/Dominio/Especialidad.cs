@@ -16,13 +16,5 @@ namespace Dominio {
 
         public bool Activo { get; set; }
 
-        //public virtual ICollection<MedicoEspecialidad> MedicoEspecialidades { get; set; }
-
-        //public Especialidad() {
-
-        //    MedicoEspecialidades = new HashSet<MedicoEspecialidad>();
-        
-        //}
-
     }
 }

@@ -7,6 +7,7 @@
             color: #495057;
             font-weight: 600;
         }
+
         .badge-activo {
             background-color: #e8f5e9;
             color: #2e7d32;
@@ -25,13 +26,13 @@
                 <h2 class="fw-bold mb-1">Médicos</h2>
                 <p class="text-muted mb-0">Gestión de médicos y sus especialidades.</p>
             </div>
-            
+
             <a href="NuevoMedico.aspx" class="btn btn-primary d-flex align-items-center gap-2">
-                <i class="bi bi-person-plus-fill"></i> Nuevo Médico
+                <i class="bi bi-person-plus-fill"></i>Nuevo Médico
             </a>
         </div>
 
-        
+
         <div class="row mb-3">
             <div class="col-md-4">
                 <div class="input-group">
@@ -42,35 +43,45 @@
         </div>
 
         <div class="table-responsive">
-            <asp:GridView ID="dgvMedicos" runat="server" 
-                CssClass="table table-hover align-middle tabla-personalizada" 
-                AutoGenerateColumns="false" 
+            <asp:GridView ID="dgvMedicos" runat="server"
+                CssClass="table table-hover align-middle tabla-personalizada"
+                AutoGenerateColumns="false"
                 GridLines="None"
                 DataKeyNames="Id">
                 <Columns>
-                    <asp:BoundField HeaderText="Matrícula" DataField="Matricula" ItemStyle-CssClass="fw-semibold" />
-                    
                     <asp:TemplateField HeaderText="Nombre Completo">
+
                         <ItemTemplate>
                             <%# Eval("Usuario.Apellido") %>, <%# Eval("Usuario.Nombre") %>
                         </ItemTemplate>
                     </asp:TemplateField>
+
+                    <asp:BoundField HeaderText="Matrícula" DataField="Matricula" ItemStyle-CssClass="fw-semibold" />
+
+                    <asp:TemplateField HeaderText="Especialidad">
+                        <ItemTemplate>
+                            <%# Eval("Especialidad.Nombre") %>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
                     <asp:TemplateField HeaderText="Email">
                         <ItemTemplate>
                             <%# Eval("Usuario.Email") %>
                         </ItemTemplate>
                     </asp:TemplateField>
-                    <asp:TemplateField HeaderText="Teléfono">
+
+                    <%--                    <asp:TemplateField HeaderText="Teléfono">
                         <ItemTemplate>
                             <%# Eval("Usuario.Telefono") %>
                         </ItemTemplate>
-                    </asp:TemplateField>
-                    
+                    </asp:TemplateField>--%>
+
                     <asp:TemplateField HeaderText="Estado">
                         <ItemTemplate>
                             <span class="badge-activo">Activo</span>
                         </ItemTemplate>
                     </asp:TemplateField>
+
                     <asp:TemplateField HeaderText="Acciones">
                         <ItemTemplate>
                             <div class="d-flex gap-2">
@@ -83,8 +94,10 @@
                             </div>
                         </ItemTemplate>
                     </asp:TemplateField>
+
                 </Columns>
             </asp:GridView>
         </div>
+    </div>
 
 </asp:Content>
