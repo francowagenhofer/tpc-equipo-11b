@@ -21,6 +21,8 @@ namespace Presentación
 
         protected void Button1_Click(object sender, EventArgs e)
         {
+
+
             if (string.IsNullOrEmpty(TextBox1.Text) || string.IsNullOrEmpty(TextBox2.Text)) {
 
                 lblMensajeError.Text = "Por favor, completa todos los campos.";
