@@ -38,6 +38,10 @@
                         placeholder="Contraseña" />
                 </div>
 
+                <div class="mb-3 text-center">
+                    <asp:Label ID="lblMensajeError" runat="server" CssClass="text-danger" Visible="false" />
+                </div>
+
                 <asp:Button ID="Button1"
                     runat="server"
                     Text="Ingresar"

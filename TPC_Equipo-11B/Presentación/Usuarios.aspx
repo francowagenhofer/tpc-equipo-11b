@@ -2,7 +2,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="Contenido" runat="server">
+<asp:Content ID="Content2" ContentPlaceHolderID="contenido" runat="server">
 
     <div class="card card-custom p-4">
         <h2>Usuarios</h2>
