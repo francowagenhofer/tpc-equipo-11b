@@ -133,43 +133,12 @@ namespace Negocio
         {
             ValidarAlta(medico);
 
-            int idUsuario = AgregarUsuario(medico.Usuario);
+            UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
+            
+            int idUsuario = usuarioNegocio.AgregarUsuario(medico.Usuario);     
             int idMedico = AgregarRegistroMedico(idUsuario, medico.Matricula);
 
             AgregarEspecialidad(idMedico, medico.Especialidad.Id);
-        }
-        private int AgregarUsuario(Usuario usuario)
-        {
-            AccesoDatos datos = new AccesoDatos();
-
-            try
-            {
-                datos.setearConsulta(@"INSERT INTO Usuarios (Nombre, Apellido, Email, Telefono, Username, PasswordHash, IDRol, Activo)
-                                        VALUES (@nombre, @apellido, @email, @telefono, @username, @passHash, 3, 1);
-                                        SELECT SCOPE_IDENTITY(); ");
-
-                datos.setearParametro("@nombre", usuario.Nombre);
-                datos.setearParametro("@apellido", usuario.Apellido);
-                datos.setearParametro("@email", usuario.Email);
-                datos.setearParametro("@telefono",
-                    string.IsNullOrEmpty(usuario.Telefono)
-                    ? (object)DBNull.Value
-                    : usuario.Telefono);
-
-                datos.setearParametro("@username", usuario.Username);
-                datos.setearParametro("@passHash", usuario.Password);
-
-                datos.ejecutarLectura();
-
-                if (datos.Lector.Read())
-                    return Convert.ToInt32(datos.Lector[0]);
-
-                throw new Exception("No se pudo obtener el ID del usuario.");
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
         }
         private int AgregarRegistroMedico(int idUsuario, string matricula)
         {
@@ -218,36 +187,11 @@ namespace Negocio
         {
             ValidarModificacion(medico);
 
-            ModificarUsuario(medico.Usuario);
+            UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
+            usuarioNegocio.ModificarUsuario(medico.Usuario);
             ModificarRegistroMedico(medico);
+
             ModificarEspecialidad(medico.Id, medico.Especialidad.Id);
-        }
-        private void ModificarUsuario(Usuario usuario)
-        {
-            AccesoDatos datos = new AccesoDatos();
-
-            try
-            {
-                datos.setearConsulta("UPDATE Usuarios SET Nombre = @nombre, Apellido = @apellido, Email = @email, Telefono = @telefono, Username = @username WHERE IDUsuario = @idUsuario");
-
-                datos.setearParametro("@idUsuario", usuario.Id);
-                datos.setearParametro("@nombre", usuario.Nombre);
-                datos.setearParametro("@apellido", usuario.Apellido);
-                datos.setearParametro("@email", usuario.Email);
-
-                datos.setearParametro("@telefono",
-                    string.IsNullOrEmpty(usuario.Telefono)
-                    ? (object)DBNull.Value
-                    : usuario.Telefono);
-
-                datos.setearParametro("@username", usuario.Username);
-
-                datos.ejecutarAccion();
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
         }
         private void ModificarRegistroMedico(Medico medico)
         {
@@ -308,29 +252,12 @@ namespace Negocio
         // VALIDACIONES
         private void ValidarAlta(Medico medico)
         {
-            if (string.IsNullOrWhiteSpace(medico.Usuario.Nombre))
-                throw new Exception("Debe ingresar el nombre.");
+            UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
 
-            if (string.IsNullOrWhiteSpace(medico.Usuario.Apellido))
-                throw new Exception("Debe ingresar el apellido.");
-
-            if (string.IsNullOrWhiteSpace(medico.Usuario.Username))
-                throw new Exception("Debe ingresar un nombre de usuario.");
-
-            if (string.IsNullOrWhiteSpace(medico.Usuario.Email))
-                throw new Exception("Debe ingresar un email.");
+            usuarioNegocio.ValidarAlta(medico.Usuario);
 
             if (string.IsNullOrWhiteSpace(medico.Matricula))
                 throw new Exception("Debe ingresar la matrícula.");
-
-            if (ExisteUsername(medico.Usuario.Username))
-                throw new Exception("El nombre de usuario ya existe.");
-
-            if (string.IsNullOrWhiteSpace(medico.Usuario.Password))
-                throw new Exception("Debe ingresar una contraseña.");
-
-            if (ExisteEmail(medico.Usuario.Email))
-                throw new Exception("El email ya está registrado.");
 
             if (ExisteMatricula(medico.Matricula))
                 throw new Exception("La matrícula ya está registrada.");
@@ -340,26 +267,12 @@ namespace Negocio
         }
         private void ValidarModificacion(Medico medico)
         {
-            if (string.IsNullOrWhiteSpace(medico.Usuario.Nombre))
-                throw new Exception("Debe ingresar el nombre.");
+            UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
 
-            if (string.IsNullOrWhiteSpace(medico.Usuario.Apellido))
-                throw new Exception("Debe ingresar el apellido.");
-
-            if (string.IsNullOrWhiteSpace(medico.Usuario.Username))
-                throw new Exception("Debe ingresar un nombre de usuario.");
-
-            if (string.IsNullOrWhiteSpace(medico.Usuario.Email))
-                throw new Exception("Debe ingresar un email.");
+            usuarioNegocio.ValidarModificacion(medico.Usuario);
 
             if (string.IsNullOrWhiteSpace(medico.Matricula))
                 throw new Exception("Debe ingresar la matrícula.");
-
-            if (ExisteUsername(medico.Usuario.Username, medico.Usuario.Id))
-                throw new Exception("El nombre de usuario ya existe.");
-
-            if (ExisteEmail(medico.Usuario.Email, medico.Usuario.Id))
-                throw new Exception("El email ya está registrado.");
 
             if (ExisteMatricula(medico.Matricula, medico.Id))
                 throw new Exception("La matrícula ya está registrada.");
@@ -378,101 +291,8 @@ namespace Negocio
                 throw new Exception("El médico ya se encuentra inactivo.");
         }
 
-        // Validaciones de Usuario
-        private bool ExisteUsername(string username)
-        {
-            AccesoDatos datos = new AccesoDatos();
+        // falta mejorar validaciones de eliminación (ej: verificar que no tenga turnos activos)
 
-            try
-            {
-                datos.setearConsulta(
-                    "SELECT IDUsuario " +
-                    "FROM Usuarios " +
-                    "WHERE Username = @username");
-
-                datos.setearParametro("@username", username);
-
-                datos.ejecutarLectura();
-
-                return datos.Lector.Read();
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
-        }
-        private bool ExisteEmail(string email)
-        {
-            AccesoDatos datos = new AccesoDatos();
-
-            try
-            {
-                datos.setearConsulta(
-                    "SELECT IDUsuario " +
-                    "FROM Usuarios " +
-                    "WHERE Email = @email");
-
-                datos.setearParametro("@email", email);
-
-                datos.ejecutarLectura();
-
-                return datos.Lector.Read();
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
-        }
-        private bool ExisteUsername(string username, int idUsuario)
-        {
-            AccesoDatos datos = new AccesoDatos();
-
-            try
-            {
-                datos.setearConsulta(
-                    "SELECT IDUsuario " +
-                    "FROM Usuarios " +
-                    "WHERE Username = @username " +
-                    "AND IDUsuario <> @idUsuario");
-
-                datos.setearParametro("@username", username);
-                datos.setearParametro("@idUsuario", idUsuario);
-
-                datos.ejecutarLectura();
-
-                return datos.Lector.Read();
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
-        }
-        private bool ExisteEmail(string email, int idUsuario)
-        {
-            AccesoDatos datos = new AccesoDatos();
-
-            try
-            {
-                datos.setearConsulta(
-                    "SELECT IDUsuario " +
-                    "FROM Usuarios " +
-                    "WHERE Email = @email " +
-                    "AND IDUsuario <> @idUsuario");
-
-                datos.setearParametro("@email", email);
-                datos.setearParametro("@idUsuario", idUsuario);
-
-                datos.ejecutarLectura();
-
-                return datos.Lector.Read();
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
-        }
-
-        // Validaciones de Medico
         private bool ExisteMatricula(string matricula)
         {
             AccesoDatos datos = new AccesoDatos();
