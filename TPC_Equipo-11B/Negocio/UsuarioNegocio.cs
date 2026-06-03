@@ -294,8 +294,7 @@ namespace Negocio {
                         SELECT COUNT(*) 
                         FROM Turnos
                         WHERE (IDMedico = @idUsuario OR IDPaciente = @idUsuario)
-                        AND FechaHora >= GETDATE()
-                        AND IDEstadoTurno IN (1,2,4)");
+                        AND FechaHora >= GETDATE()");
 
                 datos.setearParametro("@idUsuario", idUsuario);
                 datos.ejecutarLectura();

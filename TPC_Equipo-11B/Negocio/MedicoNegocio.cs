@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Datos;
 using Dominio;
-using Datos;
+using System;
+using System.Collections.Generic;
 
 namespace Negocio
 {
@@ -134,8 +131,8 @@ namespace Negocio
             ValidarAlta(medico);
 
             UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
-            
-            int idUsuario = usuarioNegocio.RegistrarUsuario(medico.Usuario);     
+
+            int idUsuario = usuarioNegocio.RegistrarUsuario(medico.Usuario);
             int idMedico = AgregarRegistroMedico(idUsuario, medico.Matricula);
 
             AgregarEspecialidad(idMedico, medico.Especialidad.Id);
@@ -289,9 +286,31 @@ namespace Negocio
 
             if (!medico.Activo)
                 throw new Exception("El médico ya se encuentra inactivo.");
-        }
 
-        // falta mejorar validaciones de eliminación (ej: verificar que no tenga turnos activos)
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT COUNT(*)
+                    FROM Turnos
+                    WHERE IDMedico = @idMedico
+                    AND FechaHora >= GETDATE()");
+
+                datos.setearParametro("@idMedico", idMedico);
+                datos.ejecutarLectura();
+
+                datos.Lector.Read();
+                int cantidad = Convert.ToInt32(datos.Lector[0]);
+
+                if (cantidad > 0)
+                    throw new Exception("No se puede eliminar el médico porque tiene turnos activos o futuros.");
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
 
         private bool ExisteMatricula(string matricula)
         {
