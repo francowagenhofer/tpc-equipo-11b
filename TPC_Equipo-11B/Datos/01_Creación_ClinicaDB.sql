@@ -253,24 +253,3 @@ CREATE TABLE HistoriaClinica (
 );
 GO
 
-----------------------------------------------
---           DATOS INICIALES                       
-----------------------------------------------
-
-INSERT INTO Roles (Nombre)
-VALUES
-('Administrador'),
-('Recepcionista'),
-('Medico');
-GO
-
-INSERT INTO EstadoTurno (Nombre)
-VALUES
-('Pendiente'),
-('Confirmado'),
-('Cancelado'),
-('Reprogramado'),
-('No Asistio'),
-('Finalizado');
-GO
-

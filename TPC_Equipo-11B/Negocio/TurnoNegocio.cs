@@ -66,8 +66,6 @@ namespace Negocio {
             }
         }
 
-
-        
         public bool CancelarTurno(int idTurno)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -88,7 +86,6 @@ namespace Negocio {
                 datos.cerrarConexion();
             }
         }
-
 
         public bool AgregarTurno(Turno nuevo)
         {

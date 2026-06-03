@@ -61,7 +61,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ClinicaDB.sql" />
+    <Content Include="01_Creación_ClinicaDB.sql" />
+    <Content Include="02_InsertDatosIniciales_ClinicaDB.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
