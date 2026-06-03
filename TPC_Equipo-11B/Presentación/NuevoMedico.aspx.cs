@@ -58,17 +58,9 @@ namespace Presentación
                 nuevoMedico.Especialidad.Id = int.Parse(ddlEspecialidad.SelectedValue);
 
                 MedicoNegocio negocio = new MedicoNegocio();
+                negocio.AgregarMedico(nuevoMedico);
 
-                if (negocio.AgregarMedico(nuevoMedico))
-                {
-                    Response.Redirect("Medicos.aspx", false);
-                }
-                else
-                {
-                    lblMensaje.Text = "No se pudo registrar al médico.";
-                    lblMensaje.CssClass = "alert alert-warning d-block text-center";
-                    lblMensaje.Visible = true;
-                }
+                Response.Redirect("Medicos.aspx", false);
             }
             catch (Exception ex)
             {

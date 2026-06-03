@@ -70,15 +70,12 @@
                         </ItemTemplate>
                     </asp:TemplateField>
 
-                    <%--                    <asp:TemplateField HeaderText="Teléfono">
-                        <ItemTemplate>
-                            <%# Eval("Usuario.Telefono") %>
-                        </ItemTemplate>
-                    </asp:TemplateField>--%>
-
                     <asp:TemplateField HeaderText="Estado">
                         <ItemTemplate>
-                            <span class="badge-activo">Activo</span>
+                            <%--<span class="badge-activo">Activo</span>--%>
+                            <span class='<%# (bool)Eval("Activo") ? "badge bg-success" : "badge bg-secondary" %>'>
+                               <%# (bool)Eval("Activo") ? "Activo" : "Inactivo" %>
+                            </span>
                         </ItemTemplate>
                     </asp:TemplateField>
 
