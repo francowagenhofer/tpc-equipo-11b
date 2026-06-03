@@ -7,7 +7,53 @@ using Dominio;
 using Datos;
 
 namespace Negocio {
+
     public class UsuarioNegocio {
+
+        // LOGIN
+        public Usuario ValidarLogin(string username, string password) {
+
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("SELECT IDUsuario, Nombre, Apellido, Email,Telefono, Username, PasswordHash, IdRol, Activo FROM Usuarios WHERE Username = @user AND PasswordHash = @pass AND Activo = 1");
+                datos.setearParametro("@user", username);
+                datos.setearParametro("@pass", password);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read()) {
+
+                    Usuario aux = new Usuario();
+                    aux.Id = (int)datos.Lector["IDUsuario"];
+                    aux.Nombre = (string)datos.Lector["Nombre"];
+                    aux.Apellido = (string)datos.Lector["Apellido"];
+                    aux.Email = (string)datos.Lector["Email"];
+                    aux.Telefono = datos.Lector["Telefono"] != DBNull.Value ? (string)datos.Lector["Telefono"] : "";
+                    aux.Username = (string)datos.Lector["Username"];
+                    aux.Password = (string)datos.Lector["PasswordHash"];
+                    aux.RolId = (int)datos.Lector["IDRol"];
+                    aux.Activo = (bool)datos.Lector["Activo"];
+
+                    return aux;
+
+                }
+
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally 
+            {
+                datos.cerrarConexion();
+            }
+        
+        
+        }
 
         // LISTADO
         public List<Usuario> ListarUsuarios()
@@ -78,38 +124,7 @@ namespace Negocio {
         }
 
         // ALTA
-        public bool RegistrarUsuario(Usuario nuevo) {
-
-            AccesoDatos datos = new AccesoDatos();
-
-            try
-            {
-                datos.setearConsulta("INSERT INTO Usuarios (Nombre, Apellido, Email, Telefono, Username, PasswordHash, IdRol, Activo) VALUES (@nombre, @apellido, @email, @telefono, @username, @passHash, @idRol, 1)");
-                datos.setearParametro("@nombre", nuevo.Nombre);
-                datos.setearParametro("@apellido", nuevo.Apellido);
-                datos.setearParametro("@email", nuevo.Email);
-                datos.setearParametro("@telefono", string.IsNullOrEmpty(nuevo.Telefono) ? (object)DBNull.Value : nuevo.Telefono);
-                datos.setearParametro("@username", nuevo.Username);
-                datos.setearParametro("@passHash", nuevo.Password);
-                datos.setearParametro("@idRol", nuevo.RolId);
-
-                datos.ejecutarAccion();
-                return true;
-
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-            finally 
-            {
-                datos.cerrarConexion();
-            }
-        
-        
-        }
-        public int AgregarUsuario(Usuario usuario)
+        public int RegistrarUsuario(Usuario nuevo) 
         {
             AccesoDatos datos = new AccesoDatos();
 
@@ -119,17 +134,17 @@ namespace Negocio {
                                         VALUES (@nombre, @apellido, @email, @telefono, @username, @passHash, @idRol, 1); 
                                         SELECT SCOPE_IDENTITY(); ");
 
-                datos.setearParametro("@nombre", usuario.Nombre);
-                datos.setearParametro("@apellido", usuario.Apellido);
-                datos.setearParametro("@email", usuario.Email);
+                datos.setearParametro("@nombre", nuevo.Nombre);
+                datos.setearParametro("@apellido", nuevo.Apellido);
+                datos.setearParametro("@email", nuevo.Email);
                 datos.setearParametro("@telefono",
-                    string.IsNullOrEmpty(usuario.Telefono)
+                    string.IsNullOrEmpty(nuevo.Telefono)
                     ? (object)DBNull.Value
-                    : usuario.Telefono);
+                    : nuevo.Telefono);
 
-                datos.setearParametro("@username", usuario.Username);
-                datos.setearParametro("@passHash", usuario.Password);
-                datos.setearParametro("@idRol", usuario.RolId);
+                datos.setearParametro("@username", nuevo.Username);
+                datos.setearParametro("@passHash", nuevo.Password);
+                datos.setearParametro("@idRol", nuevo.RolId);
 
                 datos.ejecutarLectura();
 
@@ -142,8 +157,8 @@ namespace Negocio {
             {
                 datos.cerrarConexion();
             }
+
         }
-        // falta mejorar el alta de usuario-medico
 
         // MODIFICACION
         public void ModificarUsuario(Usuario usuario)
@@ -174,8 +189,30 @@ namespace Negocio {
                 datos.cerrarConexion();
             }
         }
+        public void CambiarRolUsuario(int idUsuario, int nuevoRolId, Usuario usuarioLogueado)
+        {
+            AccesoDatos datos = new AccesoDatos();
 
-        // este metodo modifica usuarios medicos, ya que falta la modificacion de rol pero no tendria que modificarse eso.. 
+            try
+            {
+                if (usuarioLogueado.RolId != 1)
+                    throw new Exception("No tiene permisos para cambiar el rol del usuario.");
+
+                if (nuevoRolId <= 0)
+                    throw new Exception("Rol inválido.");
+
+                datos.setearConsulta(@" UPDATE Usuarios SET IDRol = @nuevoRol WHERE IDUsuario = @idUsuario");
+
+                datos.setearParametro("@nuevoRol", nuevoRolId);
+                datos.setearParametro("@idUsuario", idUsuario);
+
+                datos.ejecutarAccion();
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
 
         // BAJA
         public void EliminarUsuario(int idUsuario)
@@ -196,50 +233,6 @@ namespace Negocio {
         }
 
         // VALIDACIONES 
-        public Usuario ValidarLogin(string username, string password) {
-
-            AccesoDatos datos = new AccesoDatos();
-
-            try
-            {
-                datos.setearConsulta("SELECT IDUsuario, Nombre, Apellido, Email,Telefono, Username, PasswordHash, IdRol, Activo FROM Usuarios WHERE Username = @user AND PasswordHash = @pass AND Activo = 1");
-                datos.setearParametro("@user", username);
-                datos.setearParametro("@pass", password);
-                datos.ejecutarLectura();
-
-                if (datos.Lector.Read()) {
-
-                    Usuario aux = new Usuario();
-                    aux.Id = (int)datos.Lector["IDUsuario"];
-                    aux.Nombre = (string)datos.Lector["Nombre"];
-                    aux.Apellido = (string)datos.Lector["Apellido"];
-                    aux.Email = (string)datos.Lector["Email"];
-                    aux.Telefono = datos.Lector["Telefono"] != DBNull.Value ? (string)datos.Lector["Telefono"] : "";
-                    aux.Username = (string)datos.Lector["Username"];
-                    aux.Password = (string)datos.Lector["PasswordHash"];
-                    aux.RolId = (int)datos.Lector["IDRol"];
-                    aux.Activo = (bool)datos.Lector["Activo"];
-
-                    return aux;
-
-                }
-
-                return null;
-
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-            finally 
-            {
-                datos.cerrarConexion();
-            }
-        
-        
-        }
-
         public void ValidarAlta(Usuario usuario)
         {
             if (string.IsNullOrWhiteSpace(usuario.Nombre))
@@ -283,7 +276,6 @@ namespace Negocio {
             if (ExisteEmail(usuario.Email, usuario.Id))
                 throw new Exception("El email ya está registrado.");
         }
-
         public void ValidarEliminacion(int idUsuario)
         {
             Usuario usuario = ObtenerUsuarioPorId(idUsuario);
@@ -293,9 +285,32 @@ namespace Negocio {
 
             if (!usuario.Activo)
                 throw new Exception("El usuario ya se encuentra inactivo.");
-        }
 
-        // falta mejorar validaciones de eliminación (ej: verificar que no tenga turnos activos)
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                        SELECT COUNT(*) 
+                        FROM Turnos
+                        WHERE (IDMedico = @idUsuario OR IDPaciente = @idUsuario)
+                        AND FechaHora >= GETDATE()
+                        AND IDEstadoTurno IN (1,2,4)");
+
+                datos.setearParametro("@idUsuario", idUsuario);
+                datos.ejecutarLectura();
+
+                datos.Lector.Read();
+                int cantidadTurnos = Convert.ToInt32(datos.Lector[0]);
+
+                if (cantidadTurnos > 0)
+                    throw new Exception("No se puede eliminar el usuario porque tiene turnos activos o futuros.");
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
 
         private bool ExisteUsername(string username)
         {

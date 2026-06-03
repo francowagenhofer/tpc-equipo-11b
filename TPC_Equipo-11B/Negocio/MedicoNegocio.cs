@@ -135,7 +135,7 @@ namespace Negocio
 
             UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
             
-            int idUsuario = usuarioNegocio.AgregarUsuario(medico.Usuario);     
+            int idUsuario = usuarioNegocio.RegistrarUsuario(medico.Usuario);     
             int idMedico = AgregarRegistroMedico(idUsuario, medico.Matricula);
 
             AgregarEspecialidad(idMedico, medico.Especialidad.Id);
