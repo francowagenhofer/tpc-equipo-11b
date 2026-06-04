@@ -41,8 +41,12 @@ CREATE TABLE Usuarios (
     Username VARCHAR(50) NOT NULL UNIQUE,
 
     PasswordHash VARCHAR(255) NOT NULL,
+	
+	ImagenUrl VARCHAR(300) NULL, 
 
-    IDRol INT NOT NULL,
+	FechaAlta DATETIME NOT NULL DEFAULT GETDATE(),
+    
+	IDRol INT NOT NULL,
 
     Activo BIT NOT NULL DEFAULT 1,
 
@@ -53,29 +57,62 @@ CREATE TABLE Usuarios (
 GO
 
 ----------------------------------------------
+--                GENEROS                        
+----------------------------------------------
+
+CREATE TABLE Generos (
+    IDGenero INT PRIMARY KEY IDENTITY(1,1),
+
+    Descripcion VARCHAR(50) NOT NULL UNIQUE,
+
+    Activo BIT NOT NULL DEFAULT 1
+);
+GO
+
+----------------------------------------------
+--          OBRASSOCIALES                    
+----------------------------------------------
+CREATE TABLE ObrasSociales (
+    IDObraSocial INT PRIMARY KEY IDENTITY(1,1),
+
+    Nombre VARCHAR(100) NOT NULL UNIQUE,
+
+    Activo BIT NOT NULL DEFAULT 1
+);
+GO
+
+----------------------------------------------
 --                PACIENTES                        
 ----------------------------------------------
 
 CREATE TABLE Pacientes (
     IDPaciente INT PRIMARY KEY IDENTITY(1,1),
 
-    Nombre VARCHAR(100) NOT NULL,
-
-    Apellido VARCHAR(100) NOT NULL,
+    IDUsuario INT NOT NULL UNIQUE,
 
     DNI VARCHAR(20) NOT NULL UNIQUE,
 
     FechaNacimiento DATE NOT NULL,
 
-    Email VARCHAR(150) NOT NULL,
+    Direccion VARCHAR(200) NULL,
 
-    Telefono VARCHAR(30) NOT NULL,
+    IDObraSocial INT NULL,
 
-    Direccion VARCHAR(200),
+    IDGenero INT NULL,
 
-    ObraSocial VARCHAR(100),
+    Activo BIT NOT NULL DEFAULT 1,
 
-    Activo BIT NOT NULL DEFAULT 1
+    CONSTRAINT FK_Pacientes_Usuarios
+        FOREIGN KEY (IDUsuario)
+        REFERENCES Usuarios(IDUsuario),
+
+    CONSTRAINT FK_Pacientes_ObrasSociales
+        FOREIGN KEY (IDObraSocial)
+        REFERENCES ObrasSociales(IDObraSocial),
+
+    CONSTRAINT FK_Pacientes_Generos
+        FOREIGN KEY (IDGenero)
+        REFERENCES Generos(IDGenero)
 );
 GO
 
@@ -181,7 +218,7 @@ GO
 
 CREATE TABLE Turnos (
     IDTurno INT PRIMARY KEY IDENTITY(1,1),
-
+	
     Codigo VARCHAR(20) NOT NULL UNIQUE,
 
     IDPaciente INT NOT NULL,

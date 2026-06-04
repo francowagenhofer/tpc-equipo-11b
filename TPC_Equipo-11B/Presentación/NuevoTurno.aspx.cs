@@ -29,8 +29,7 @@ namespace Presentación {
                 ddlPaciente.Items.Add(new ListItem("-- Seleccione un Paciente --", ""));
                 foreach (var pac in lista)
                 {
-                    
-                    string texto = $"{pac.Apellido}, {pac.Nombre} (DNI: {pac.DNI})";
+                    string texto = $"{pac.Usuario.Apellido}, {pac.Usuario.Nombre} (DNI: {pac.DNI})";
                     ddlPaciente.Items.Add(new ListItem(texto, pac.Id.ToString()));
                 }
             }

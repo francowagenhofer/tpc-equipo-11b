@@ -41,7 +41,6 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-
         public void Agregar(Especialidad nuevaEspecialidad)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -60,7 +59,6 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-
         public void Modificar(Especialidad especialidad)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -80,7 +78,6 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-
         public void Eliminar(int id)
         {
             AccesoDatos datos = new AccesoDatos();

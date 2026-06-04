@@ -7,7 +7,7 @@ namespace Negocio
 {
     public class MedicoNegocio
     {
-        // LISTADO
+        // Listado
         public List<Medico> ListarMedicos()
         {
 
@@ -125,8 +125,8 @@ namespace Negocio
             }
         }
 
-        // ALTA
-        public void AgregarMedico(Medico medico)
+        // Alta
+        public void RegistrarMedico(Medico medico)
         {
             ValidarAlta(medico);
 
@@ -178,8 +178,23 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+        public void ReactivarMedico(int idMedico)
+        {
+            AccesoDatos datos = new AccesoDatos();
 
-        // MODIFICACIÓN
+            try
+            {
+                datos.setearConsulta(@"UPDATE Medicos SET Activo = 1 WHERE IDMedico = @id");
+                datos.setearParametro("@id", idMedico);
+                datos.ejecutarAccion();
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        // Modificación
         public void ModificarMedico(Medico medico)
         {
             ValidarModificacion(medico);
@@ -227,7 +242,7 @@ namespace Negocio
             }
         }
 
-        // BAJA 
+        // Baja lógica
         public void EliminarMedico(int idMedico)
         {
             ValidarEliminacion(idMedico);
@@ -246,7 +261,7 @@ namespace Negocio
             }
         }
 
-        // VALIDACIONES
+        // Validaciones
         private void ValidarAlta(Medico medico)
         {
             UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
@@ -358,7 +373,6 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-
     }
 
 }

@@ -6,23 +6,26 @@ using System.Threading.Tasks;
 using Dominio;
 using Datos;
 
-namespace Negocio {
+namespace Negocio
+{
 
-    public class UsuarioNegocio {
-
-        // LOGIN
-        public Usuario ValidarLogin(string username, string password) {
+    public class UsuarioNegocio
+    {
+        // Login
+        public Usuario ValidarLogin(string username, string password)
+        {
 
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                datos.setearConsulta("SELECT IDUsuario, Nombre, Apellido, Email,Telefono, Username, PasswordHash, IdRol, Activo FROM Usuarios WHERE Username = @user AND PasswordHash = @pass AND Activo = 1");
+                datos.setearConsulta("SELECT IDUsuario, Nombre, Apellido, Email,Telefono, Username, PasswordHash, ImagenUrl, FechaAlta, IdRol, Activo FROM Usuarios WHERE Username = @user AND PasswordHash = @pass AND Activo = 1");
                 datos.setearParametro("@user", username);
                 datos.setearParametro("@pass", password);
                 datos.ejecutarLectura();
 
-                if (datos.Lector.Read()) {
+                if (datos.Lector.Read())
+                {
 
                     Usuario aux = new Usuario();
                     aux.Id = (int)datos.Lector["IDUsuario"];
@@ -32,6 +35,8 @@ namespace Negocio {
                     aux.Telefono = datos.Lector["Telefono"] != DBNull.Value ? (string)datos.Lector["Telefono"] : "";
                     aux.Username = (string)datos.Lector["Username"];
                     aux.Password = (string)datos.Lector["PasswordHash"];
+                    aux.ImagenUrl = datos.Lector["ImagenUrl"] != DBNull.Value ? (string)datos.Lector["ImagenUrl"] : "";
+                    aux.FechaAlta = (DateTime)datos.Lector["FechaAlta"];
                     aux.RolId = (int)datos.Lector["IDRol"];
                     aux.Activo = (bool)datos.Lector["Activo"];
 
@@ -47,22 +52,22 @@ namespace Negocio {
 
                 throw ex;
             }
-            finally 
+            finally
             {
                 datos.cerrarConexion();
             }
-        
-        
+
+
         }
 
-        // LISTADO
+        // Listado
         public List<Usuario> ListarUsuarios()
-        { 
+        {
             List<Usuario> lista = new List<Usuario>();
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("SELECT IDUsuario, Nombre, Apellido, Email, Telefono, Username, PasswordHash, IdRol, Activo FROM Usuarios");
+                datos.setearConsulta("SELECT IDUsuario, Nombre, Apellido, Email, Telefono, Username, PasswordHash, IdRol, ImagenUrl, FechaAlta, Activo FROM Usuarios");
                 datos.ejecutarLectura();
                 while (datos.Lector.Read())
                 {
@@ -74,6 +79,8 @@ namespace Negocio {
                     aux.Telefono = datos.Lector["Telefono"] != DBNull.Value ? (string)datos.Lector["Telefono"] : "";
                     aux.Username = (string)datos.Lector["Username"];
                     aux.Password = (string)datos.Lector["PasswordHash"];
+                    aux.ImagenUrl = datos.Lector["ImagenUrl"] != DBNull.Value ? (string)datos.Lector["ImagenUrl"] : "";
+                    aux.FechaAlta = (DateTime)datos.Lector["FechaAlta"];
                     aux.RolId = (int)datos.Lector["IDRol"];
                     aux.Activo = (bool)datos.Lector["Activo"];
                     lista.Add(aux);
@@ -84,17 +91,17 @@ namespace Negocio {
             {
                 throw ex;
             }
-            finally 
+            finally
             {
                 datos.cerrarConexion();
             }
         }
-        public Usuario ObtenerUsuarioPorId(int idUsuario) 
+        public Usuario ObtenerUsuarioPorId(int idUsuario)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("SELECT IDUsuario, Nombre, Apellido, Email, Telefono, Username, PasswordHash, IdRol, Activo FROM Usuarios WHERE IDUsuario = @id");
+                datos.setearConsulta("SELECT IDUsuario, Nombre, Apellido, Email, Telefono, Username, PasswordHash, IdRol, ImagenUrl, FechaAlta, Activo FROM Usuarios WHERE IDUsuario = @id");
                 datos.setearParametro("@id", idUsuario);
                 datos.ejecutarLectura();
                 if (datos.Lector.Read())
@@ -107,6 +114,8 @@ namespace Negocio {
                     aux.Telefono = datos.Lector["Telefono"] != DBNull.Value ? (string)datos.Lector["Telefono"] : "";
                     aux.Username = (string)datos.Lector["Username"];
                     aux.Password = (string)datos.Lector["PasswordHash"];
+                    aux.ImagenUrl = datos.Lector["ImagenUrl"] != DBNull.Value ? (string)datos.Lector["ImagenUrl"] : "";
+                    aux.FechaAlta = (DateTime)datos.Lector["FechaAlta"];
                     aux.RolId = (int)datos.Lector["IDRol"];
                     aux.Activo = (bool)datos.Lector["Activo"];
                     return aux;
@@ -117,31 +126,28 @@ namespace Negocio {
             {
                 throw ex;
             }
-            finally 
+            finally
             {
                 datos.cerrarConexion();
             }
         }
 
-        // ALTA
-        public int RegistrarUsuario(Usuario nuevo) 
+        // Alta
+        public int RegistrarUsuario(Usuario nuevo)
         {
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                datos.setearConsulta(@"INSERT INTO Usuarios (Nombre, Apellido, Email, Telefono, Username, PasswordHash, IDRol, Activo)
-                                        VALUES (@nombre, @apellido, @email, @telefono, @username, @passHash, @idRol, 1); 
+                datos.setearConsulta(@"INSERT INTO Usuarios (Nombre, Apellido, Email, Telefono, Username, ImagenUrl, PasswordHash, IDRol, Activo)
+                                        VALUES (@nombre, @apellido, @email, @telefono, @username, @imagenUrl, @passHash, @idRol, 1); 
                                         SELECT SCOPE_IDENTITY(); ");
 
                 datos.setearParametro("@nombre", nuevo.Nombre);
                 datos.setearParametro("@apellido", nuevo.Apellido);
                 datos.setearParametro("@email", nuevo.Email);
-                datos.setearParametro("@telefono",
-                    string.IsNullOrEmpty(nuevo.Telefono)
-                    ? (object)DBNull.Value
-                    : nuevo.Telefono);
-
+                datos.setearParametro("@telefono", string.IsNullOrEmpty(nuevo.Telefono) ? (object)DBNull.Value : nuevo.Telefono);
+                datos.setearParametro("@imagenUrl", string.IsNullOrWhiteSpace(nuevo.ImagenUrl) ? (object)DBNull.Value : nuevo.ImagenUrl);
                 datos.setearParametro("@username", nuevo.Username);
                 datos.setearParametro("@passHash", nuevo.Password);
                 datos.setearParametro("@idRol", nuevo.RolId);
@@ -159,28 +165,106 @@ namespace Negocio {
             }
 
         }
+        public void ReactivarUsuario(int idUsuario)
+        {
+            AccesoDatos datos = new AccesoDatos();
 
-        // MODIFICACION
+            try
+            {
+                datos.setearConsulta("UPDATE Usuarios SET Activo = 1 WHERE IDUsuario = @id");
+                datos.setearParametro("@id", idUsuario);
+                datos.ejecutarAccion();
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        // Modificación
+        // Para todos los usuarios
         public void ModificarUsuario(Usuario usuario)
         {
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                datos.setearConsulta("UPDATE Usuarios SET Nombre = @nombre, Apellido = @apellido, Email = @email, Telefono = @telefono, Username = @username WHERE IDUsuario = @idUsuario");
+                datos.setearConsulta(@"
+                    UPDATE Usuarios 
+                    SET 
+                        Nombre = @nombre, 
+                        Apellido = @apellido, 
+                        Email = @email, 
+                        Telefono = @telefono, 
+                        ImagenUrl = @imagenUrl, 
+                        Username = @username 
+                    WHERE IDUsuario = @idUsuario");
 
                 datos.setearParametro("@idUsuario", usuario.Id);
                 datos.setearParametro("@nombre", usuario.Nombre);
                 datos.setearParametro("@apellido", usuario.Apellido);
                 datos.setearParametro("@email", usuario.Email);
-
-                datos.setearParametro("@telefono",
-                    string.IsNullOrEmpty(usuario.Telefono)
-                    ? (object)DBNull.Value
-                    : usuario.Telefono);
-
+                datos.setearParametro("@telefono", string.IsNullOrEmpty(usuario.Telefono) ? (object)DBNull.Value : usuario.Telefono);
+                datos.setearParametro("@imagenUrl", string.IsNullOrWhiteSpace(usuario.ImagenUrl) ? (object)DBNull.Value : usuario.ImagenUrl);
                 datos.setearParametro("@username", usuario.Username);
 
+
+                datos.ejecutarAccion();
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public void CambiarContraseña(int idUsuario, string passwordActual, string passwordNueva)
+        {
+            Usuario usuario = ObtenerUsuarioPorId(idUsuario);
+
+            if (usuario == null)
+                throw new Exception("El usuario no existe.");
+
+            if (usuario.Password != passwordActual)
+                throw new Exception("La contraseña actual es incorrecta.");
+
+            if (string.IsNullOrWhiteSpace(passwordNueva))
+                throw new Exception("Debe ingresar una nueva contraseña.");
+
+            if (passwordNueva.Length < 4)
+                throw new Exception("La nueva contraseña debe tener al menos 4 caracteres.");
+
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"UPDATE Usuarios SET PasswordHash = @passwordNueva WHERE IDUsuario = @idUsuario");
+                datos.setearParametro("@passwordNueva", passwordNueva);
+                datos.setearParametro("@idUsuario", idUsuario);
+
+                datos.ejecutarAccion();
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        // Para administradores
+        public void ResetearContraseña(int idUsuario, string passwordNueva)
+        {
+            if (string.IsNullOrWhiteSpace(passwordNueva))
+                throw new Exception("Debe ingresar una nueva contraseña.");
+
+            if (passwordNueva.Length < 4)
+                throw new Exception("La nueva contraseña debe tener al menos 4 caracteres.");
+
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@" UPDATE Usuarios SET PasswordHash = @passwordNueva WHERE IDUsuario = @idUsuario");
+
+                datos.setearParametro("@passwordNueva", passwordNueva);
+                datos.setearParametro("@idUsuario", idUsuario);
 
                 datos.ejecutarAccion();
             }
@@ -214,7 +298,7 @@ namespace Negocio {
             }
         }
 
-        // BAJA
+        // Baja lógica
         public void EliminarUsuario(int idUsuario)
         {
             ValidarEliminacion(idUsuario);
@@ -232,7 +316,7 @@ namespace Negocio {
             }
         }
 
-        // VALIDACIONES 
+        // Validaciones
         public void ValidarAlta(Usuario usuario)
         {
             if (string.IsNullOrWhiteSpace(usuario.Nombre))
@@ -285,30 +369,6 @@ namespace Negocio {
 
             if (!usuario.Activo)
                 throw new Exception("El usuario ya se encuentra inactivo.");
-
-            AccesoDatos datos = new AccesoDatos();
-
-            try
-            {
-                datos.setearConsulta(@"
-                        SELECT COUNT(*) 
-                        FROM Turnos
-                        WHERE (IDMedico = @idUsuario OR IDPaciente = @idUsuario)
-                        AND FechaHora >= GETDATE()");
-
-                datos.setearParametro("@idUsuario", idUsuario);
-                datos.ejecutarLectura();
-
-                datos.Lector.Read();
-                int cantidadTurnos = Convert.ToInt32(datos.Lector[0]);
-
-                if (cantidadTurnos > 0)
-                    throw new Exception("No se puede eliminar el usuario porque tiene turnos activos o futuros.");
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
         }
 
         private bool ExisteUsername(string username)

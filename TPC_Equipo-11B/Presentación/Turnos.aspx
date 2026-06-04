@@ -67,7 +67,7 @@
                     
                     <asp:TemplateField HeaderText="Paciente">
                         <ItemTemplate>
-                            <span class="fw-semibold"><%# Eval("Paciente.Apellido") %>, <%# Eval("Paciente.Nombre") %></span>
+                            <span class="fw-semibold"><%# Eval("Paciente.Usuario.Apellido") %>, <%# Eval("Paciente.Usuario.Nombre") %></span>
                             <div class="text-muted small">DNI: <%# Eval("Paciente.DNI") %></div>
                         </ItemTemplate>
                     </asp:TemplateField>

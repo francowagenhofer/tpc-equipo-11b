@@ -58,7 +58,7 @@ namespace Presentación
                 nuevoMedico.Especialidad.Id = int.Parse(ddlEspecialidad.SelectedValue);
 
                 MedicoNegocio negocio = new MedicoNegocio();
-                negocio.AgregarMedico(nuevoMedico);
+                negocio.RegistrarMedico(nuevoMedico);
 
                 Response.Redirect("Medicos.aspx", false);
             }
