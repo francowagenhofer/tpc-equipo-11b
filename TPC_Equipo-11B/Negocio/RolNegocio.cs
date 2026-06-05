@@ -8,22 +8,22 @@ using System.Threading.Tasks;
 
 namespace Negocio
 {
-    public class EspecialidadNegocio
+    public class RolNegocio
     {
-        public List<Especialidad> Listar()
+        public List<Rol> ListarRoles()
         {
-            List<Especialidad> lista = new List<Especialidad>();
+            List<Rol> lista = new List<Rol>();
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                datos.setearConsulta("SELECT IDEspecialidad, Nombre FROM Especialidades WHERE Activo = 1");
+                datos.setearConsulta("SELECT IDRol, Nombre FROM Roles WHERE Activo = 1");
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
                 {
-                    Especialidad aux = new Especialidad();
-                    aux.Id = (int)datos.Lector["IDEspecialidad"];
+                    Rol aux = new Rol();
+                    aux.Id = (int)datos.Lector["IDRol"];
                     aux.Nombre = (string)datos.Lector["Nombre"];
                     lista.Add(aux);
 
@@ -41,13 +41,39 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-        public void Agregar(Especialidad nuevaEspecialidad)
+        public int ObtenerIdRol(string nombre)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("INSERT INTO Especialidades (Nombre, Activo) VALUES (@Nombre, 1)");
-                datos.setearParametro("@Nombre", nuevaEspecialidad.Nombre);
+                datos.setearConsulta("SELECT IDRol FROM Roles WHERE Nombre = @Nombre AND Activo = 1");
+                datos.setearParametro("@Nombre", nombre);
+                datos.ejecutarLectura();
+                if (datos.Lector.Read())
+                {
+                    return (int)datos.Lector["IDRol"];
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public void AgregarRoles(Rol nuevoRol)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("INSERT INTO Roles (Nombre, Activo) VALUES (@Nombre, 1)");
+                datos.setearParametro("@Nombre", nuevoRol.Nombre);
                 datos.ejecutarAccion();
             }
             catch (Exception ex)
@@ -59,12 +85,12 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-        public void Reactivar(int id)
+        public void ReactivarRoles(int id)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("UPDATE Especialidades SET Activo = 1 WHERE IDEspecialidad = @Id");
+                datos.setearConsulta("UPDATE Roles SET Activo = 1 WHERE IDRol = @Id");
                 datos.setearParametro("@Id", id);
                 datos.ejecutarAccion();
             }
@@ -77,14 +103,14 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-        public void Modificar(Especialidad especialidad)
+        public void ModificarRoles(Rol rol)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("UPDATE Especialidades SET Nombre = @Nombre WHERE IDEspecialidad = @Id");
-                datos.setearParametro("@Nombre", especialidad.Nombre);
-                datos.setearParametro("@Id", especialidad.Id);
+                datos.setearConsulta("UPDATE Roles SET Nombre = @Nombre WHERE IDRol = @Id");
+                datos.setearParametro("@Nombre", rol.Nombre);
+                datos.setearParametro("@Id", rol.Id);
                 datos.ejecutarAccion();
             }
             catch (Exception ex)
@@ -96,12 +122,12 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-        public void Eliminar(int id)
+        public void EliminarRoles(int id)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("UPDATE Especialidades SET Activo = 0 WHERE IDEspecialidad = @Id");
+                datos.setearConsulta("UPDATE Roles SET Activo = 0 WHERE IDRol = @Id");
                 datos.setearParametro("@Id", id);
                 datos.ejecutarAccion();
             }
@@ -114,5 +140,6 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
     }
 }

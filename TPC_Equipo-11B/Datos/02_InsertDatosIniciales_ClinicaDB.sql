@@ -142,3 +142,5 @@ INSERT INTO HistoriaClinica (IDPaciente, IDMedico, IDTurno, Diagnostico, Tratami
 VALUES
 (1,1,1,'Control general','Reposo','Sin complicaciones');
 GO
+
+

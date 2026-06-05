@@ -8,23 +8,23 @@ using System.Threading.Tasks;
 
 namespace Negocio
 {
-    public class EspecialidadNegocio
+    public class GeneroNegocio
     {
-        public List<Especialidad> Listar()
+        public List<Genero> ListarGeneros()
         {
-            List<Especialidad> lista = new List<Especialidad>();
+            List<Genero> lista = new List<Genero>();
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                datos.setearConsulta("SELECT IDEspecialidad, Nombre FROM Especialidades WHERE Activo = 1");
+                datos.setearConsulta("SELECT IDGenero, Descripcion FROM Generos WHERE Activo = 1");
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
                 {
-                    Especialidad aux = new Especialidad();
-                    aux.Id = (int)datos.Lector["IDEspecialidad"];
-                    aux.Nombre = (string)datos.Lector["Nombre"];
+                    Genero aux = new Genero();
+                    aux.Id = (int)datos.Lector["IDGenero"];
+                    aux.Descripcion = (string)datos.Lector["Descripcion"];
                     lista.Add(aux);
 
                 }
@@ -41,13 +41,39 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-        public void Agregar(Especialidad nuevaEspecialidad)
+        public int ObtenerIdGenero(string descripcion)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("INSERT INTO Especialidades (Nombre, Activo) VALUES (@Nombre, 1)");
-                datos.setearParametro("@Nombre", nuevaEspecialidad.Nombre);
+                datos.setearConsulta("SELECT IDGenero FROM Generos WHERE Descripcion = @Descripcion AND Activo = 1");
+                datos.setearParametro("@Descripcion", descripcion);
+                datos.ejecutarLectura();
+                if (datos.Lector.Read())
+                {
+                    return (int)datos.Lector["IDGenero"];
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public void AgregarGenero(Genero nuevoGenero)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("INSERT INTO Generos (Descripcion, Activo) VALUES (@Descripcion, 1)");
+                datos.setearParametro("@Descripcion", nuevoGenero.Descripcion);
                 datos.ejecutarAccion();
             }
             catch (Exception ex)
@@ -59,12 +85,12 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-        public void Reactivar(int id)
+        public void ReactivarGenero(int id)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("UPDATE Especialidades SET Activo = 1 WHERE IDEspecialidad = @Id");
+                datos.setearConsulta("UPDATE Generos SET Activo = 1 WHERE IDGenero = @Id");
                 datos.setearParametro("@Id", id);
                 datos.ejecutarAccion();
             }
@@ -77,14 +103,14 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-        public void Modificar(Especialidad especialidad)
+        public void ModificarGenero(Genero genero)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("UPDATE Especialidades SET Nombre = @Nombre WHERE IDEspecialidad = @Id");
-                datos.setearParametro("@Nombre", especialidad.Nombre);
-                datos.setearParametro("@Id", especialidad.Id);
+                datos.setearConsulta("UPDATE Generos SET Descripcion = @Descripcion WHERE IDGenero = @Id");
+                datos.setearParametro("@Descripcion", genero.Descripcion);
+                datos.setearParametro("@Id", genero.Id);
                 datos.ejecutarAccion();
             }
             catch (Exception ex)
@@ -96,12 +122,12 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-        public void Eliminar(int id)
+        public void EliminarGenero(int id)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("UPDATE Especialidades SET Activo = 0 WHERE IDEspecialidad = @Id");
+                datos.setearConsulta("UPDATE Generos SET Activo = 0 WHERE IDGenero = @Id");
                 datos.setearParametro("@Id", id);
                 datos.ejecutarAccion();
             }

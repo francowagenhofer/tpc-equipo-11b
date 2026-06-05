@@ -43,9 +43,13 @@
   <ItemGroup>
     <Compile Include="CatalogoNegocio.cs" />
     <Compile Include="EspecialidadNegocio.cs" />
+    <Compile Include="EstadoTurnoNegocio.cs" />
+    <Compile Include="GeneroNegocio.cs" />
     <Compile Include="MedicoNegocio.cs" />
+    <Compile Include="ObraSocialNegocio.cs" />
     <Compile Include="PacienteNegocio.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RolNegocio.cs" />
     <Compile Include="TurnoNegocio.cs" />
     <Compile Include="UsuarioNegocio.cs" />
   </ItemGroup>

@@ -8,22 +8,22 @@ using System.Threading.Tasks;
 
 namespace Negocio
 {
-    public class EspecialidadNegocio
+    public class EstadoTurnoNegocio
     {
-        public List<Especialidad> Listar()
+        public List<EstadoTurno> ListarEstadosTurno()
         {
-            List<Especialidad> lista = new List<Especialidad>();
+            List<EstadoTurno> lista = new List<EstadoTurno>();
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                datos.setearConsulta("SELECT IDEspecialidad, Nombre FROM Especialidades WHERE Activo = 1");
+                datos.setearConsulta("SELECT IDEstadoTurno, Nombre FROM EstadosTurno WHERE Activo = 1");
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
                 {
-                    Especialidad aux = new Especialidad();
-                    aux.Id = (int)datos.Lector["IDEspecialidad"];
+                    EstadoTurno aux = new EstadoTurno();
+                    aux.Id = (int)datos.Lector["IDEstadoTurno"];
                     aux.Nombre = (string)datos.Lector["Nombre"];
                     lista.Add(aux);
 
@@ -41,13 +41,39 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-        public void Agregar(Especialidad nuevaEspecialidad)
+        public int ObtenerIdEstadoTurno(string nombre)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("INSERT INTO Especialidades (Nombre, Activo) VALUES (@Nombre, 1)");
-                datos.setearParametro("@Nombre", nuevaEspecialidad.Nombre);
+                datos.setearConsulta("SELECT IDEstadoTurno FROM EstadosTurno WHERE Nombre = @Nombre AND Activo = 1");
+                datos.setearParametro("@Nombre", nombre);
+                datos.ejecutarLectura();
+                if (datos.Lector.Read())
+                {
+                    return (int)datos.Lector["IDEstadoTurno"];
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public void AgregarEstadoTurno(EstadoTurno nuevoEstadoTurno)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("INSERT INTO EstadosTurno (Nombre, Activo) VALUES (@Nombre, 1)");
+                datos.setearParametro("@Nombre", nuevoEstadoTurno.Nombre);
                 datos.ejecutarAccion();
             }
             catch (Exception ex)
@@ -59,12 +85,12 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-        public void Reactivar(int id)
+        public void ReactivarEstadoTurno(int id)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("UPDATE Especialidades SET Activo = 1 WHERE IDEspecialidad = @Id");
+                datos.setearConsulta("UPDATE EstadosTurno SET Activo = 1 WHERE IDEstadoTurno = @Id");
                 datos.setearParametro("@Id", id);
                 datos.ejecutarAccion();
             }
@@ -77,14 +103,14 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-        public void Modificar(Especialidad especialidad)
+        public void ModificarEstadoTurno(EstadoTurno estadoTurno)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("UPDATE Especialidades SET Nombre = @Nombre WHERE IDEspecialidad = @Id");
-                datos.setearParametro("@Nombre", especialidad.Nombre);
-                datos.setearParametro("@Id", especialidad.Id);
+                datos.setearConsulta("UPDATE EstadosTurno SET Nombre = @Nombre WHERE IDEstadoTurno = @Id");
+                datos.setearParametro("@Nombre", estadoTurno.Nombre);
+                datos.setearParametro("@Id", estadoTurno.Id);
                 datos.ejecutarAccion();
             }
             catch (Exception ex)
@@ -96,12 +122,12 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-        public void Eliminar(int id)
+        public void EliminarEstadoTurno(int id)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("UPDATE Especialidades SET Activo = 0 WHERE IDEspecialidad = @Id");
+                datos.setearConsulta("UPDATE EstadosTurno SET Activo = 0 WHERE IDEstadoTurno = @Id");
                 datos.setearParametro("@Id", id);
                 datos.ejecutarAccion();
             }
@@ -114,5 +140,6 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
     }
 }

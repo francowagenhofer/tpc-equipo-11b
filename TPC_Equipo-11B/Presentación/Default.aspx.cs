@@ -12,6 +12,46 @@ namespace Presentación
         protected void Page_Load(object sender, EventArgs e)
         {
 
+            if (!IsPostBack)
+            {
+                MostrarDashboard();
+            }
+
+        }
+
+        private void MostrarDashboard()
+        {
+            // Simulación hasta implementar login
+            string rol = "Recepcionista";
+
+            OcultarTodos();
+
+            switch (rol)
+            {
+                case "Administrador":
+                    pnlAdministrador.Visible = true;
+                    break;
+
+                case "Recepcionista":
+                    pnlRecepcionista.Visible = true;
+                    break;
+
+                case "Medico":
+                    pnlMedico.Visible = true;
+                    break;
+
+                case "Paciente":
+                    pnlPaciente.Visible = true;
+                    break;
+            }
+        }
+
+        private void OcultarTodos()
+        {
+            pnlAdministrador.Visible = false;
+            pnlRecepcionista.Visible = false;
+            pnlMedico.Visible = false;
+            pnlPaciente.Visible = false;
         }
     }
 }

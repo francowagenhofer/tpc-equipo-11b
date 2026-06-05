@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\CSS\Acceso.css" />
+    <Content Include="Assets\CSS\Default.css" />
     <Content Include="Assets\CSS\Master.css" />
     <Content Include="Default.aspx" />
     <Content Include="Especialidades.aspx" />

@@ -8,22 +8,22 @@ using System.Threading.Tasks;
 
 namespace Negocio
 {
-    public class EspecialidadNegocio
+    public class ObraSocialNegocio
     {
-        public List<Especialidad> Listar()
+        public List<ObraSocial> ListarObrasSociales()
         {
-            List<Especialidad> lista = new List<Especialidad>();
+            List<ObraSocial> lista = new List<ObraSocial>();
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                datos.setearConsulta("SELECT IDEspecialidad, Nombre FROM Especialidades WHERE Activo = 1");
+                datos.setearConsulta("SELECT IDObraSocial, Nombre FROM ObrasSociales WHERE Activo = 1");
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
                 {
-                    Especialidad aux = new Especialidad();
-                    aux.Id = (int)datos.Lector["IDEspecialidad"];
+                    ObraSocial aux = new ObraSocial();
+                    aux.Id = (int)datos.Lector["IDObraSocial"];
                     aux.Nombre = (string)datos.Lector["Nombre"];
                     lista.Add(aux);
 
@@ -41,13 +41,39 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-        public void Agregar(Especialidad nuevaEspecialidad)
+        public int ObtenerIdObraSocial(string nombre)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("INSERT INTO Especialidades (Nombre, Activo) VALUES (@Nombre, 1)");
-                datos.setearParametro("@Nombre", nuevaEspecialidad.Nombre);
+                datos.setearConsulta("SELECT IDObraSocial FROM ObrasSociales WHERE Nombre = @Nombre AND Activo = 1");
+                datos.setearParametro("@Nombre", nombre);
+                datos.ejecutarLectura();
+                if (datos.Lector.Read())
+                {
+                    return (int)datos.Lector["IDObraSocial"];
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public void AgregarObraSocial(ObraSocial nuevaObraSocial)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("INSERT INTO ObrasSociales (Nombre, Activo) VALUES (@Nombre, 1)");
+                datos.setearParametro("@Nombre", nuevaObraSocial.Nombre);
                 datos.ejecutarAccion();
             }
             catch (Exception ex)
@@ -59,12 +85,12 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-        public void Reactivar(int id)
+        public void ReactivarObraSocial(int id)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("UPDATE Especialidades SET Activo = 1 WHERE IDEspecialidad = @Id");
+                datos.setearConsulta("UPDATE ObrasSociales SET Activo = 1 WHERE IDObraSocial = @Id");
                 datos.setearParametro("@Id", id);
                 datos.ejecutarAccion();
             }
@@ -77,14 +103,14 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-        public void Modificar(Especialidad especialidad)
+        public void ModificarObraSocial(ObraSocial obraSocial)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("UPDATE Especialidades SET Nombre = @Nombre WHERE IDEspecialidad = @Id");
-                datos.setearParametro("@Nombre", especialidad.Nombre);
-                datos.setearParametro("@Id", especialidad.Id);
+                datos.setearConsulta("UPDATE ObrasSociales SET Nombre = @Nombre WHERE IDObraSocial = @Id");
+                datos.setearParametro("@Nombre", obraSocial.Nombre);
+                datos.setearParametro("@Id", obraSocial.Id);
                 datos.ejecutarAccion();
             }
             catch (Exception ex)
@@ -96,12 +122,12 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-        public void Eliminar(int id)
+        public void EliminarObraSocial(int id)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("UPDATE Especialidades SET Activo = 0 WHERE IDEspecialidad = @Id");
+                datos.setearConsulta("UPDATE ObrasSociales SET Activo = 0 WHERE IDObraSocial = @Id");
                 datos.setearParametro("@Id", id);
                 datos.ejecutarAccion();
             }
@@ -116,3 +142,4 @@ namespace Negocio
         }
     }
 }
+    
