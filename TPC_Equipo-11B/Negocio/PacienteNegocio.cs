@@ -190,13 +190,46 @@ namespace Negocio
         // Alta 
         public void RegistrarPaciente(Paciente paciente)
         {
-            ValidarAlta(paciente);
+            AccesoDatos datosRol = new AccesoDatos();
+            int idRolPaciente = 0;
+            try
+            {
+                datosRol.setearConsulta("SELECT IDRol FROM Roles WHERE Nombre = 'Paciente'");
+                datosRol.ejecutarLectura();
 
+                if (datosRol.Lector.Read()) { 
+                    
+                    idRolPaciente = (int)datosRol.Lector["IDRol"];
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("Error al obtener el rol del paciente: " + ex.Message);
+            }
+            finally 
+            {
+                datosRol.cerrarConexion();
+            }
+
+            // Si encontramos el rol, se lo asignamos al usuario del paciente
+            if (idRolPaciente > 0)
+            {
+                paciente.Usuario.RolId = idRolPaciente;
+            }
+            else
+            {
+                throw new Exception("El rol 'Paciente' no está registrado en la base de datos.");
+            }
+            ValidarAlta(paciente);
             UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
             int idUsuario = usuarioNegocio.RegistrarUsuario(paciente.Usuario);
-
             AgregarRegistroPaciente(idUsuario, paciente);
         }
+
         private int AgregarRegistroPaciente(int idUsuario, Paciente paciente)
         {
             AccesoDatos datos = new AccesoDatos();
