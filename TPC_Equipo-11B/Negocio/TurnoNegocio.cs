@@ -134,7 +134,7 @@ namespace Negocio
                     VALUES (@codigo, @idPaciente, @idMedico, @fechaHora, 1, GETDATE())");
 
                 datos.setearParametro("@codigo", nuevo.Codigo);
-                datos.setearParametro("@idPaciente", nuevo.Paciente.Id);
+                datos.setearParametro("@idPaciente", nuevo.PacienteId);
                 datos.setearParametro("@idMedico", nuevo.MedicoId);
                 datos.setearParametro("@fechaHora", nuevo.FechaHora);
 

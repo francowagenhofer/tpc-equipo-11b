@@ -224,29 +224,13 @@
 
         <!-- GESTIÓN OPERATIVA -->
         <div class="tarjeta-seccion mb-4">
-
             <h5>Gestión del día</h5>
-
-            <div class="grupo-botones">
-
-                <button class="btn-accion btn-verde">
-                    + Nuevo Paciente
-                </button>
-
-                <button class="btn-accion btn-azul">
-                    + Nuevo Turno
-                </button>
-
-                <button class="btn-accion">
-                    Reprogramar Turno
-                </button>
-
-                <button class="btn-accion">
-                    Buscar Paciente
-                </button>
-
-            </div>
-
+                <div class="grupo-botones">
+                    <a href="NuevoPaciente.aspx" class="btn-accion btn-verde">+ Nuevo Paciente</a>
+                    <a href="NuevoTurno.aspx" class="btn-accion btn-azul">+ Nuevo Turno</a>
+                    <a href="Turnos.aspx" class="btn-accion">Reprogramar / Cancelar</a>
+                    <a href="Pacientes.aspx" class="btn-accion">Buscar Paciente</a>
+                </div>
         </div>
 
         <!-- TABLA DE TURNOS -->

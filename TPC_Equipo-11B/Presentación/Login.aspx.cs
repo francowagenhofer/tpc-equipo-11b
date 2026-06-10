@@ -13,7 +13,7 @@ namespace Presentación
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if(Session["usuarioLogeado"] != null) {
+            if(Session["usuarioLogueado"] != null) {
                 Response.Redirect("Default.aspx");
             }
 
