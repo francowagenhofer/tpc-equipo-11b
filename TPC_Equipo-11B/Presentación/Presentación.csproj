@@ -70,13 +70,16 @@
     <Content Include="Assets\CSS\Acceso.css" />
     <Content Include="Assets\CSS\Default.css" />
     <Content Include="Assets\CSS\Master.css" />
+    <Content Include="Configuracion.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="Especialidades.aspx" />
     <Content Include="Login.aspx" />
     <Content Include="Medicos.aspx" />
+    <Content Include="NuevaEspecialidad.aspx" />
     <Content Include="NuevoMedico.aspx" />
     <Content Include="NuevoPaciente.aspx" />
     <Content Include="NuevoTurno.aspx" />
+    <Content Include="NuevoUsuario.aspx" />
     <Content Include="Pacientes.aspx" />
     <Content Include="Registro.aspx" />
     <Content Include="Turnos.aspx" />
@@ -90,6 +93,13 @@
     </Compile>
     <Compile Include="Clinica.Master.designer.cs">
       <DependentUpon>Clinica.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Configuracion.aspx.cs">
+      <DependentUpon>Configuracion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Configuracion.aspx.designer.cs">
+      <DependentUpon>Configuracion.aspx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
@@ -119,6 +129,13 @@
     <Compile Include="Medicos.aspx.designer.cs">
       <DependentUpon>Medicos.aspx</DependentUpon>
     </Compile>
+    <Compile Include="NuevaEspecialidad.aspx.cs">
+      <DependentUpon>NuevaEspecialidad.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NuevaEspecialidad.aspx.designer.cs">
+      <DependentUpon>NuevaEspecialidad.aspx</DependentUpon>
+    </Compile>
     <Compile Include="NuevoMedico.aspx.cs">
       <DependentUpon>NuevoMedico.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -139,6 +156,13 @@
     </Compile>
     <Compile Include="NuevoTurno.aspx.designer.cs">
       <DependentUpon>NuevoTurno.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NuevoUsuario.aspx.cs">
+      <DependentUpon>NuevoUsuario.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NuevoUsuario.aspx.designer.cs">
+      <DependentUpon>NuevoUsuario.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pacientes.aspx.cs">
       <DependentUpon>Pacientes.aspx</DependentUpon>

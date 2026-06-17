@@ -24,7 +24,7 @@ namespace Presentación
         private void MostrarDashboard()
         {
             // Simulación hasta implementar login
-            string rol = "Recepcionista";
+            string rol = "Paciente";
 
             OcultarTodos();
 
@@ -47,7 +47,6 @@ namespace Presentación
                     break;
             }
         }
-
 
         private void OcultarTodos()
         {

@@ -67,6 +67,13 @@
                             <span>Usuarios</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="Configuracion.aspx" class="opcion-menu">
+                            <i class="bi bi-gear"></i>
+                            <span>Configuraciones</span>
+                        </a>
+                    </li>
+
                 </ul>
 
                 <div class="menu-salir">
