@@ -67,7 +67,10 @@ namespace Negocio
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("SELECT IDUsuario, Nombre, Apellido, Email, Telefono, Username, PasswordHash, IdRol, ImagenUrl, FechaAlta, Activo FROM Usuarios");
+                //datos.setearConsulta("SELECT IDUsuario, Nombre, Apellido, Email, Telefono, Username, PasswordHash, IdRol, ImagenUrl, FechaAlta, Activo FROM Usuarios");
+                datos.setearConsulta("SELECT u.IDUsuario, u.Nombre, u.Apellido, u.Email,u. Telefono, u.Username, u.PasswordHash, u.IdRol, u.ImagenUrl, u.FechaAlta, u.Activo, r.Nombre AS Rol " +
+                    "FROM Usuarios u INNER JOIN Roles r ON u.IdRol = r.IDRol");
+
                 datos.ejecutarLectura();
                 while (datos.Lector.Read())
                 {
@@ -83,6 +86,12 @@ namespace Negocio
                     aux.FechaAlta = (DateTime)datos.Lector["FechaAlta"];
                     aux.RolId = (int)datos.Lector["IDRol"];
                     aux.Activo = (bool)datos.Lector["Activo"];
+
+                    Rol auxRol = new Rol();
+                    auxRol.Id = (int)datos.Lector["IDRol"];
+                    auxRol.Nombre = (string)datos.Lector["Rol"];
+                    aux.Rol = auxRol;
+
                     lista.Add(aux);
                 }
                 return lista;

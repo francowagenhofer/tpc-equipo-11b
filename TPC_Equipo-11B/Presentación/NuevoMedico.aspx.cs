@@ -23,7 +23,7 @@ namespace Presentación
         {
             EspecialidadNegocio negocio = new EspecialidadNegocio();
 
-            ddlEspecialidad.DataSource = negocio.Listar();
+            ddlEspecialidad.DataSource = negocio.ListarEspecialidades();
             ddlEspecialidad.DataTextField = "Nombre";
             ddlEspecialidad.DataValueField = "Id";
             ddlEspecialidad.DataBind();

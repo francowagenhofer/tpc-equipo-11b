@@ -18,7 +18,6 @@ namespace Presentación
 
         }
 
-
         private void cargarGrilla() {
 
             PacienteNegocio negocio = new PacienteNegocio();
@@ -35,6 +34,22 @@ namespace Presentación
         
         
         }
+
+
+        protected void txtBuscar_TextChanged(object sender, EventArgs e)
+        {
+            // Aquí agregaremos el filtro de búsqueda 
+        }
+
+        protected void ddlObraSocial_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Aca agregaremos el filtro por obra social
+        }
+        protected void ddlEstado_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Aca agregaremos el filtro por rol
+        }
+
 
 
         protected void dgvPacientes_RowCommand(object sender, GridViewCommandEventArgs e)

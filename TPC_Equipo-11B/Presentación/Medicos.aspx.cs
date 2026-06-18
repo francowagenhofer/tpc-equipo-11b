@@ -36,5 +36,15 @@ namespace Presentación
             // Aquí agregaremos el filtro de búsqueda 
         }
 
+
+
+        protected void ddlEspecialidad_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Aca agregaremos el filtro por especialidad
+        }
+        protected void ddlEstado_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Aca agregaremos el filtro por rol
+        }
     }
 }

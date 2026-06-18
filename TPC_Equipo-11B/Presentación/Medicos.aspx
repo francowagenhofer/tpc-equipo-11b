@@ -32,14 +32,37 @@
             </a>
         </div>
 
-
-        <div class="row mb-3">
-            <div class="col-md-4">
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <label class="form-label fw-semibold text-muted small">Buscar Medico</label>
                 <div class="input-group">
                     <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
                     <asp:TextBox ID="txtBuscar" runat="server" CssClass="form-control border-start-0" placeholder="Buscar por apellido o matrícula..." AutoPostBack="true" OnTextChanged="txtBuscar_TextChanged" />
                 </div>
             </div>
+
+            <div class="col-md-3">
+                <label class="form-label fw-semibold text-muted small">Filtrar por Especialidad</label>
+                <asp:DropDownList ID="ddlRol" runat="server" CssClass="form-select" AutoPostBack="true" OnSelectedIndexChanged="ddlEspecialidad_SelectedIndexChanged">
+                    <asp:ListItem Text="Todas las especialidades" Value="0" />
+
+                    <%-- tendria que poner un foreach que liste las especialidades --%>
+                    <asp:ListItem Text="Activo" Value="1" />
+                    <asp:ListItem Text="No activo" Value="2" />
+                </asp:DropDownList>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label fw-semibold text-muted small">Filtrar por Estado</label>
+                <asp:DropDownList ID="DropDownList1" runat="server" CssClass="form-select" AutoPostBack="true" OnSelectedIndexChanged="ddlEstado_SelectedIndexChanged">
+                    <asp:ListItem Text="Todos los estados" Value="0" />
+                    <asp:ListItem Text="Activo" Value="1" />
+                    <asp:ListItem Text="No activo" Value="2" />
+                </asp:DropDownList>
+            </div>
+
+
+
         </div>
 
         <div class="table-responsive">
@@ -72,9 +95,8 @@
 
                     <asp:TemplateField HeaderText="Estado">
                         <ItemTemplate>
-                            <%--<span class="badge-activo">Activo</span>--%>
                             <span class='<%# (bool)Eval("Activo") ? "badge bg-success" : "badge bg-secondary" %>'>
-                               <%# (bool)Eval("Activo") ? "Activo" : "Inactivo" %>
+                                <%# (bool)Eval("Activo") ? "Activo" : "Inactivo" %>
                             </span>
                         </ItemTemplate>
                     </asp:TemplateField>

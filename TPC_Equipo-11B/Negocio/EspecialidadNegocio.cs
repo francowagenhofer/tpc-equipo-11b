@@ -10,14 +10,15 @@ namespace Negocio
 {
     public class EspecialidadNegocio
     {
-        public List<Especialidad> Listar()
+        public List<Especialidad> ListarEspecialidades()
         {
             List<Especialidad> lista = new List<Especialidad>();
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                datos.setearConsulta("SELECT IDEspecialidad, Nombre FROM Especialidades WHERE Activo = 1");
+                //datos.setearConsulta("SELECT IDEspecialidad, Nombre, Descripcion FROM Especialidades WHERE Activo = 1");
+                datos.setearConsulta("SELECT IDEspecialidad, Nombre, Descripcion, Activo FROM Especialidades");
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
@@ -25,6 +26,9 @@ namespace Negocio
                     Especialidad aux = new Especialidad();
                     aux.Id = (int)datos.Lector["IDEspecialidad"];
                     aux.Nombre = (string)datos.Lector["Nombre"];
+                    aux.Descripcion = (string)datos.Lector["Descripcion"];
+                    aux.Activo = (bool)datos.Lector["Activo"];
+
                     lista.Add(aux);
 
                 }
@@ -41,7 +45,7 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-        public void Agregar(Especialidad nuevaEspecialidad)
+        public void AgregarEspecialidad(Especialidad nuevaEspecialidad)
         {
             AccesoDatos datos = new AccesoDatos();
             try
@@ -59,7 +63,7 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-        public void Reactivar(int id)
+        public void ReactivarEspecialidad(int id)
         {
             AccesoDatos datos = new AccesoDatos();
             try
@@ -77,7 +81,7 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-        public void Modificar(Especialidad especialidad)
+        public void ModificarEspecialidad(Especialidad especialidad)
         {
             AccesoDatos datos = new AccesoDatos();
             try
@@ -96,7 +100,7 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-        public void Eliminar(int id)
+        public void EliminarEspecialidad(int id)
         {
             AccesoDatos datos = new AccesoDatos();
             try

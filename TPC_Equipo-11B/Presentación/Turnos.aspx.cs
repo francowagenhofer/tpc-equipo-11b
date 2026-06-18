@@ -38,6 +38,20 @@ namespace Presentación {
         {
             // lo dejo vacío por ahora mas adelante lo usaremos para filtrar por estado
         }
+
+        protected void txtFechaFiltro_TextChanged(object sender, EventArgs e)
+        {
+            if (DateTime.TryParse(txtFechaFiltro.Text, out DateTime fecha))
+            {
+                // filtrar
+            }
+            else
+            {
+                // sin filtro
+            }
+        }
+
+
         protected void dgvTurnos_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             if (e.CommandName == "Cancelar")
