@@ -15,17 +15,50 @@ namespace Presentación {
             {
                 CargarPacientes();
                 CargarMedicos();
+
+                if (Request.QueryString["id"] != null) { 
+                    int idTurno = Convert.ToInt32(Request.QueryString["id"]);
+                    CargarTurno(idTurno);
+                }
             }
         }
+
+        private void CargarTurno(int idTurno) {
+
+            TurnoNegocio negocio = new TurnoNegocio();
+            try
+            {
+                Turno turno = negocio.ObtnerTurnoPorId(idTurno);
+                if (turno != null)
+                {
+                    litTitulo.Text = "Modificar Turno";
+                    btnGuardar.Text = "Modificar Turno";
+                    ddlPaciente.SelectedValue = turno.PacienteId.ToString();
+                    ddlMedico.SelectedValue = turno.MedicoId.ToString();
+
+                    
+                    txtFechaHora.Text = turno.FechaHora.ToString("yyyy-MM-ddTHH:mm");
+                }
+            }
+            catch (Exception ex)
+            {
+                lblMensaje.Text = "Error al cargar datos del turno: " + ex.Message;
+                lblMensaje.CssClass = "alert alert-danger d-block text-center";
+                lblMensaje.Visible = true;
+            }
+
+
+
+        }
+
+
         private void CargarPacientes()
         {
             PacienteNegocio negocio = new PacienteNegocio();
             try
             {
                 var lista = negocio.ListarPacientes();
-                ddlPaciente.Items.Clear();
-
-                
+                ddlPaciente.Items.Clear(); 
                 ddlPaciente.Items.Add(new ListItem("-- Seleccione un Paciente --", ""));
                 foreach (var pac in lista)
                 {
@@ -46,8 +79,7 @@ namespace Presentación {
             try
             {
                 var lista = negocio.ListarMedicos();
-                ddlMedico.Items.Clear();
-                
+                ddlMedico.Items.Clear();       
                 ddlMedico.Items.Add(new ListItem("-- Seleccione un Médico --", ""));
                 foreach (var med in lista)
                 {

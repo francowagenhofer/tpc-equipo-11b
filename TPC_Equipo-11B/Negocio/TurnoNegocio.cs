@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Dominio;
 using Datos;
+using System.ComponentModel;
 
 namespace Negocio
 {
@@ -149,6 +150,96 @@ namespace Negocio
             {
                 datos.cerrarConexion();
             }
+        }
+
+
+        public Turno ObtnerTurnoPorId(int idTurno) {
+
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT 
+                        T.IDTurno,
+                        T.Codigo,
+                        T.FechaHora,
+                        T.IDEstadoTurno,
+                        ET.Nombre AS EstadoNombre,
+                        T.IDPaciente,
+                        T.IDMedico
+                    FROM Turnos T
+                    INNER JOIN EstadoTurno ET ON T.IDEstadoTurno = ET.IDEstadoTurno
+                    WHERE T.IDTurno = @id");
+
+                datos.setearParametro("@id", idTurno);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read()) {
+
+                    Turno turno = new Turno();
+                    turno.Id = (int)datos.Lector["IDTurno"];
+                    turno.Codigo = (string)datos.Lector["Codigo"];
+                    turno.FechaHora = (DateTime)datos.Lector["FechaHora"];
+                    turno.PacienteId = (int)datos.Lector["IDPaciente"];
+                    turno.MedicoId = (int)datos.Lector["IDMedico"];
+
+                    turno.EstadoTurno = new EstadoTurno();
+                    turno.EstadoTurno.Id = (int)datos.Lector["IDEstadoTurno"];
+                    turno.EstadoTurno.Nombre = (string)datos.Lector["EstadoNombre"];
+
+                    return turno;
+                }
+
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+       
+        }
+
+
+        public bool ModificarTurno(Turno modificado) {
+
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta(@"
+                    UPDATE Turnos 
+                    SET 
+                        IDPaciente = @idPaciente, 
+                        IDMedico = @idMedico, 
+                        FechaHora = @fechaHora, 
+                        FechaModificacion = GETDATE() 
+                    WHERE IDTurno = @id");
+
+                datos.setearParametro("idPaciente", modificado.PacienteId);
+                datos.setearParametro("@idMedico", modificado.MedicoId);
+                datos.setearParametro("@fechaHora", modificado.FechaHora);
+                datos.setearParametro("@id", modificado.Id);
+
+                datos.ejecutarAccion();
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally 
+            {
+                datos.cerrarConexion();
+            }
+            
+        
         }
 
     }

@@ -11,7 +11,7 @@ namespace Negocio
     public class PacienteNegocio
     {
         // Listado
-        public List<Paciente> ListarPacientes()
+        public List<Paciente> ListarPacientes(bool soloActivos = true)
         {
             List<Paciente> lista = new List<Paciente>();
             AccesoDatos datos = new AccesoDatos();
@@ -49,9 +49,11 @@ namespace Negocio
                      
                      LEFT JOIN ObrasSociales OS
                          ON P.IDObraSocial = OS.IDObraSocial
+                    
+                    WHERE (@soloActivos = 0 OR P.Activo = 1)
                      
                      ORDER BY U.Apellido, U.Nombre");
-
+                datos.setearParametro("@soloActivos", soloActivos ? 1 : 0);
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
@@ -280,6 +282,10 @@ namespace Negocio
         // Modificación
         public void ModificarPaciente(Paciente paciente)
         {
+            UsuarioNegocio negocio = new UsuarioNegocio();
+            paciente.Usuario.Id = paciente.UsuarioId;
+            negocio.ModificarUsuario(paciente.Usuario);
+
             AccesoDatos datos = new AccesoDatos();
 
             try

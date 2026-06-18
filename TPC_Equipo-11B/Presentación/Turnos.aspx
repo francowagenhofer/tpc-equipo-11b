@@ -155,20 +155,29 @@
                     </asp:TemplateField>
 
                     <asp:TemplateField HeaderText="Acciones">
-                        <ItemTemplate>
-                            <div class="d-flex gap-2">
-                                <asp:LinkButton ID="btnCancelar" runat="server"
-                                    CssClass="btn btn-sm btn-outline-danger"
-                                    ToolTip="Cancelar turno"
-                                    CommandName="Cancelar"
-                                    CommandArgument='<%# Eval("Id") %>'
-                                    OnClientClick="return confirm('¿Está seguro de que desea cancelar este turno?');"
-                                    Visible='<%# Eval("EstadoTurno.Nombre").ToString() == "Pendiente" || Eval("EstadoTurno.Nombre").ToString() == "Confirmado" %>'>
-                                    <i class="bi bi-x-circle"></i> Cancelar
-                                </asp:LinkButton>
-                            </div>
-                        </ItemTemplate>
-                    </asp:TemplateField>
+    <ItemTemplate>
+        <div class="d-flex gap-2">
+            <!-- Botón Modificar (siempre visible) -->
+            <asp:LinkButton ID="btnModificar" runat="server" 
+                CssClass="btn btn-sm btn-outline-primary" 
+                ToolTip="Modificar turno" 
+                CommandName="Modificar" 
+                CommandArgument='<%# Eval("Id") %>'>
+                <i class="bi bi-pencil"></i> Modificar
+            </asp:LinkButton>
+            <!-- Botón Cancelar -->
+            <asp:LinkButton ID="btnCancelar" runat="server" 
+                CssClass="btn btn-sm btn-outline-danger" 
+                ToolTip="Cancelar turno" 
+                CommandName="Cancelar" 
+                CommandArgument='<%# Eval("Id") %>'
+                OnClientClick="return confirm('¿Está seguro de que desea cancelar este turno?');"
+                Visible='<%# Eval("EstadoTurno.Nombre").ToString() == "Pendiente" || Eval("EstadoTurno.Nombre").ToString() == "Confirmado" %>'>
+                <i class="bi bi-x-circle"></i> Cancelar
+            </asp:LinkButton>
+        </div>
+    </ItemTemplate>
+</asp:TemplateField>
                 </Columns>
             </asp:GridView>
         </div>

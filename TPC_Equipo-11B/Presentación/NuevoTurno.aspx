@@ -6,7 +6,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="contenido" runat="server">
 
     <div class="card card-custom p-4 shadow-sm border-0 mx-auto" style="max-width: 600px;">
-        <h2 class="fw-bold mb-1">Registrar Nuevo Turno</h2>
+        <h2 class="fw-bold mb-1"><asp:Literal ID="litTitulo" runat="server" Text="Registrar Nuevo Turno" /></h2>
         <p class="text-muted mb-4">Selecciona paciente, médico y la fecha del turno.</p>
 
         

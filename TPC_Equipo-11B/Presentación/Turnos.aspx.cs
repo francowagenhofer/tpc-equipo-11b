@@ -62,13 +62,18 @@ namespace Presentación {
                 {
                     if (negocio.CancelarTurno(idTurno))
                     {
-                        CargarGrilla(); 
+                        CargarGrilla();
                     }
                 }
                 catch (Exception ex)
                 {
                     Response.Write("<script>alert('No se pudo cancelar el turno: " + ex.Message + "');</script>");
                 }
+            }
+            else if (e.CommandName == "Modificar")
+            {
+                string idTurno = e.CommandArgument.ToString();
+                Response.Redirect("NuevoTurno.aspx?id=" + idTurno);
             }
         }
         
