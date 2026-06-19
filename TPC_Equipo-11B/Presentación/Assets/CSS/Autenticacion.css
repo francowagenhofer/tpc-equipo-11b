@@ -1,0 +1,249 @@
+﻿* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+body {
+    background-color: #f3f4f6;
+}
+
+.contenedor-autenticacion {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.tarjeta-autenticacion {
+    width: 100%;
+    max-width: 980px;
+    height: 620px;
+    display: flex;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+    border: 1px solid #e5e7eb;
+    background: white;
+}
+
+/* PANEL IZQUIERDO */
+.panel-izquierdo {
+    width: 42%;
+    background: #111827;
+    color: white;
+    padding: 48px 42px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Logo */
+/* Logo */
+.logo-sistema {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.logo-contenedor {
+    width: 78px;
+    height: 78px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.logo-imagen {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.28));
+}
+
+.logo-texto {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.05;
+}
+
+.logo-nombre {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    color: #ffffff;
+}
+
+.logo-subtitulo {
+    margin-top: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.62);
+}
+
+/* Cuerpo izquierdo */
+.cuerpo-izquierdo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px 0;
+}
+
+.etiqueta {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #9ca3af;
+    margin-bottom: 14px;
+}
+
+.titulo-izquierdo {
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 14px;
+}
+
+.descripcion-izquierda {
+    font-size: 13px;
+    color: #cbd5e1;
+    line-height: 1.6;
+    margin-bottom: 28px;
+}
+
+.linea-separadora {
+    width: 40px;
+    height: 2px;
+    background: #374151;
+    margin-bottom: 28px;
+}
+
+/* Features */
+.item-info {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.punto {
+    width: 6px;
+    height: 6px;
+    background: #6b7280;
+    border-radius: 50%;
+    margin-top: 6px;
+}
+
+.texto-item {
+    font-size: 12px;
+    color: #9ca3af;
+    line-height: 1.5;
+}
+
+    .texto-item strong {
+        display: block;
+        color: #e5e7eb;
+        font-weight: 600;
+        margin-bottom: 2px;
+    }
+
+/* Footer izquierdo */
+.pie-izquierdo {
+    font-size: 11px;
+    color: #6b7280;
+}
+
+/* PANEL DERECHO */
+.panel-derecho {
+    flex: 1;
+    background: white;
+    padding: 60px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Encabezados */
+.etiqueta-formulario {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #9ca3af;
+    margin-bottom: 10px;
+}
+
+.titulo-formulario {
+    font-size: 24px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 6px;
+}
+
+.subtitulo-formulario {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 28px;
+}
+
+/* Campos */
+.campo {
+    margin-bottom: 18px;
+}
+
+    .campo input {
+        width: 100%;
+        border: none;
+        border-bottom: 1.5px solid #e5e7eb;
+        padding: 12px 0;
+        font-size: 14px;
+        outline: none;
+        transition: 0.2s ease;
+        background: transparent;
+    }
+
+        .campo input:focus {
+            border-color: #111827;
+        }
+
+.boton-principal {
+    width: 100%;
+    background: #111827;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+    margin-top: 10px;
+}
+
+    .boton-principal:hover {
+        background: #1f2937;
+        transform: translateY(-1px);
+    }
+
+/* Link inferior */
+.link-formulario {
+    text-align: center;
+    margin-top: 22px;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+    .link-formulario a {
+        color: #111827;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+        .link-formulario a:hover {
+            text-decoration: underline;
+        }

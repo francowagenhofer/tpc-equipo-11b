@@ -6,55 +6,131 @@
     <title>Login - Clínica</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="Assets/CSS/Acceso.css" rel="stylesheet" />
+    <link href="~/Assets/CSS/Autenticacion.css" rel="stylesheet" runat="server" />
 </head>
 
 <body>
 
     <form id="form1" runat="server">
 
-        <div class="contenedor-acceso">
+        <div class="contenedor-autenticacion">
 
-            <div class="tarjeta-acceso">
+            <div class="tarjeta-autenticacion">
 
-                <h3 class="titulo-acceso">Sistema Clínica</h3>
+                <!-- PANEL IZQUIERDO -->
+                <div class="panel-izquierdo">
 
-                <p class="text-center text-muted mb-3">
-                    Iniciar sesión
-                </p>
+                    <div class="logo-sistema">
+                        <div class="logo-contenedor">
+                            <img src="<%= ResolveUrl("~/Assets/IMG/logo-clinica.png") %>"
+                                alt="Logo Sistema Clínica"
+                                class="logo-imagen" />
+                        </div>
 
-                <div class="mb-3">
-                    <asp:TextBox ID="TextBox1"
+                        <div class="logo-texto">
+                            <span class="logo-nombre">Sistema Clínica</span>
+                            <span class="logo-subtitulo">Gestión integral de la salud</span>
+                        </div>
+                    </div>
+
+                    <div class="cuerpo-izquierdo">
+
+                        <div class="etiqueta">Plataforma de gestión</div>
+
+                        <h2 class="titulo-izquierdo">Gestión clínica<br />
+                            centralizada
+                        </h2>
+
+                        <p class="descripcion-izquierda">
+                            Sistema diseñado para la administración integral de turnos, pacientes, médicos y usuarios.
+                        </p>
+
+                        <div class="linea-separadora"></div>
+
+                        <div class="item-info">
+                            <div class="punto"></div>
+                            <div class="texto-item">
+                                <strong>Turnos</strong>
+                                Organización de citas médicas en tiempo real.
+                            </div>
+                        </div>
+
+                        <div class="item-info">
+                            <div class="punto"></div>
+                            <div class="texto-item">
+                                <strong>Pacientes</strong>
+                                Gestión completa de historiales clínicos.
+                            </div>
+                        </div>
+
+                        <div class="item-info">
+                            <div class="punto"></div>
+                            <div class="texto-item">
+                                <strong>Acceso seguro</strong>
+                                Control por roles de usuario.
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="pie-izquierdo">
+                        © 2026 Sistema Clínica
+                    </div>
+
+                </div>
+
+                <!-- PANEL DERECHO -->
+                <div class="panel-derecho">
+
+                    <div class="etiqueta-formulario">
+                        Acceso al sistema
+                    </div>
+
+                    <h3 class="titulo-formulario">Iniciar sesión
+                    </h3>
+
+                    <p class="subtitulo-formulario">
+                        Ingresá tu usuario y contraseña para acceder.
+                    </p>
+
+                    <div class="campo">
+                        <asp:TextBox ID="txtUsuario"
+                            runat="server"
+                            CssClass="form-control"
+                            placeholder="Usuario" />
+                    </div>
+
+                    <div class="campo">
+                        <asp:TextBox ID="txtPassword"
+                            runat="server"
+                            TextMode="Password"
+                            CssClass="form-control"
+                            placeholder="Contraseña" />
+                    </div>
+
+                    <div class="campo text-center">
+                        <asp:Label ID="lblMensajeError"
+                            runat="server"
+                            CssClass="text-danger"
+                            Visible="false" />
+                    </div>
+
+                    <asp:Button ID="btnLogin"
                         runat="server"
-                        CssClass="form-control"
-                        placeholder="Usuario" />
-                </div>
+                        Text="Ingresar"
+                        CssClass="boton-principal" />
 
-                <div class="mb-3">
-                    <asp:TextBox ID="TextBox2"
-                        runat="server"
-                        TextMode="Password"
-                        CssClass="form-control"
-                        placeholder="Contraseña" />
-                </div>
+                    <div class="link-formulario">
+                        ¿No tenés cuenta?
+                    <a href="Registro.aspx">Registrarse</a>
+                    </div>
 
-                <div class="mb-3 text-center">
-                    <asp:Label ID="lblMensajeError" runat="server" CssClass="text-danger" Visible="false" />
-                </div>
-
-                <asp:Button ID="Button1"
-                    runat="server"
-                    Text="Ingresar"
-                    CssClass="boton-acceso" />
-
-                <div class="link-acceso">
-                    ¿No tenés cuenta?
-            <a href="Registro.aspx">Registrarse</a>
                 </div>
 
             </div>
 
         </div>
+
     </form>
 
 </body>
