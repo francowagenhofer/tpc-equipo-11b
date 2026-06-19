@@ -89,6 +89,13 @@
     justify-content: space-between;
 }
 
+.avatar-usuario {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
 /* CONTENIDO */
 .contenido {
     padding: 20px;

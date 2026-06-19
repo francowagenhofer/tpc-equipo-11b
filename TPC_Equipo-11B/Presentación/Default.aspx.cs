@@ -9,26 +9,21 @@ using Negocio;
 
 namespace Presentación
 {
-    public partial class Default : System.Web.UI.Page
+    public partial class Default : PaginaProtegida
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
             if (!IsPostBack)
             {
                 MostrarDashboard();
             }
-
         }
 
         private void MostrarDashboard()
         {
-            // Simulación hasta implementar login
-            string rol = "Paciente";
-
             OcultarTodos();
 
-            switch (rol)
+            switch (UsuarioLogueado.Rol.Nombre)
             {
                 case "Administrador":
                     pnlAdministrador.Visible = true;
@@ -47,7 +42,7 @@ namespace Presentación
                     break;
             }
         }
-
+        
         private void OcultarTodos()
         {
             pnlAdministrador.Visible = false;

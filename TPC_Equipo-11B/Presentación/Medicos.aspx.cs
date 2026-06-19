@@ -8,7 +8,7 @@ using Negocio;
 
 namespace Presentación
 {
-    public partial class Medicos : System.Web.UI.Page
+    public partial class Medicos : PaginaProtegida
     {
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -35,8 +35,6 @@ namespace Presentación
         {
             // Aquí agregaremos el filtro de búsqueda 
         }
-
-
 
         protected void ddlEspecialidad_SelectedIndexChanged(object sender, EventArgs e)
         {

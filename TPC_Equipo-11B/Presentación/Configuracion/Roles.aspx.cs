@@ -8,7 +8,7 @@ using System.Web.UI.WebControls;
 
 namespace Presentación.Configuracion
 {
-    public partial class Roles : System.Web.UI.Page
+    public partial class Roles : PaginaProtegida
     {
         protected void Page_Load(object sender, EventArgs e)
         {

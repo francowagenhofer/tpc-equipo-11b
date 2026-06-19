@@ -11,53 +11,69 @@ namespace Negocio
 
     public class UsuarioNegocio
     {
-        // Login
         public Usuario ValidarLogin(string username, string password)
         {
-
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                datos.setearConsulta("SELECT IDUsuario, Nombre, Apellido, Email,Telefono, Username, PasswordHash, ImagenUrl, FechaAlta, IdRol, Activo FROM Usuarios WHERE Username = @user AND PasswordHash = @pass AND Activo = 1");
-                datos.setearParametro("@user", username);
-                datos.setearParametro("@pass", password);
+                datos.setearConsulta(@"
+                                    SELECT
+                                        u.IDUsuario,
+                                        u.Nombre,
+                                        u.Apellido,
+                                        u.Email,
+                                        u.Telefono,
+                                        u.Username,
+                                        u.PasswordHash,
+                                        u.ImagenUrl,
+                                        u.FechaAlta,
+                                        u.IDRol,
+                                        u.Activo,
+                                        r.Nombre AS NombreRol
+                                    FROM Usuarios u
+                                    INNER JOIN Roles r
+                                        ON u.IDRol = r.IDRol
+                                    WHERE u.Username = @username
+                                      AND u.PasswordHash = @password
+                                      AND u.Activo = 1
+                                      AND r.Activo = 1");
+
+                datos.setearParametro("@username", username);
+                datos.setearParametro("@password", password);
+
                 datos.ejecutarLectura();
 
-                if (datos.Lector.Read())
-                {
+                if (!datos.Lector.Read())
+                    return null;
 
-                    Usuario aux = new Usuario();
-                    aux.Id = (int)datos.Lector["IDUsuario"];
-                    aux.Nombre = (string)datos.Lector["Nombre"];
-                    aux.Apellido = (string)datos.Lector["Apellido"];
-                    aux.Email = (string)datos.Lector["Email"];
-                    aux.Telefono = datos.Lector["Telefono"] != DBNull.Value ? (string)datos.Lector["Telefono"] : "";
-                    aux.Username = (string)datos.Lector["Username"];
-                    aux.Password = (string)datos.Lector["PasswordHash"];
-                    aux.ImagenUrl = datos.Lector["ImagenUrl"] != DBNull.Value ? (string)datos.Lector["ImagenUrl"] : "";
-                    aux.FechaAlta = (DateTime)datos.Lector["FechaAlta"];
-                    aux.RolId = (int)datos.Lector["IDRol"];
-                    aux.Activo = (bool)datos.Lector["Activo"];
+                Usuario usuario = new Usuario();
 
-                    return aux;
+                usuario.Id = (int)datos.Lector["IDUsuario"];
+                usuario.Nombre = datos.Lector["Nombre"].ToString();
+                usuario.Apellido = datos.Lector["Apellido"].ToString();
+                usuario.Email = datos.Lector["Email"].ToString();
+                usuario.Telefono = datos.Lector["Telefono"] != DBNull.Value ? datos.Lector["Telefono"].ToString() : "";
+                usuario.Username = datos.Lector["Username"].ToString();
+                usuario.Password = datos.Lector["PasswordHash"].ToString();
+                usuario.ImagenUrl = datos.Lector["ImagenUrl"] != DBNull.Value ? datos.Lector["ImagenUrl"].ToString() : "";
+                usuario.FechaAlta = (DateTime)datos.Lector["FechaAlta"];
+                usuario.Activo = (bool)datos.Lector["Activo"];
 
-                }
+                usuario.Rol = new Rol();
+                usuario.Rol.Id = (int)datos.Lector["IDRol"];
+                usuario.Rol.Nombre = datos.Lector["NombreRol"].ToString();
 
-                return null;
-
+                return usuario;
             }
-            catch (Exception ex)
+            catch
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
                 datos.cerrarConexion();
             }
-
-
         }
 
         // Listado
@@ -191,7 +207,6 @@ namespace Negocio
         }
 
         // Modificación
-        // Para todos los usuarios
         public void ModificarUsuario(Usuario usuario)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -473,5 +488,26 @@ namespace Negocio
             }
         }
 
+        // Validación de Email
+        public bool EmailRegistrado(string email)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("Select count(*) from Usuarios where Email = @email");
+                datos.setearParametro("@email", email);
+
+                int count = (int)datos.ejecutarEscalar();
+                return count > 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }

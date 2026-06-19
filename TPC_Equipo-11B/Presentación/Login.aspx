@@ -15,6 +15,7 @@
 
         <div class="contenedor-autenticacion">
 
+
             <div class="tarjeta-autenticacion">
 
                 <!-- PANEL IZQUIERDO -->
@@ -82,6 +83,16 @@
                 <!-- PANEL DERECHO -->
                 <div class="panel-derecho">
 
+                    <asp:Panel ID="pnlAvisoAcceso"
+                        runat="server"
+                        CssClass="alert alert-warning mb-4"
+                        Visible="false">
+
+                        <i class="bi bi-shield-lock me-2"></i>
+                        Debe iniciar sesión para acceder al sistema.
+
+                    </asp:Panel>
+
                     <div class="etiqueta-formulario">
                         Acceso al sistema
                     </div>
@@ -94,10 +105,11 @@
                     </p>
 
                     <div class="campo">
-                        <asp:TextBox ID="txtUsuario"
+                        <asp:TextBox ID="txtUsername"
                             runat="server"
                             CssClass="form-control"
-                            placeholder="Usuario" />
+                            placeholder="Usuario"
+                            MaxLength="50" />
                     </div>
 
                     <div class="campo">
@@ -105,7 +117,8 @@
                             runat="server"
                             TextMode="Password"
                             CssClass="form-control"
-                            placeholder="Contraseña" />
+                            placeholder="Contraseña"
+                            MaxLength="50" />
                     </div>
 
                     <div class="campo text-center">
@@ -118,7 +131,7 @@
                     <asp:Button ID="btnLogin"
                         runat="server"
                         Text="Ingresar"
-                        CssClass="boton-principal" />
+                        CssClass="boton-principal" OnClick="btnLogin_Click" />
 
                     <div class="link-formulario">
                         ¿No tenés cuenta?

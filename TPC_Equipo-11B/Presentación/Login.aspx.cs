@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Dominio;
+using Negocio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Dominio;
-using Negocio;
 
 namespace Presentación
 {
@@ -13,52 +14,76 @@ namespace Presentación
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if(Session["usuarioLogueado"] != null) {
+            if (Session["usuarioLogueado"] != null)
+            {
                 Response.Redirect("Default.aspx");
+                return; 
             }
 
+            if (!IsPostBack)
+            {
+                if (Request.QueryString["acceso"] == "denegado")
+                {
+                    pnlAvisoAcceso.Visible = true;
+                }
+            }
         }
 
-        protected void Button1_Click(object sender, EventArgs e)
+        protected void btnLogin_Click(object sender, EventArgs e)
         {
-
-
-            if (string.IsNullOrEmpty(TextBox1.Text) || string.IsNullOrEmpty(TextBox2.Text)) {
-
-                lblMensajeError.Text = "Por favor, completa todos los campos.";
-                lblMensajeError.Visible = true;
-                return;
-
-            }
-
-            UsuarioNegocio negocio = new UsuarioNegocio();
+            lblMensajeError.Visible = false;
 
             try
             {
-                Usuario usuario = negocio.ValidarLogin(TextBox1.Text, TextBox2.Text);
+                string usuario = txtUsername.Text.Trim();
+                string password = txtPassword.Text;
 
-                if (usuario != null) {
-
-                    Session["usuarioLogueado"] = usuario;
-                    Response.Redirect("Default.aspx", false);
-
-                }
-                else{
-
-                    lblMensajeError.Text = "Usuario o contraseña Incorrectos.";
+                if (string.IsNullOrWhiteSpace(usuario) || string.IsNullOrWhiteSpace(password))
+                {
+                    lblMensajeError.Text = "Debe completar todos los campos.";
                     lblMensajeError.Visible = true;
-
+                    return;
                 }
 
-            }
-            catch (Exception ex)
-            {
+                if (usuario.Length > 50)
+                {
+                    lblMensajeError.Text = "El usuario es demasiado largo.";
+                    lblMensajeError.Visible = true;
+                    return;
+                }
 
-                lblMensajeError.Text = "Ocurrió un error al intentar iniciar sesión. Por favor, intenta nuevamente más tarde." + ex.Message; // error en la base de datos
+                if (password.Length > 50)
+                {
+                    lblMensajeError.Text = "La contraseña es demasiado larga.";
+                    lblMensajeError.Visible = true;
+                    return;
+                }
+                else if (password.Length < 4)
+                {
+                    lblMensajeError.Text = "La contraseña es demasiado corta.";
+                    lblMensajeError.Visible = true;
+                    return;
+                }
+
+                UsuarioNegocio negocio = new UsuarioNegocio();
+                Usuario usuarioLogueado = negocio.ValidarLogin(usuario, password);
+
+                if (usuarioLogueado != null)
+                {
+                    Session["usuarioLogueado"] = usuarioLogueado;
+                    Response.Redirect("Default.aspx");
+                    return;
+                }
+
+                lblMensajeError.Text = "Usuario o contraseña incorrectos.";
+                lblMensajeError.Visible = true;
+            }
+            catch
+            {
+                lblMensajeError.Text = "Ocurrió un error al iniciar sesión. Intente nuevamente.";
                 lblMensajeError.Visible = true;
             }
         }
-
 
     }
 }

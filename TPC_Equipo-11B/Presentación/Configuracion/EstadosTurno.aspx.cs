@@ -8,7 +8,7 @@ using System.Web.UI.WebControls;
 
 namespace Presentación.Configuracion
 {
-    public partial class EstadosTurno : System.Web.UI.Page
+    public partial class EstadosTurno : PaginaProtegida
     {
         protected void Page_Load(object sender, EventArgs e)
         {

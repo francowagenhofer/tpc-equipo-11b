@@ -7,7 +7,8 @@ using System.Web.UI.WebControls;
 using Negocio;
 
 namespace Presentación {
-    public partial class Pacientes : System.Web.UI.Page {
+    public partial class Pacientes : PaginaProtegida
+    {
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)

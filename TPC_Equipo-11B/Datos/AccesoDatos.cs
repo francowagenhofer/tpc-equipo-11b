@@ -65,7 +65,7 @@ namespace Datos
             comando.Parameters.AddWithValue(nombre, valor);
         }
 
-        public int ejecutarScalar()
+        public int ejecutarEscalar()
         {
             comando.Connection = conexion;
 

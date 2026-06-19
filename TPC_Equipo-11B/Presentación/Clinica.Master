@@ -77,10 +77,10 @@
                 </ul>
 
                 <div class="menu-salir">
-                    <a href="~/Login.aspx" runat="server" class="opcion-salir">
-                        <i class="bi bi-box-arrow-right"></i>
-                        <span>Cerrar sesión</span>
-                    </a>
+                    <asp:LinkButton ID="btnCerrarSesion" runat="server" CssClass="opcion-salir" OnClick="btnCerrarSesion_Click">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Cerrar sesión</span>
+                    </asp:LinkButton>
                 </div>
 
             </aside>
@@ -92,12 +92,17 @@
                 <header class="barra-superior">
 
                     <div class="titulo-pagina">
-                        Home
+                        <asp:Label ID="lblTituloPagina" runat="server" />
                     </div>
 
                     <div class="usuario-sistema">
-                        <i class="bi bi-person-circle"></i>
-                        <span>Administrador</span>
+                        <asp:Image ID="imgUsuario" runat="server" CssClass="avatar-usuario" />
+
+                        <div>
+                            <asp:Label ID="lblNombreUsuario" runat="server" />
+                            <br />
+                            <asp:Label ID="lblRolUsuario" runat="server" CssClass="text-muted" />
+                        </div>
                     </div>
 
                 </header>

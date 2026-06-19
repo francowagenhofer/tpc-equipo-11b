@@ -7,22 +7,24 @@ using System.Web.UI.WebControls;
 using Dominio;
 using Negocio;
 
-namespace Presentación {
-    public partial class NuevoPaciente : System.Web.UI.Page {
+namespace Presentación
+{
+    public partial class NuevoPaciente : PaginaProtegida
+    {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack) {
+            if (!IsPostBack)
+            {
 
                 CargarObrasSociales();
                 CargarGeneros();
-            
+
             }
-
-
         }
 
-        private void CargarObrasSociales() { 
-        
+        private void CargarObrasSociales()
+        {
+
             ObraSocialNegocio negocio = new ObraSocialNegocio();
             try
             {
@@ -43,7 +45,8 @@ namespace Presentación {
         }
 
 
-        private void CargarGeneros() {
+        private void CargarGeneros()
+        {
 
             GeneroNegocio negocio = new GeneroNegocio();
             try
@@ -61,13 +64,13 @@ namespace Presentación {
                 lblMensaje.CssClass = "alert alert-danger d-block text-center";
                 lblMensaje.Visible = true;
             }
-        
+
         }
 
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
-            
+
             if (string.IsNullOrEmpty(ddlObraSocial.SelectedValue) || string.IsNullOrEmpty(ddlGenero.SelectedValue))
             {
                 lblMensaje.Text = "Debe seleccionar una Obra Social y un Género.";
@@ -82,12 +85,12 @@ namespace Presentación {
                 nuevo.FechaNacimiento = Convert.ToDateTime(txtFechaNacimiento.Text);
                 nuevo.Direccion = txtDireccion.Text.Trim();
                 nuevo.Activo = true;
-               
+
                 nuevo.ObraSocial = new ObraSocial();
                 nuevo.ObraSocial.Id = Convert.ToInt32(ddlObraSocial.SelectedValue);
                 nuevo.Genero = new Genero();
                 nuevo.Genero.Id = Convert.ToInt32(ddlGenero.SelectedValue);
-                
+
                 nuevo.Usuario = new Usuario();
                 nuevo.Usuario.Nombre = txtNombre.Text.Trim();
                 nuevo.Usuario.Apellido = txtApellido.Text.Trim();
@@ -100,7 +103,7 @@ namespace Presentación {
                 nuevo.Usuario.RolId = 0;
                 nuevo.Usuario.Activo = true;
                 PacienteNegocio negocio = new PacienteNegocio();
-                negocio.RegistrarPaciente(nuevo); 
+                negocio.RegistrarPaciente(nuevo);
                 Response.Redirect("Pacientes.aspx", false);
             }
             catch (Exception ex)
