@@ -17,7 +17,7 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("SELECT IDObraSocial, Nombre FROM ObrasSociales WHERE Activo = 1");
+                datos.setearConsulta("SELECT IDObraSocial, Nombre, Activo FROM ObrasSociales");
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
@@ -25,8 +25,9 @@ namespace Negocio
                     ObraSocial aux = new ObraSocial();
                     aux.Id = (int)datos.Lector["IDObraSocial"];
                     aux.Nombre = (string)datos.Lector["Nombre"];
-                    lista.Add(aux);
+                    aux.Activo = (bool)datos.Lector["Activo"];
 
+                    lista.Add(aux);
                 }
 
                 return lista;

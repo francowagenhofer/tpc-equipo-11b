@@ -17,7 +17,7 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("SELECT IDRol, Nombre FROM Roles WHERE Activo = 1");
+                datos.setearConsulta("SELECT IDRol, Nombre, Activo FROM Roles");
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
@@ -25,8 +25,8 @@ namespace Negocio
                     Rol aux = new Rol();
                     aux.Id = (int)datos.Lector["IDRol"];
                     aux.Nombre = (string)datos.Lector["Nombre"];
+                    aux.Activo = (bool)datos.Lector["Activo"];
                     lista.Add(aux);
-
                 }
 
                 return lista;

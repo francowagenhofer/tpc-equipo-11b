@@ -17,7 +17,7 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("SELECT IDEstadoTurno, Nombre FROM EstadosTurno WHERE Activo = 1");
+                datos.setearConsulta("SELECT IDEstadoTurno, Nombre, Activo FROM EstadoTurno");
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
@@ -25,6 +25,8 @@ namespace Negocio
                     EstadoTurno aux = new EstadoTurno();
                     aux.Id = (int)datos.Lector["IDEstadoTurno"];
                     aux.Nombre = (string)datos.Lector["Nombre"];
+                    aux.Activo = (bool)datos.Lector["Activo"];
+
                     lista.Add(aux);
 
                 }

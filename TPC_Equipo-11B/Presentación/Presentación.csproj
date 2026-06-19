@@ -71,6 +71,10 @@
     <Content Include="Assets\CSS\Default.css" />
     <Content Include="Assets\CSS\Master.css" />
     <Content Include="Configuracion.aspx" />
+    <Content Include="Configuracion\EstadosTurno.aspx" />
+    <Content Include="Configuracion\Generos.aspx" />
+    <Content Include="Configuracion\ObrasSociales.aspx" />
+    <Content Include="Configuracion\Roles.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="Especialidades.aspx" />
     <Content Include="Login.aspx" />
@@ -100,6 +104,34 @@
     </Compile>
     <Compile Include="Configuracion.aspx.designer.cs">
       <DependentUpon>Configuracion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Configuracion\EstadosTurno.aspx.cs">
+      <DependentUpon>EstadosTurno.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Configuracion\EstadosTurno.aspx.designer.cs">
+      <DependentUpon>EstadosTurno.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Configuracion\Generos.aspx.cs">
+      <DependentUpon>Generos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Configuracion\Generos.aspx.designer.cs">
+      <DependentUpon>Generos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Configuracion\ObrasSociales.aspx.cs">
+      <DependentUpon>ObrasSociales.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Configuracion\ObrasSociales.aspx.designer.cs">
+      <DependentUpon>ObrasSociales.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Configuracion\Roles.aspx.cs">
+      <DependentUpon>Roles.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Configuracion\Roles.aspx.designer.cs">
+      <DependentUpon>Roles.aspx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>

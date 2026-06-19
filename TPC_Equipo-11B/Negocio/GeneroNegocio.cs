@@ -17,7 +17,7 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("SELECT IDGenero, Descripcion FROM Generos WHERE Activo = 1");
+                datos.setearConsulta("SELECT IDGenero, Descripcion, Activo FROM Generos");
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
@@ -25,8 +25,9 @@ namespace Negocio
                     Genero aux = new Genero();
                     aux.Id = (int)datos.Lector["IDGenero"];
                     aux.Descripcion = (string)datos.Lector["Descripcion"];
-                    lista.Add(aux);
+                    aux.Activo = (bool)datos.Lector["Activo"];
 
+                    lista.Add(aux);
                 }
 
                 return lista;

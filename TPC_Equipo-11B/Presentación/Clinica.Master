@@ -31,44 +31,44 @@
                 <ul class="lista-menu">
 
                     <li>
-                        <a href="Default.aspx" class="opcion-menu">
+                        <a href="~/Default.aspx" runat="server" class="opcion-menu">
                             <i class="bi bi-speedometer2"></i>
                             <span>Inicio</span>
                         </a>
                     </li>
 
                     <li>
-                        <a href="Especialidades.aspx" class="opcion-menu">
+                        <a href="~/Especialidades.aspx" runat="server" class="opcion-menu">
                             <i class="bi bi-journal-medical"></i>
                             <span>Especialidades</span>
                         </a>
                     </li>
                     <li>
-                        <a href="Medicos.aspx" class="opcion-menu">
+                        <a href="~/Medicos.aspx" runat="server" class="opcion-menu">
                             <i class="bi bi-heart-pulse"></i>
                             <span>Médicos</span>
                         </a>
                     </li>
                     <li>
-                        <a href="Pacientes.aspx" class="opcion-menu">
+                        <a href="~/Pacientes.aspx" runat="server" class="opcion-menu">
                             <i class="bi bi-people"></i>
                             <span>Pacientes</span>
                         </a>
                     </li>
                     <li>
-                        <a href="Turnos.aspx" class="opcion-menu">
+                        <a href="~/Turnos.aspx" runat="server" class="opcion-menu">
                             <i class="bi bi-calendar-check"></i>
                             <span>Turnos</span>
                         </a>
                     </li>
                     <li>
-                        <a href="Usuarios.aspx" class="opcion-menu">
+                        <a href="~/Usuarios.aspx" runat="server" class="opcion-menu">
                             <i class="bi bi-journal-medical"></i>
                             <span>Usuarios</span>
                         </a>
                     </li>
                     <li>
-                        <a href="Configuracion.aspx" class="opcion-menu">
+                        <a href="~/Configuracion.aspx" runat="server" class="opcion-menu">
                             <i class="bi bi-gear"></i>
                             <span>Configuraciones</span>
                         </a>
@@ -77,7 +77,7 @@
                 </ul>
 
                 <div class="menu-salir">
-                    <a href="Login.aspx" class="opcion-salir">
+                    <a href="~/Login.aspx" runat="server" class="opcion-salir">
                         <i class="bi bi-box-arrow-right"></i>
                         <span>Cerrar sesión</span>
                     </a>
