@@ -73,7 +73,7 @@ namespace Negocio
             {
                 datos.setearConsulta(
                     "SELECT M.IDMedico, M.IDUsuario, M.Matricula, M.Activo, " +
-                    "U.Nombre, U.Apellido, U.Email, U.Telefono, U.Username, " +
+                    "U.Nombre, U.Apellido, U.Email, U.Telefono, U.Username, U.ImagenUrl, " +
                     "E.IDEspecialidad, E.Nombre AS Especialidad " +
                     "FROM Medicos M " +
                     "INNER JOIN Usuarios U ON M.IDUsuario = U.IDUsuario " +
@@ -103,8 +103,12 @@ namespace Negocio
 
                     medico.Usuario.Telefono =
                         datos.Lector["Telefono"] != DBNull.Value
-                        ? (string)datos.Lector["Telefono"]
-                        : "";
+                        ? (string)datos.Lector["Telefono"] : "";
+                   
+                    medico.Usuario.ImagenUrl =
+                        datos.Lector["ImagenUrl"] != DBNull.Value
+                        ? (string)datos.Lector["ImagenUrl"] : "";
+
 
                     medico.Especialidad = new Especialidad();
                     medico.Especialidad.Id = (int)datos.Lector["IDEspecialidad"];
