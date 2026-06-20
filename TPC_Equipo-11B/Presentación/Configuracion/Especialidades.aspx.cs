@@ -6,9 +6,9 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace Presentación
+namespace Presentación.Configuracion
 {
-    public partial class Especialidades : System.Web.UI.Page
+    public partial class Especialidades : PaginaProtegida
     {
         protected void Page_Load(object sender, EventArgs e)
         {

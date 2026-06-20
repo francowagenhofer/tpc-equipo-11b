@@ -57,12 +57,6 @@
                     <li><span class="menu-seccion">Gestión</span></li>
 
                     <li>
-                        <a href="~/Especialidades.aspx" runat="server" class="opcion-menu">
-                            <i class="bi bi-journal-medical" aria-hidden="true"></i>
-                            <span>Especialidades</span>
-                        </a>
-                    </li>
-                    <li>
                         <a href="~/Medicos.aspx" runat="server" class="opcion-menu">
                             <i class="bi bi-heart-pulse" aria-hidden="true"></i>
                             <span>Médicos</span>
@@ -78,6 +72,12 @@
                         <a href="~/Turnos.aspx" runat="server" class="opcion-menu">
                             <i class="bi bi-calendar-check" aria-hidden="true"></i>
                             <span>Turnos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="~/HistorialClinico.aspx" runat="server" class="opcion-menu">
+                            <i class="bi bi-file-text" aria-hidden="true"></i>
+                            <span>Historial Clínico</span>
                         </a>
                     </li>
 

@@ -18,7 +18,6 @@
         </div>
 
         <!-- Buscador -->
-
         <div class="row mb-5">
 
             <div class="col-md-5">
@@ -39,73 +38,32 @@
         </div>
 
         <!-- Catálogos -->
-
         <h5 class="fw-bold mb-3">Catálogos</h5>
 
-        <div class="row g-4">
+        <div class="row g-3">
 
-            <!-- Obras Sociales -->
-            <div class="col-xl-3 col-lg-4 col-md-6">
+            <%-- Especialidades --%>
+            <div class="col-xl-4 col-lg-4 col-md-6">
                 <div class="card h-100 border-0 shadow-sm">
                     <div class="card-body text-center">
 
-                        <i class="bi bi-hospital fs-1 text-primary"></i>
+                        <i class="bi bi-filter-left fs-1 text-primary"></i>
 
-                        <h5 class="mt-3">Obras Sociales</h5>
+                        <h5 class="mt-3">Especialidades</h5>
 
                         <p class="text-muted small">
-                            Administración de obras sociales.
+                            Administración de especialidades.
                         </p>
 
-                        <a runat="server" href="~/Configuracion/ObrasSociales.aspx"
+                        <a runat="server" href="~/Configuracion/Especialidades.aspx"
                             class="btn btn-outline-primary btn-sm">Gestionar </a>
 
                     </div>
                 </div>
             </div>
 
-            <!-- Roles -->
-            <div class="col-xl-3 col-lg-4 col-md-6">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-body text-center">
-
-                        <i class="bi bi-people-fill fs-1 text-primary"></i>
-
-                        <h5 class="mt-3">Roles
-                        </h5>
-
-                        <p class="text-muted small">
-                            Administración de roles.                   
-                        </p>
-
-                        <a runat="server" href="~/Configuracion/Roles.aspx"
-                            class="btn btn-outline-primary btn-sm">Gestionar</a>
-
-                    </div>
-                </div>
-            </div>
-
-            <!-- Estados -->
-            <div class="col-xl-3 col-lg-4 col-md-6">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-body text-center">
-                        <i class="bi bi-calendar-check fs-1 text-primary"></i>
-
-                        <h5 class="mt-3">Estados de Turno</h5>
-
-                        <p class="text-muted small">
-                            Administración de estados.
-                        </p>
-
-                        <a runat="server" href="~/Configuracion/EstadosTurno.aspx"
-                            class="btn btn-outline-primary btn-sm">Gestionar</a>
-
-                    </div>
-                </div>
-            </div>
-
             <!-- Géneros -->
-            <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="col-xl-4 col-lg-4 col-md-6">
                 <div class="card h-100 border-0 shadow-sm">
                     <div class="card-body text-center">
 
@@ -125,6 +83,66 @@
                 </div>
             </div>
 
+            <!-- Obras Sociales -->
+            <div class="col-xl-4 col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+
+                        <i class="bi bi-hospital fs-1 text-primary"></i>
+
+                        <h5 class="mt-3">Obras Sociales</h5>
+
+                        <p class="text-muted small">
+                            Administración de obras sociales.
+                        </p>
+
+                        <a runat="server" href="~/Configuracion/ObrasSociales.aspx"
+                            class="btn btn-outline-primary btn-sm">Gestionar </a>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <%--            <!-- Roles -->
+            <div class="col-xl-3 col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+
+                        <i class="bi bi-people-fill fs-1 text-primary"></i>
+
+                        <h5 class="mt-3">Roles
+                        </h5>
+
+                        <p class="text-muted small">
+                            Administración de roles.                   
+                        </p>
+
+                        <a runat="server" href="~/Configuracion/Roles.aspx"
+                            class="btn btn-outline-primary btn-sm">Gestionar</a>
+
+                    </div>
+                </div>
+            </div>--%>
+
+            <!-- Estados -->
+            <%--            <div class="col-xl-3 col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="bi bi-calendar-check fs-1 text-primary"></i>
+
+                        <h5 class="mt-3">Estados de Turno</h5>
+
+                        <p class="text-muted small">
+                            Administración de estados.
+                        </p>
+
+                        <a runat="server" href="~/Configuracion/EstadosTurno.aspx"
+                            class="btn btn-outline-primary btn-sm">Gestionar</a>
+
+                    </div>
+                </div>
+            </div>--%>
         </div>
 
     </div>

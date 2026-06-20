@@ -7,7 +7,7 @@
 // </generado automáticamente>
 //------------------------------------------------------------------------------
 
-namespace Presentación
+namespace Presentación.Configuracion
 {
 
 

@@ -77,7 +77,8 @@
     <Content Include="Configuracion\ObrasSociales.aspx" />
     <Content Include="Configuracion\Roles.aspx" />
     <Content Include="Default.aspx" />
-    <Content Include="Especialidades.aspx" />
+    <Content Include="Configuracion\Especialidades.aspx" />
+    <Content Include="HistorialClinico.aspx" />
     <Content Include="Login.aspx" />
     <Content Include="Medicos.aspx" />
     <Content Include="NuevaEspecialidad.aspx" />
@@ -141,12 +142,19 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Especialidades.aspx.cs">
+    <Compile Include="Configuracion\Especialidades.aspx.cs">
       <DependentUpon>Especialidades.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Especialidades.aspx.designer.cs">
+    <Compile Include="Configuracion\Especialidades.aspx.designer.cs">
       <DependentUpon>Especialidades.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="HistorialClinico.aspx.cs">
+      <DependentUpon>HistorialClinico.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HistorialClinico.aspx.designer.cs">
+      <DependentUpon>HistorialClinico.aspx</DependentUpon>
     </Compile>
     <Compile Include="Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
