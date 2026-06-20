@@ -6,7 +6,10 @@
     <title>Registro - Clínica</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/Assets/CSS/Autenticacion.css" rel="stylesheet" runat="server" />
+    
+    <%--<link href="~/Assets/CSS/Autenticacion.css" rel="stylesheet" runat="server" />--%>
+    <link href="<%= ResolveUrl("~/Assets/CSS/Autenticacion.css") %>?v=1.0" rel="stylesheet" />
+
 </head>
 
 <body>

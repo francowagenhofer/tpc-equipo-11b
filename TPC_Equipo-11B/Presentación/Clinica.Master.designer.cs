@@ -51,15 +51,6 @@ namespace Presentación
         protected global::System.Web.UI.WebControls.Label lblTituloPagina;
 
         /// <summary>
-        /// Control imgUsuario.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Image imgUsuario;
-
-        /// <summary>
         /// Control lblNombreUsuario.
         /// </summary>
         /// <remarks>
@@ -76,6 +67,15 @@ namespace Presentación
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblRolUsuario;
+
+        /// <summary>
+        /// Control imgUsuario.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image imgUsuario;
 
         /// <summary>
         /// Control contenido.
