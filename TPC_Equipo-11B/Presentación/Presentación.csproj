@@ -76,6 +76,7 @@
     <Content Include="Configuracion\Generos.aspx" />
     <Content Include="Configuracion\ObrasSociales.aspx" />
     <Content Include="Configuracion\Roles.aspx" />
+    <Content Include="ConfirmarTurno.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="Configuracion\Especialidades.aspx" />
     <Content Include="HistorialClinico.aspx" />
@@ -136,6 +137,13 @@
     </Compile>
     <Compile Include="Configuracion\Roles.aspx.designer.cs">
       <DependentUpon>Roles.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ConfirmarTurno.aspx.cs">
+      <DependentUpon>ConfirmarTurno.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ConfirmarTurno.aspx.designer.cs">
+      <DependentUpon>ConfirmarTurno.aspx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>

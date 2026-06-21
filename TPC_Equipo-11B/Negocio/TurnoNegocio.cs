@@ -242,6 +242,96 @@ namespace Negocio
         
         }
 
+
+        public bool ConfirmarTurnoPorCodigo(string codigo)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                // IDEstadoTurno = 2 corresponde a "Confirmado"
+                datos.setearConsulta("UPDATE Turnos SET IDEstadoTurno = 2, FechaModificacion = @fechaMod WHERE Codigo = @codigo");
+                datos.setearParametro("@codigo", codigo);
+                datos.setearParametro("@fechaMod", DateTime.Now);
+                datos.ejecutarAccion();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public Turno ObtenerTurnoPorCodigo(string codigo)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT 
+                        T.IDTurno,
+                        T.Codigo,
+                        T.FechaHora,
+                        T.IDEstadoTurno,
+                        ET.Nombre AS EstadoNombre,
+                        P.IDPaciente,
+                        U_Pac.Nombre AS PacienteNombre,
+                        U_Pac.Apellido AS PacienteApellido,
+                        M.IDMedico,
+                        U_Med.Nombre AS MedicoNombre,
+                        U_Med.Apellido AS MedicoApellido
+                    FROM Turnos T
+                    INNER JOIN Pacientes P ON T.IDPaciente = P.IDPaciente
+                    INNER JOIN Usuarios U_Pac ON P.IDUsuario = U_Pac.IDUsuario
+                    INNER JOIN Medicos M ON T.IDMedico = M.IDMedico
+                    INNER JOIN Usuarios U_Med ON M.IDUsuario = U_Med.IDUsuario
+                    INNER JOIN EstadoTurno ET ON T.IDEstadoTurno = ET.IDEstadoTurno
+                    WHERE T.Codigo = @codigo");
+
+                datos.setearParametro("@codigo", codigo);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    Turno turno = new Turno();
+                    turno.Id = (int)datos.Lector["IDTurno"];
+                    turno.Codigo = (string)datos.Lector["Codigo"];
+                    turno.FechaHora = (DateTime)datos.Lector["FechaHora"];
+                    turno.PacienteId = (int)datos.Lector["IDPaciente"];
+                    turno.MedicoId = (int)datos.Lector["IDMedico"];
+
+                    turno.Paciente = new Paciente();
+                    turno.Paciente.Usuario = new Usuario();
+                    turno.Paciente.Usuario.Nombre = (string)datos.Lector["PacienteNombre"];
+                    turno.Paciente.Usuario.Apellido = (string)datos.Lector["PacienteApellido"];
+
+                    turno.Medico = new Medico();
+                    turno.Medico.Usuario = new Usuario();
+                    turno.Medico.Usuario.Nombre = (string)datos.Lector["MedicoNombre"];
+                    turno.Medico.Usuario.Apellido = (string)datos.Lector["MedicoApellido"];
+
+                    turno.EstadoTurno = new EstadoTurno();
+                    turno.EstadoTurno.Id = (int)datos.Lector["IDEstadoTurno"];
+                    turno.EstadoTurno.Nombre = (string)datos.Lector["EstadoNombre"];
+
+                    return turno;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+
     }
 }
 

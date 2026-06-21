@@ -153,9 +153,10 @@ namespace Presentación {
 
                 TurnoNegocio negocio = new TurnoNegocio();
                 bool resultado = false;
+                bool esNuevo = Request.QueryString["id"] == null;
 
                 // Manejar si se está editando o creando un turno nuevo
-                if (Request.QueryString["id"] != null)
+                if (!esNuevo)
                 {
                     nuevo.Id = Convert.ToInt32(Request.QueryString["id"]);
                     resultado = negocio.ModificarTurno(nuevo);
@@ -168,6 +169,60 @@ namespace Presentación {
 
                 if (resultado)
                 {
+                    // Enviar correo de confirmación solo si es un turno NUEVO
+                    if (esNuevo)
+                    {
+                        try
+                        {
+                            PacienteNegocio pacienteNeg = new PacienteNegocio();
+                            Paciente pac = pacienteNeg.ObtenerPacientePorId(nuevo.PacienteId);
+
+                            if (pac != null && pac.Usuario != null && !string.IsNullOrEmpty(pac.Usuario.Email))
+                            {
+                                string nombrePaciente = $"{pac.Usuario.Nombre} {pac.Usuario.Apellido}";
+                                string nombreMedico = ddlMedico.SelectedItem.Text;
+                                string fechaHoraStr = nuevo.FechaHora.ToString("dd/MM/yyyy HH:mm") + " hs";
+
+                                // Generar URL de confirmación dinámica (funciona en localhost y en hosting de producción)
+                                string urlBase = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath.TrimEnd('/');
+                                string urlConfirmacion = $"{urlBase}/ConfirmarTurno.aspx?codigo={nuevo.Codigo}";
+
+                                string asunto = "Confirmación de Turno Médico - " + nuevo.Codigo;
+                                string cuerpo = $@"
+                                    <html>
+                                    <body style='font-family: Arial, sans-serif; color: #333; line-height: 1.6;'>
+                                        <div style='max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;'>
+                                            <h2 style='color: #0d6efd; text-align: center;'>¡Hola, {nombrePaciente}!</h2>
+                                            <p>Hemos registrado una solicitud de turno médico en nuestro sistema. A continuación se detallan los datos del turno:</p>
+                                            
+                                            <div style='background-color: #f8f9fa; padding: 15px; border-radius: 6px; margin: 20px 0; border-left: 4px solid #0d6efd;'>
+                                                <p style='margin: 5px 0;'><strong>Código de Turno:</strong> {nuevo.Codigo}</p>
+                                                <p style='margin: 5px 0;'><strong>Médico:</strong> {nombreMedico}</p>
+                                                <p style='margin: 5px 0;'><strong>Fecha y Hora:</strong> {fechaHoraStr}</p>
+                                            </div>
+
+                                            <p style='text-align: center; margin: 30px 0;'>
+                                                <a href='{urlConfirmacion}' style='background-color: #198754; color: white; padding: 12px 25px; text-decoration: none; border-radius: 50px; font-weight: bold; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.1);'>Confirmar mi Turno</a>
+                                            </p>
+
+                                            <p style='font-size: 0.9em; color: #666;'>Si tú no solicitaste este turno, por favor ignora este correo.</p>
+                                            <hr style='border: none; border-top: 1px solid #eee; margin: 20px 0;' />
+                                            <p style='font-size: 0.8em; color: #999; text-align: center;'>© 2026 Sistema Clínica. Todos los derechos reservados.</p>
+                                        </div>
+                                    </body>
+                                    </html>";
+
+                                EmailService emailService = new EmailService();
+                                emailService.EnviarCorreo(pac.Usuario.Email, asunto, cuerpo);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            // Se registra el error en consola para depuración, pero no bloquea el flujo principal
+                            System.Diagnostics.Debug.WriteLine("Error al enviar el correo: " + ex.Message);
+                        }
+                    }
+
                     Response.Redirect("Turnos.aspx", false);
                 }
             }
@@ -178,5 +233,7 @@ namespace Presentación {
                 lblMensaje.Visible = true;
             }
         }
+
+
     }
 }
