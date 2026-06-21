@@ -1,6 +1,8 @@
 ﻿<%@ Page Title="Turnos" Language="C#" MasterPageFile="~/Clinica.Master" AutoEventWireup="true" CodeBehind="Turnos.aspx.cs" Inherits="Presentación.Turnos" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+
     <style>
         .tabla-turnos th {
             background-color: #f8f9fa;
@@ -108,10 +110,15 @@
                 <asp:TextBox
                     ID="txtFechaFiltro"
                     runat="server"
+                    ClientIDMode="Static"
+                    placeholder="Seleccione una fecha..."
                     CssClass="form-control"
-                    TextMode="Date"
                     AutoPostBack="true"
                     OnTextChanged="txtFechaFiltro_TextChanged" />
+            </div>
+            
+            <div class="col-md-2 d-flex align-items-end">
+                <asp:Button ID="btnLimpiar" runat="server" Text="Limpiar" CssClass="btn btn-outline-secondary btn-sm w-100" OnClick="btnLimpiar_Click" />
             </div>
         </div>
 
@@ -182,5 +189,61 @@
             </asp:GridView>
         </div>
     </div>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+
+    <!-- Script JS para deshabilitar fines de semana y feriados en el filtro de fechas -->
+    <script type="text/javascript">
+        // Feriados nacionales fijos en formato "MM-DD"
+        const feriadosNacionales = [
+            "01-01", // Año Nuevo
+            "03-24", // Día de la Memoria
+            "04-02", // Veteranos de Malvinas
+            "05-01", // Día del Trabajador
+            "05-25", // Revolución de Mayo
+            "06-17", // Gral. Güemes
+            "06-20", // Gral. Belgrano
+            "07-09", // Día de la Independencia
+            "08-17", // Gral. San Martín
+            "10-12", // Diversidad Cultural
+            "11-20", // Soberanía Nacional
+            "12-08", // Inmaculada Concepción
+            "12-25"  // Navidad
+        ];
+
+        document.addEventListener("DOMContentLoaded", function () {
+            flatpickr("#txtFechaFiltro", {
+                locale: "es",
+                dateFormat: "Y-m-d",
+                // Permitimos ver fechas pasadas (no usamos minDate: "today") 
+                // para que el usuario pueda consultar turnos anteriores
+                disable: [
+                    function (date) {
+                        // 1. Deshabilitar Sábados (6) y Domingos (0)
+                        if (date.getDay() === 0 || date.getDay() === 6) {
+                            return true;
+                        }
+
+                        // 2. Deshabilitar feriados
+                        const mesDia = String(date.getMonth() + 1).padStart(2, '0') + "-" + String(date.getDate()).padStart(2, '0');
+                        return feriadosNacionales.includes(mesDia);
+                    }
+                ],
+                onChange: function (selectedDates, dateStr, instance) {
+                    // Disparar el evento de cambio nativo para que ASP.NET realice el postback automáticamente
+                    const el = document.getElementById('txtFechaFiltro');
+                    if (el) {
+                        if (typeof el.onchange === 'function') {
+                            el.onchange();
+                        } else {
+                            el.dispatchEvent(new Event('change'));
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 
 </asp:Content>
