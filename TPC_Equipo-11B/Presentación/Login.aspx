@@ -6,8 +6,6 @@
     <title>Login - Clínica</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-
-    <%--<link href="~/Assets/CSS/Autenticacion.css" rel="stylesheet" runat="server" />--%>
     <link href="<%= ResolveUrl("~/Assets/CSS/Autenticacion.css") %>?v=1.0" rel="stylesheet" />
 </head>
 
@@ -16,7 +14,6 @@
     <form id="form1" runat="server">
 
         <div class="contenedor-autenticacion">
-
 
             <div class="tarjeta-autenticacion">
 
@@ -89,10 +86,8 @@
                         runat="server"
                         CssClass="alert alert-warning mb-4"
                         Visible="false">
-
                         <i class="bi bi-shield-lock me-2"></i>
                         Debe iniciar sesión para acceder al sistema.
-
                     </asp:Panel>
 
                     <div class="etiqueta-formulario">
@@ -106,14 +101,16 @@
                         Ingresá tu usuario y contraseña para acceder.
                     </p>
 
+                    <!-- CUADRO DE USUARIO (txtUsuario) -->
                     <div class="campo">
-                        <asp:TextBox ID="txtUsername"
+                        <asp:TextBox ID="txtUsuario"
                             runat="server"
                             CssClass="form-control"
                             placeholder="Usuario"
                             MaxLength="50" />
                     </div>
 
+                    <!-- CUADRO DE CONTRASEÑA (txtPassword) -->
                     <div class="campo">
                         <asp:TextBox ID="txtPassword"
                             runat="server"
@@ -130,14 +127,16 @@
                             Visible="false" />
                     </div>
 
+                    <!-- UN SÓLO BOTÓN DE INGRESO -->
                     <asp:Button ID="btnLogin"
                         runat="server"
                         Text="Ingresar"
-                        CssClass="boton-principal" OnClick="btnLogin_Click" />
+                        CssClass="boton-principal"
+                        OnClick="btnLogin_Click" />
 
                     <div class="link-formulario">
                         ¿No tenés cuenta?
-                    <a href="Registro.aspx">Registrarse</a>
+                        <a href="Registro.aspx">Registrarse</a>
                     </div>
 
                 </div>

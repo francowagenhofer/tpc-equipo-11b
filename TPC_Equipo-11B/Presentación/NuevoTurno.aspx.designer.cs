@@ -49,13 +49,22 @@ namespace Presentación {
         protected global::System.Web.UI.WebControls.DropDownList ddlMedico;
 
         /// <summary>
-        /// txtFechaHora control.
+        /// txtFecha control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtFechaHora;
+        protected global::System.Web.UI.WebControls.TextBox txtFecha;
+
+        /// <summary>
+        /// ddlHora control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlHora;
 
         /// <summary>
         /// btnGuardar control.
