@@ -240,6 +240,24 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+        public void CambiarPassword(int idUsuario, string password)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@" UPDATE Usuarios SET PasswordHash = @password WHERE IDUsuario = @idUsuario");
+
+                datos.setearParametro("@idUsuario", idUsuario);
+                datos.setearParametro("@password", password);
+
+                datos.ejecutarAccion();
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
         public void CambiarContraseña(int idUsuario, string passwordActual, string passwordNueva)
         {
             Usuario usuario = ObtenerUsuarioPorId(idUsuario);

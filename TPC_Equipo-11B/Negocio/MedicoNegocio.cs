@@ -184,6 +184,8 @@ namespace Negocio
         }
         public void ReactivarMedico(int idMedico)
         {
+            ValidarReactivacion(idMedico);
+
             AccesoDatos datos = new AccesoDatos();
 
             try
@@ -330,6 +332,16 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+        private void ValidarReactivacion(int idMedico)
+        {
+            Medico medico = ObtenerMedicoPorId(idMedico);
+
+            if (medico == null)
+                throw new Exception("El médico no existe.");
+
+            if (medico.Activo)
+                throw new Exception("El médico ya se encuentra activo.");
+        }   
 
         private bool ExisteMatricula(string matricula)
         {

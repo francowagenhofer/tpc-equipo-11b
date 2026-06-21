@@ -51,10 +51,10 @@
 
         <div class="row g-3 mb-4">
             <div class="col-md-3">
-                <label class="form-label fw-semibold text-muted small">Buscar Medico</label>
+                <label class="form-label fw-semibold text-muted small">Buscar Médico</label>
                 <div class="input-group">
                     <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
-                    <asp:TextBox ID="txtBuscar" runat="server" CssClass="form-control border-start-0" placeholder="Buscar por apellido o matrícula..." AutoPostBack="true" OnTextChanged="txtBuscar_TextChanged" />
+                    <asp:TextBox ID="txtBuscar" runat="server" CssClass="form-control border-start-0" placeholder="Buscar por nombre o matrícula..." AutoPostBack="true" OnTextChanged="txtBuscar_TextChanged" />
                 </div>
             </div>
 
@@ -114,7 +114,7 @@
 
                     <asp:TemplateField HeaderText="Estado">
                         <ItemTemplate>
-                            <span class='<%# (bool)Eval("Activo") ? "badge bg-success" : "badge bg-secondary" %>'>
+                            <span class='<%# (bool)Eval("Activo") ? "badge bg-success" : "badge bg-danger" %>'>
                                 <%# (bool)Eval("Activo") ? "Activo" : "Inactivo" %>
                             </span>
                         </ItemTemplate>
@@ -170,7 +170,6 @@
 
 
         </div>
-
         <asp:HiddenField ID="hfIdMedico" runat="server" />
         <asp:HiddenField ID="hfAccion" runat="server" />
 

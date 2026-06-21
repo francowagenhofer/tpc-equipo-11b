@@ -204,8 +204,6 @@ namespace Negocio
                     idRolPaciente = (int)datosRol.Lector["IDRol"];
 
                 }
-
-
             }
             catch (Exception ex)
             {
@@ -217,7 +215,7 @@ namespace Negocio
                 datosRol.cerrarConexion();
             }
 
-            // Si encontramos el rol, se lo asignamos al usuario del paciente
+            // Si encontramos el rol, se lo asignamos al usuario paciente
             if (idRolPaciente > 0)
             {
                 paciente.Usuario.RolId = idRolPaciente;
@@ -229,6 +227,7 @@ namespace Negocio
             ValidarAlta(paciente);
             UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
             int idUsuario = usuarioNegocio.RegistrarUsuario(paciente.Usuario);
+
             AgregarRegistroPaciente(idUsuario, paciente);
         }
 
@@ -265,6 +264,8 @@ namespace Negocio
         }
         public void ReactivarPaciente(int idPaciente)
         {
+            ValidarReactivacion(idPaciente);
+
             AccesoDatos datos = new AccesoDatos();
 
             try
@@ -282,6 +283,8 @@ namespace Negocio
         // Modificación
         public void ModificarPaciente(Paciente paciente)
         {
+            ValidarModificacion(paciente);
+
             UsuarioNegocio negocio = new UsuarioNegocio();
             paciente.Usuario.Id = paciente.UsuarioId;
             negocio.ModificarUsuario(paciente.Usuario);
@@ -318,6 +321,8 @@ namespace Negocio
         // Baja lógica 
         public void EliminarPaciente(int idPaciente)
         {
+            ValidarEliminacion(idPaciente);
+
             AccesoDatos datos = new AccesoDatos();
 
             try
@@ -403,6 +408,16 @@ namespace Negocio
             {
                 datos.cerrarConexion();
             }
+        }
+        private void ValidarReactivacion(int idPaciente)
+        {
+            Paciente paciente = ObtenerPacientePorId(idPaciente);
+
+            if (paciente == null)
+                throw new Exception("El paciente no existe.");
+
+            if (paciente.Activo)
+                throw new Exception("El paciente ya se encuentra activo.");
         }
 
         private bool ExisteDNI(string dni)

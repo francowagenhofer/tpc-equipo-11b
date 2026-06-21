@@ -88,6 +88,7 @@
     <Content Include="NuevoUsuario.aspx" />
     <Content Include="Pacientes.aspx" />
     <Content Include="PerfilMedico.aspx" />
+    <Content Include="PerfilPaciente.aspx" />
     <Content Include="Registro.aspx" />
     <Content Include="Turnos.aspx" />
     <Content Include="Usuarios.aspx" />
@@ -222,6 +223,13 @@
     </Compile>
     <Compile Include="PerfilMedico.aspx.designer.cs">
       <DependentUpon>PerfilMedico.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PerfilPaciente.aspx.cs">
+      <DependentUpon>PerfilPaciente.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PerfilPaciente.aspx.designer.cs">
+      <DependentUpon>PerfilPaciente.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Registro.aspx.cs">

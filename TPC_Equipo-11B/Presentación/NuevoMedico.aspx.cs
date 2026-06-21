@@ -30,14 +30,23 @@ namespace Presentación
 
         private void CargarEspecialidades()
         {
-            EspecialidadNegocio negocio = new EspecialidadNegocio();
-
-            ddlEspecialidad.DataSource = negocio.ListarEspecialidades();
-            ddlEspecialidad.DataTextField = "Nombre";
-            ddlEspecialidad.DataValueField = "Id";
-            ddlEspecialidad.DataBind();
-
-            ddlEspecialidad.Items.Insert(0, new ListItem("Seleccione una especialidad", "0"));
+            try
+            {
+                EspecialidadNegocio negocio = new EspecialidadNegocio();
+    
+                ddlEspecialidad.DataSource = negocio.ListarEspecialidades();
+                ddlEspecialidad.DataTextField = "Nombre";
+                ddlEspecialidad.DataValueField = "Id";
+                ddlEspecialidad.DataBind();
+    
+                ddlEspecialidad.Items.Insert(0, new ListItem("Seleccione una especialidad", "0"));
+            }
+            catch (Exception ex)
+            {
+                lblMensaje.Text = "Error al cargar Especialidades: " + ex.Message;
+                lblMensaje.CssClass = "alert alert-danger d-block text-center";
+                lblMensaje.Visible = true;
+            }
         }
 
         private void CargarMedico(int idMedico)
@@ -71,7 +80,6 @@ namespace Presentación
                 ViewState["ImagenActual"] = medico.Usuario.ImagenUrl;
             }
         }
-
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
@@ -167,9 +175,6 @@ namespace Presentación
                 lblMensaje.Visible = true;
             }
         }
-
-
-
 
     }
 }

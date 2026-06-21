@@ -112,7 +112,6 @@ namespace Presentación
             CargarGrilla();
         }
 
-
         protected void dgvMedicos_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             int idMedico = int.Parse(e.CommandArgument.ToString());
@@ -144,6 +143,12 @@ namespace Presentación
             }
         }
 
+        protected void dgvMedicos_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            dgvMedicos.PageIndex = e.NewPageIndex;
+            AplicarFiltros();
+        }
+
         private void MostrarModalConfirmacion()
         {
             if (hfAccion.Value == "Eliminar")
@@ -173,11 +178,6 @@ namespace Presentación
             ClientScript.RegisterStartupScript(GetType(), "MostrarModal", script, true);
         }
 
-        protected void dgvMedicos_PageIndexChanging(object sender, GridViewPageEventArgs e)
-        {
-            dgvMedicos.PageIndex = e.NewPageIndex;
-            CargarGrilla();
-        }
         protected void btnConfirmarAccion_Click(object sender, EventArgs e)
         {
             try
@@ -198,7 +198,6 @@ namespace Presentación
                 Response.Write("<script>alert('" + ex.Message + "')</script>");
             }
         }
-
 
     }
 }
