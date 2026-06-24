@@ -144,9 +144,33 @@
                     <label class="form-check-label fw-semibold" for="<%= chkCredencialesAutomaticas.ClientID %>">Generar credenciales automáticamente usando DNI</label>
                 </div>
 
-                <asp:Panel ID="pnlInfoCredenciales" runat="server" CssClass="alert alert-info d-flex align-items-center gap-2">
-                    <i class="bi bi-info-circle-fill"></i>
-                    <span>El usuario y contraseña iniciales se generarán utilizando el DNI del paciente.</span>
+
+<%--                <asp:Panel ID="pnlInfoCredenciales" runat="server" CssClass="alert alert-info">
+                    <div class="d-flex align-items-start gap-2">
+                        <i class="bi bi-info-circle-fill mt-1"></i>
+                        <div>
+                            <strong>Credenciales automáticas</strong>
+
+                            <div class="small mt-1">
+                                Se generará un nombre de usuario basado en el email del usuario.
+                                La contraseña inicial será la fecha de alta del sistema.
+                            </div>
+                        </div>
+                    </div>
+                </asp:Panel>--%>
+
+                <asp:Panel ID="pnlInfoCredenciales" runat="server" CssClass="alert alert-info">
+                    <div class="d-flex align-items-start gap-2">
+                        <i class="bi bi-info-circle-fill mt-1"></i>
+                        <div>
+                            <strong>Credenciales automáticas</strong>
+
+                            <div class="small mt-1">
+                                Se generará un nombre de usuario basado en el email del usuario.
+                                La contraseña inicial será el DNI del paciente.
+                            </div>
+                        </div>
+                    </div>
                 </asp:Panel>
 
             </asp:Panel>

@@ -134,9 +134,10 @@
                         CssClass="boton-principal"
                         OnClick="btnLogin_Click" />
 
-                    <div class="link-formulario">
-                        ¿No tenés cuenta?
-                        <a href="Registro.aspx">Registrarse</a>
+                    <div class="alert alert-light border mt-4 mb-0 text-center">
+                        <i class="bi bi-info-circle me-2"></i>
+                        El acceso al sistema es gestionado por la clínica.
+                        Contacte con recepción para solicitar credenciales.
                     </div>
 
                 </div>

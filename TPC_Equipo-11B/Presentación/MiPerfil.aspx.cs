@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 
 namespace Presentación
 {
-    public partial class Registro : Page
+    public partial class MiPerfil : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {

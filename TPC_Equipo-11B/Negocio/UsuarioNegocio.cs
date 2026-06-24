@@ -160,6 +160,8 @@ namespace Negocio
         // Alta
         public int RegistrarUsuario(Usuario nuevo)
         {
+            ValidarAlta(nuevo);
+
             AccesoDatos datos = new AccesoDatos();
 
             try
@@ -209,6 +211,8 @@ namespace Negocio
         // Modificación
         public void ModificarUsuario(Usuario usuario)
         {
+            ValidarModificacion(usuario);
+
             AccesoDatos datos = new AccesoDatos();
 
             try
@@ -242,6 +246,17 @@ namespace Negocio
         }
         public void CambiarPassword(int idUsuario, string password)
         {
+            Usuario usuario = ObtenerUsuarioPorId(idUsuario);
+
+            if (usuario == null)
+                throw new Exception("El usuario no existe.");
+
+            if (string.IsNullOrWhiteSpace(password))
+                throw new Exception("Debe ingresar una contraseña.");
+
+            if (password.Length < 4)
+                throw new Exception("La nueva contraseña debe tener al menos 4 caracteres.");
+
             AccesoDatos datos = new AccesoDatos();
 
             try
@@ -258,63 +273,8 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-        public void CambiarContraseña(int idUsuario, string passwordActual, string passwordNueva)
-        {
-            Usuario usuario = ObtenerUsuarioPorId(idUsuario);
-
-            if (usuario == null)
-                throw new Exception("El usuario no existe.");
-
-            if (usuario.Password != passwordActual)
-                throw new Exception("La contraseña actual es incorrecta.");
-
-            if (string.IsNullOrWhiteSpace(passwordNueva))
-                throw new Exception("Debe ingresar una nueva contraseña.");
-
-            if (passwordNueva.Length < 4)
-                throw new Exception("La nueva contraseña debe tener al menos 4 caracteres.");
-
-            AccesoDatos datos = new AccesoDatos();
-
-            try
-            {
-                datos.setearConsulta(@"UPDATE Usuarios SET PasswordHash = @passwordNueva WHERE IDUsuario = @idUsuario");
-                datos.setearParametro("@passwordNueva", passwordNueva);
-                datos.setearParametro("@idUsuario", idUsuario);
-
-                datos.ejecutarAccion();
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
-        }
 
         // Para administradores
-        public void ResetearContraseña(int idUsuario, string passwordNueva)
-        {
-            if (string.IsNullOrWhiteSpace(passwordNueva))
-                throw new Exception("Debe ingresar una nueva contraseña.");
-
-            if (passwordNueva.Length < 4)
-                throw new Exception("La nueva contraseña debe tener al menos 4 caracteres.");
-
-            AccesoDatos datos = new AccesoDatos();
-
-            try
-            {
-                datos.setearConsulta(@" UPDATE Usuarios SET PasswordHash = @passwordNueva WHERE IDUsuario = @idUsuario");
-
-                datos.setearParametro("@passwordNueva", passwordNueva);
-                datos.setearParametro("@idUsuario", idUsuario);
-
-                datos.ejecutarAccion();
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
-        }
         public void CambiarRolUsuario(int idUsuario, int nuevoRolId, Usuario usuarioLogueado)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -376,11 +336,17 @@ namespace Negocio
             if (string.IsNullOrWhiteSpace(usuario.Password))
                 throw new Exception("Debe ingresar una contraseña.");
 
+            if (usuario.Password.Length < 4)
+                throw new Exception("La nueva contraseña debe tener al menos 4 caracteres.");
+
             if (ExisteUsername(usuario.Username))
                 throw new Exception("El nombre de usuario ya existe.");
 
             if (ExisteEmail(usuario.Email))
                 throw new Exception("El email ya está registrado.");
+
+            if (usuario.RolId <= 0)
+                throw new Exception("Debe seleccionar un rol.");
         }
         public void ValidarModificacion(Usuario usuario)
         {
@@ -401,6 +367,9 @@ namespace Negocio
 
             if (ExisteEmail(usuario.Email, usuario.Id))
                 throw new Exception("El email ya está registrado.");
+            
+            if (usuario.RolId <= 0)
+                throw new Exception("Debe seleccionar un rol.");
         }
         public void ValidarEliminacion(int idUsuario)
         {

@@ -191,6 +191,7 @@ namespace Presentación
                 paciente.Direccion = txtDireccion.Text.Trim();
                 paciente.Activo = true;
 
+
                 paciente.ObraSocial = new ObraSocial
                 {
                     Id = Convert.ToInt32(ddlObrasSociales.SelectedValue)
@@ -226,15 +227,16 @@ namespace Presentación
                     if (chkCambiarPassword.Checked)
                     {
                         UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
-                        usuarioNegocio.CambiarPassword(paciente.Usuario.Id,txtPasswordEdicion.Text.Trim());
+                        usuarioNegocio.CambiarPassword(paciente.Usuario.Id, txtPasswordEdicion.Text.Trim());
                     }
                 }
                 else
                 {
                     if (chkCredencialesAutomaticas.Checked)
                     {
-                        paciente.Usuario.Username = txtDNI.Text.Trim();
+                        paciente.Usuario.Username = txtEmail.Text.Trim().ToLower();
                         paciente.Usuario.Password = txtDNI.Text.Trim();
+                        //paciente.Usuario.Password = DateTime.Now.ToString("yyyyMMdd");
                     }
                     else
                     {
