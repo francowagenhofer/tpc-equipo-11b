@@ -11,7 +11,7 @@ namespace Presentación
 {
 
 
-    public partial class PerfilPaciente
+    public partial class MiAgenda
     {
     }
 }

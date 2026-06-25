@@ -13,6 +13,8 @@ namespace Presentación
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            ValidarRoles("Administrador");
+
             if (!IsPostBack)
             {
                 if (Request.QueryString["id"] != null)

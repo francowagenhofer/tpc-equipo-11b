@@ -8,7 +8,8 @@ using Negocio;
 using Dominio;
 
 namespace Presentación {
-    public partial class Turnos : PaginaProtegida {
+    public partial class Turnos : PaginaProtegida
+    {
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)

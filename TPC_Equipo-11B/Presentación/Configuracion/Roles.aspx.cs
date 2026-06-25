@@ -12,6 +12,8 @@ namespace Presentación.Configuracion
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            ValidarRoles("Administrador");
+
             if (!IsPostBack)
             {
                 CargarGrilla();
@@ -33,15 +35,9 @@ namespace Presentación.Configuracion
         }
 
 
-        protected void txtBuscar_TextChanged(object sender, EventArgs e)
-        {
-            // Aquí agregaremos el filtro de búsqueda 
-        }
+        protected void txtBuscar_TextChanged(object sender, EventArgs e) {}
 
 
-        protected void ddlEstado_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            // Aquí agregaremos el filtro por estado (Activo/Inactivo)
-        }
+        protected void ddlEstado_SelectedIndexChanged(object sender, EventArgs e) {}
     }
 }

@@ -12,6 +12,8 @@ namespace Presentación {
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            ValidarRoles("Administrador", "Recepcionista");
+
             if (!IsPostBack)
             {
                 cargarGrilla();

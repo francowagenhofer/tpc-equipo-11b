@@ -46,60 +46,82 @@
                 <%-- Navegación --%>
                 <ul class="lista-menu">
 
-                    <li><span class="menu-seccion">Principal</span></li>
+                    <li id="liSeccionPrincipal" runat="server"><span class="menu-seccion">General</span></li>
 
-                    <li>
+                    <li id="liInicio" runat="server">
                         <a href="~/Default.aspx" runat="server" class="opcion-menu">
                             <i class="bi bi-speedometer2" aria-hidden="true"></i>
                             <span>Inicio</span>
                         </a>
                     </li>
 
-                    <li><span class="menu-seccion">Gestión</span></li>
+                    <li id="liSeccionGestion" runat="server"><span class="menu-seccion">Gestión</span></li>
 
-                    <li>
+                    <li id="liMedicos" runat="server">
                         <a href="~/Medicos.aspx" runat="server" class="opcion-menu">
                             <i class="bi bi-heart-pulse" aria-hidden="true"></i>
                             <span>Médicos</span>
                         </a>
                     </li>
-                    <li>
+                    <li id="liPacientes" runat="server">
                         <a href="~/Pacientes.aspx" runat="server" class="opcion-menu">
                             <i class="bi bi-people" aria-hidden="true"></i>
                             <span>Pacientes</span>
                         </a>
                     </li>
-                    <li>
+                    <li id="liTurnos" runat="server">
                         <a href="~/Turnos.aspx" runat="server" class="opcion-menu">
                             <i class="bi bi-calendar-check" aria-hidden="true"></i>
                             <span>Turnos</span>
                         </a>
                     </li>
-                    <li>
+
+                    <li id="liSeccionAtencion" runat="server"><span class="menu-seccion">Atención</span></li>
+
+                    <li id="liMiAgenda" runat="server">
+                        <a href="~/MiAgenda.aspx" runat="server" class="opcion-menu">
+                            <i class="bi bi-calendar-check" aria-hidden="true"></i>
+                            <span>Mi Agenda</span>
+                        </a>
+                    </li>
+                    <li id="liMiDisponibilidad" runat="server">
+                        <a href="~/MiDisponibilidad.aspx" runat="server" class="opcion-menu">
+                            <i class="bi bi-calendar-check" aria-hidden="true"></i>
+                            <span>Mi Disponibilidad</span>
+                        </a>
+                    </li>
+                    <li id="liHistoriaClinica" runat="server">
                         <a href="~/HistorialClinico.aspx" runat="server" class="opcion-menu">
                             <i class="bi bi-file-text" aria-hidden="true"></i>
-                            <span>Historial Clínico</span>
+                            <span>Historias Clínicas</span>
                         </a>
                     </li>
 
-                    <li><span class="menu-seccion">Sistema</span></li>
+                    <li id="liSeccionAdministracion" runat="server"><span class="menu-seccion">Administración</span></li>
 
-                    <li>
+                    <li id="liUsuarios" runat="server">
                         <a href="~/Usuarios.aspx" runat="server" class="opcion-menu">
                             <i class="bi bi-person-badge" aria-hidden="true"></i>
                             <span>Usuarios</span>
                         </a>
                     </li>
-                    <li>
+                    <li id="liConfiguracion" runat="server">
                         <a href="~/Configuracion.aspx" runat="server" class="opcion-menu">
                             <i class="bi bi-gear" aria-hidden="true"></i>
                             <span>Configuraciones</span>
                         </a>
                     </li>
+                    
+                    <li id="liSeccionCuenta" runat="server"><span class="menu-seccion">Cuenta</span></li>
+                    <li id="liMiPerfil" runat="server">
+                        <a href="~/MiPerfil.aspx" runat="server" class="opcion-menu">
+                            <i class="bi bi-gear" aria-hidden="true"></i>
+                            <span>Mi Perfil</span>
+                        </a>
+                    </li>
 
                 </ul>
 
-                <%-- Cerrar sesión --%>
                 <div class="menu-salir">
                     <asp:LinkButton
                         ID="btnCerrarSesion"
@@ -132,12 +154,10 @@
 
                 </header>
 
-                <%-- Contenido dinámico de cada página --%>
                 <main class="contenido">
                     <asp:ContentPlaceHolder ID="contenido" runat="server" />
                 </main>
 
-                <%-- Footer --%>
                 <footer class="footer">
                     Sistema Clínica &mdash; 2026
                

@@ -13,12 +13,13 @@ namespace Presentación
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            //ValidarRoles("Administrador"); El recepcionista tendria que poder ver listado de medicos
+
             if (!IsPostBack)
             {
                 CargarEspecialidades();
                 CargarGrilla();
             }
-
         }
 
         private void CargarGrilla()

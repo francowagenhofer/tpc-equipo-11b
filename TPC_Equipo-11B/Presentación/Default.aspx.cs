@@ -11,6 +11,7 @@ namespace Presentación
 {
     public partial class Default : PaginaProtegida
     {
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)

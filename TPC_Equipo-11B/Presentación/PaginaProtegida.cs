@@ -27,5 +27,13 @@ namespace Presentación
 
             base.OnLoad(e);
         }
+
+        protected void ValidarRoles(params string[] rolesPermitidos)
+        {
+            if (!rolesPermitidos.Contains(UsuarioLogueado.Rol.Nombre))
+            {
+                Response.Redirect("~/Default.aspx");
+            }
+        }
     }
 }

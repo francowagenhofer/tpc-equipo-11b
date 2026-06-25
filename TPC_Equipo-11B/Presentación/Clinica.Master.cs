@@ -21,22 +21,108 @@ namespace Presentación
             {
                 Usuario usuario = (Usuario)Session["usuarioLogueado"];
 
-                lblNombreUsuario.Text =
-                    usuario.Nombre + " " + usuario.Apellido;
-
-                lblRolUsuario.Text =
-                    usuario.Rol.Nombre;
-
-                if (!string.IsNullOrWhiteSpace(usuario.ImagenUrl))
-                {
-                    imgUsuario.ImageUrl = usuario.ImagenUrl;
-                }
-                else
-                {
-                    imgUsuario.ImageUrl =
-                        "~/Assets/IMG/usuario-default.png";
-                }
+                CargarUsuario(usuario);
+                ConfigurarMenu(usuario);
             }
+        }
+
+        private void CargarUsuario(Usuario usuario)
+        {
+            lblNombreUsuario.Text = usuario.Nombre + " " + usuario.Apellido;
+            lblRolUsuario.Text = usuario.Rol.Nombre;
+
+            if (!string.IsNullOrWhiteSpace(usuario.ImagenUrl))
+            {
+                imgUsuario.ImageUrl = usuario.ImagenUrl;
+            }
+            else
+            {
+                imgUsuario.ImageUrl = "~/Assets/IMG/Perfil.jpg";
+            }
+        }
+
+        private void ConfigurarMenu(Usuario usuario)
+        {
+            OcultarMenu();
+            OcultarSecciones();
+
+            liSeccionPrincipal.Visible = true;
+            liInicio.Visible = true;
+            liSeccionCuenta.Visible = true;
+            liMiPerfil.Visible = true;
+
+            switch (usuario.Rol.Nombre)
+            {
+                case "Administrador":
+
+                    liSeccionGestion.Visible = true;
+                    liSeccionAtencion.Visible = true;
+                    liSeccionAdministracion.Visible = true;
+
+                    liPacientes.Visible = true;
+                    liMedicos.Visible = true;
+                    liTurnos.Visible = true;
+
+                    liHistoriaClinica.Visible = true;
+
+                    liUsuarios.Visible = true;
+                    liConfiguracion.Visible = true;
+
+                    break;
+
+                case "Recepcionista":
+
+                    liSeccionGestion.Visible = true;
+
+                    liPacientes.Visible = true;
+                    liMedicos.Visible = true;
+                    liTurnos.Visible = true;
+
+                    break;
+
+                case "Medico":
+
+                    liSeccionAtencion.Visible = true;
+
+                    liMiAgenda.Visible = true;
+                    liMiDisponibilidad.Visible = true;
+                    liHistoriaClinica.Visible = true;
+
+                    break;
+
+                case "Paciente":
+
+                    liSeccionAtencion.Visible = true;
+
+                    liMiAgenda.Visible = true;
+                    liHistoriaClinica.Visible = true;
+
+                    break;
+            }
+        }
+
+        private void OcultarMenu()
+        {
+            liPacientes.Visible = false;
+            liMedicos.Visible = false;
+            liTurnos.Visible = false;
+
+            liMiAgenda.Visible = false;
+            liMiDisponibilidad.Visible = false;
+            liHistoriaClinica.Visible = false;
+
+            liUsuarios.Visible = false;
+            liConfiguracion.Visible = false;
+
+            liMiPerfil.Visible = false;
+        }
+        private void OcultarSecciones()
+        {
+            liSeccionPrincipal.Visible = false;
+            liSeccionGestion.Visible = false;
+            liSeccionAtencion.Visible = false;
+            liSeccionAdministracion.Visible = false;
+            liSeccionCuenta.Visible = false;
         }
 
         protected void btnCerrarSesion_Click(object sender, EventArgs e)

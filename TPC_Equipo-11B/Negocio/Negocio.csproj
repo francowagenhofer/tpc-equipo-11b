@@ -33,6 +33,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,6 +47,7 @@
     <Compile Include="EspecialidadNegocio.cs" />
     <Compile Include="EstadoTurnoNegocio.cs" />
     <Compile Include="GeneroNegocio.cs" />
+    <Compile Include="HistoriaClinicaNegocio.cs" />
     <Compile Include="MedicoNegocio.cs" />
     <Compile Include="ObraSocialNegocio.cs" />
     <Compile Include="PacienteNegocio.cs" />

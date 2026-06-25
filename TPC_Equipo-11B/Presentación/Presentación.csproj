@@ -80,18 +80,19 @@
     <Content Include="ConfirmarTurno.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="Configuracion\Especialidades.aspx" />
+    <Content Include="HistoriaClinicaDetalle.aspx" />
     <Content Include="HistorialClinico.aspx" />
     <Content Include="Login.aspx" />
     <Content Include="Medicos.aspx" />
+    <Content Include="MiAgenda.aspx" />
+    <Content Include="MiDisponibilidad.aspx" />
     <Content Include="MiPerfil.aspx" />
-    <Content Include="NuevaEspecialidad.aspx" />
+    <Content Include="Configuracion\NuevaEspecialidad.aspx" />
     <Content Include="NuevoMedico.aspx" />
     <Content Include="NuevoPaciente.aspx" />
     <Content Include="NuevoTurno.aspx" />
     <Content Include="NuevoUsuario.aspx" />
     <Content Include="Pacientes.aspx" />
-    <Content Include="PerfilMedico.aspx" />
-    <Content Include="PerfilPaciente.aspx" />
     <Content Include="Turnos.aspx" />
     <Content Include="Usuarios.aspx" />
     <Content Include="Web.config" />
@@ -160,6 +161,13 @@
     <Compile Include="Configuracion\Especialidades.aspx.designer.cs">
       <DependentUpon>Especialidades.aspx</DependentUpon>
     </Compile>
+    <Compile Include="HistoriaClinicaDetalle.aspx.cs">
+      <DependentUpon>HistoriaClinicaDetalle.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HistoriaClinicaDetalle.aspx.designer.cs">
+      <DependentUpon>HistoriaClinicaDetalle.aspx</DependentUpon>
+    </Compile>
     <Compile Include="HistorialClinico.aspx.cs">
       <DependentUpon>HistorialClinico.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -181,6 +189,20 @@
     <Compile Include="Medicos.aspx.designer.cs">
       <DependentUpon>Medicos.aspx</DependentUpon>
     </Compile>
+    <Compile Include="MiAgenda.aspx.cs">
+      <DependentUpon>MiAgenda.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MiAgenda.aspx.designer.cs">
+      <DependentUpon>MiAgenda.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MiDisponibilidad.aspx.cs">
+      <DependentUpon>MiDisponibilidad.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MiDisponibilidad.aspx.designer.cs">
+      <DependentUpon>MiDisponibilidad.aspx</DependentUpon>
+    </Compile>
     <Compile Include="MiPerfil.aspx.cs">
       <DependentUpon>MiPerfil.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -188,11 +210,11 @@
     <Compile Include="MiPerfil.aspx.designer.cs">
       <DependentUpon>MiPerfil.aspx</DependentUpon>
     </Compile>
-    <Compile Include="NuevaEspecialidad.aspx.cs">
+    <Compile Include="Configuracion\NuevaEspecialidad.aspx.cs">
       <DependentUpon>NuevaEspecialidad.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="NuevaEspecialidad.aspx.designer.cs">
+    <Compile Include="Configuracion\NuevaEspecialidad.aspx.designer.cs">
       <DependentUpon>NuevaEspecialidad.aspx</DependentUpon>
     </Compile>
     <Compile Include="NuevoMedico.aspx.cs">
@@ -232,20 +254,6 @@
     </Compile>
     <Compile Include="PaginaProtegida.cs">
       <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="PerfilMedico.aspx.cs">
-      <DependentUpon>PerfilMedico.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="PerfilMedico.aspx.designer.cs">
-      <DependentUpon>PerfilMedico.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="PerfilPaciente.aspx.cs">
-      <DependentUpon>PerfilPaciente.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="PerfilPaciente.aspx.designer.cs">
-      <DependentUpon>PerfilPaciente.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Turnos.aspx.cs">
