@@ -87,6 +87,15 @@ namespace Presentación
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl liTurnos;
 
         /// <summary>
+        /// Control liMiDisponibilidad.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl liMiDisponibilidad;
+
+        /// <summary>
         /// Control liSeccionAtencion.
         /// </summary>
         /// <remarks>
@@ -103,15 +112,6 @@ namespace Presentación
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl liMiAgenda;
-
-        /// <summary>
-        /// Control liMiDisponibilidad.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl liMiDisponibilidad;
 
         /// <summary>
         /// Control liHistoriaClinica.

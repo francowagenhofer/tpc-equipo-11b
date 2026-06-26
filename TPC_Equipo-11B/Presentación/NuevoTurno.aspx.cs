@@ -46,7 +46,7 @@ namespace Presentación {
             TurnoNegocio negocio = new TurnoNegocio();
             try
             {
-                Turno turno = negocio.ObtnerTurnoPorId(idTurno);
+                Turno turno = negocio.ObtenerTurnoPorId(idTurno);
                 if (turno != null)
                 {
                     litTitulo.Text = "Modificar Turno";
@@ -166,7 +166,7 @@ namespace Presentación {
                 }
                 else
                 {
-                    nuevo.Codigo = "TRN-" + DateTime.Now.ToString("yyyyMMdd-HHmmss");
+                    nuevo.Codigo = "T" + DateTime.Now.ToString("mmssfff");
                     resultado = negocio.AgregarTurno(nuevo);
                 }
 

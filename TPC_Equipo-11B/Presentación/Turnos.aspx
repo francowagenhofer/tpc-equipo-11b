@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="Turnos" Language="C#" MasterPageFile="~/Clinica.Master" AutoEventWireup="true" CodeBehind="Turnos.aspx.cs" Inherits="Presentación.Turnos" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
 
     <style>
         .tabla-turnos th {
@@ -116,7 +116,7 @@
                     AutoPostBack="true"
                     OnTextChanged="txtFechaFiltro_TextChanged" />
             </div>
-            
+
             <div class="col-md-2 d-flex align-items-end">
                 <asp:Button ID="btnLimpiar" runat="server" Text="Limpiar" CssClass="btn btn-outline-secondary btn-sm w-100" OnClick="btnLimpiar_Click" />
             </div>
@@ -155,42 +155,42 @@
 
                     <asp:TemplateField HeaderText="Estado">
                         <ItemTemplate>
-                            <span class='<%# ObtenerClaseBadge(Eval("EstadoTurno.Nombre").ToString()) %>'>
+                            <span class='badge <%# ObtenerClaseBadge(Eval("EstadoTurno.Nombre").ToString()) %>'>
                                 <%# Eval("EstadoTurno.Nombre") %>
                             </span>
                         </ItemTemplate>
                     </asp:TemplateField>
 
                     <asp:TemplateField HeaderText="Acciones">
-    <ItemTemplate>
-        <div class="d-flex gap-2">
-            <!-- Botón Modificar (siempre visible) -->
-            <asp:LinkButton ID="btnModificar" runat="server" 
-                CssClass="btn btn-sm btn-outline-primary" 
-                ToolTip="Modificar turno" 
-                CommandName="Modificar" 
-                CommandArgument='<%# Eval("Id") %>'>
+                        <ItemTemplate>
+                            <div class="d-flex gap-2">
+                                <!-- Botón Modificar (siempre visible) -->
+                                <asp:LinkButton ID="btnModificar" runat="server"
+                                    CssClass="btn btn-sm btn-outline-primary"
+                                    ToolTip="Modificar turno"
+                                    CommandName="Modificar"
+                                    CommandArgument='<%# Eval("Id") %>'>
                 <i class="bi bi-pencil"></i> Modificar
-            </asp:LinkButton>
-            <!-- Botón Cancelar -->
-            <asp:LinkButton ID="btnCancelar" runat="server" 
-                CssClass="btn btn-sm btn-outline-danger" 
-                ToolTip="Cancelar turno" 
-                CommandName="Cancelar" 
-                CommandArgument='<%# Eval("Id") %>'
-                OnClientClick="return confirm('¿Está seguro de que desea cancelar este turno?');"
-                Visible='<%# Eval("EstadoTurno.Nombre").ToString() == "Pendiente" || Eval("EstadoTurno.Nombre").ToString() == "Confirmado" %>'>
-                <i class="bi bi-x-circle"></i> Cancelar
-            </asp:LinkButton>
-        </div>
-    </ItemTemplate>
-</asp:TemplateField>
+                                </asp:LinkButton>
+                                <!-- Botón Cancelar -->
+                                <asp:LinkButton ID="btnCancelar" runat="server"
+                                    CssClass="btn btn-sm btn-outline-danger"
+                                    ToolTip="Cancelar turno"
+                                    CommandName="Cancelar"
+                                    CommandArgument='<%# Eval("Id") %>'
+                                    OnClientClick="return confirm('¿Está seguro de que desea cancelar este turno?');"
+                                    Visible='<%# Eval("EstadoTurno.Nombre").ToString() == "Pendiente" || Eval("EstadoTurno.Nombre").ToString() == "Confirmado" %>'>
+                                 <i class="bi bi-x-circle"></i> Cancelar
+                                </asp:LinkButton>
+                            </div>
+                        </ItemTemplate>
+                    </asp:TemplateField>
                 </Columns>
             </asp:GridView>
         </div>
     </div>
 
-    
+
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
 

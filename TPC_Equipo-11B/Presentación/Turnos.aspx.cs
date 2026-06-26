@@ -153,16 +153,22 @@ namespace Presentación {
             {
                 case "pendiente":
                     return "estado-pendiente";
+
                 case "confirmado":
                     return "estado-confirmado";
+
                 case "cancelado":
                     return "estado-cancelado";
+
                 case "reprogramado":
                     return "estado-reprogramado";
+
                 case "finalizado":
                     return "estado-finalizado";
-                case "no asistio":
+
+                case "no asistió":
                     return "estado-noasistio";
+
                 default:
                     return "badge bg-secondary";
             }

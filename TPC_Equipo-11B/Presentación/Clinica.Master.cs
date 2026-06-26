@@ -85,6 +85,7 @@ namespace Presentación
                     liSeccionAtencion.Visible = true;
 
                     liMiAgenda.Visible = true;
+                    liSeccionGestion.Visible = true;
                     liMiDisponibilidad.Visible = true;
                     liHistoriaClinica.Visible = true;
 
