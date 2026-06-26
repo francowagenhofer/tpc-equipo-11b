@@ -43,12 +43,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AusenciaMedicoNegocio.cs" />
+    <Compile Include="DisponibilidadMedicoNegocio.cs" />
     <Compile Include="EmailService.cs" />
     <Compile Include="EspecialidadNegocio.cs" />
     <Compile Include="EstadoTurnoNegocio.cs" />
     <Compile Include="GeneroNegocio.cs" />
     <Compile Include="HistoriaClinicaNegocio.cs" />
     <Compile Include="MedicoNegocio.cs" />
+    <Compile Include="MedicoObraSocialNegocio.cs" />
     <Compile Include="ObraSocialNegocio.cs" />
     <Compile Include="PacienteNegocio.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

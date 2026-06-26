@@ -20,5 +20,7 @@ namespace Dominio {
         public bool Activo { get; set; } = true;
 
         public Rol Rol { get; set; }
+        public Medico Medico { get; set; }
+        public Paciente Paciente { get; set; }
     }
 }

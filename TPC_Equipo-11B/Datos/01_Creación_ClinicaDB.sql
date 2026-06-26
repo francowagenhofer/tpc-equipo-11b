@@ -78,9 +78,14 @@ GO
 CREATE TABLE ObrasSociales (
     IDObraSocial INT PRIMARY KEY IDENTITY(1,1),
 
-    Nombre VARCHAR(100) NOT NULL UNIQUE,
+    Nombre VARCHAR(100) NOT NULL,
 
-    Activo BIT NOT NULL DEFAULT 1
+	TipoPlan VARCHAR(100) NOT NULL,
+
+    Activo BIT NOT NULL DEFAULT 1,
+
+	CONSTRAINT UQ_ObraSocial
+	UNIQUE(Nombre,TipoPlan)
 );
 GO
 
@@ -154,6 +159,29 @@ CREATE TABLE Especialidades (
 GO
 
 ----------------------------------------------
+--          MEDICO OBRA SOCIAL                  
+----------------------------------------------
+
+CREATE TABLE MedicoObraSocial (
+    ID INT PRIMARY KEY IDENTITY(1,1),
+
+    IDMedico INT NOT NULL,
+
+	IDObraSocial INT NOT NULL,
+
+	CONSTRAINT FK_MedicoObraSocial_Medicos
+		FOREIGN KEY (IDMedico)
+		REFERENCES Medicos(IDMedico),
+
+	CONSTRAINT FK_MedicoObraSocial_ObrasSociales
+		FOREIGN KEY (IDObraSocial)
+		REFERENCES ObrasSociales(IDObraSocial),
+
+	UNIQUE(IDMedico, IDObraSocial)
+);
+GO
+
+----------------------------------------------
 --             MEDICO_ESPECIALIDAD                    
 ----------------------------------------------
 
@@ -186,8 +214,7 @@ CREATE TABLE DisponibilidadMedico (
 
     IDMedico INT NOT NULL,
 
-    DiaSemana INT NOT NULL
-        CHECK (DiaSemana BETWEEN 1 AND 7),
+    DiaSemana INT NOT NULL CHECK (DiaSemana BETWEEN 1 AND 7),
 
     HoraInicio TIME NOT NULL,
 
@@ -195,14 +222,35 @@ CREATE TABLE DisponibilidadMedico (
 
     Activo BIT NOT NULL DEFAULT 1,
 
-    CONSTRAINT CHK_Disponibilidad_Horarios
+    CONSTRAINT CHK_HorarioLaboralMedico_Horarios
         CHECK (HoraInicio < HoraFin),
 
-    CONSTRAINT FK_DisponibilidadMedico_Medicos
+    CONSTRAINT FK_HorarioLaboralMedico_Medicos
         FOREIGN KEY (IDMedico)
         REFERENCES Medicos(IDMedico)
 );
 GO
+
+
+----------------------------------------------
+--          DIAS NO DISPONIBLES (MEDICOS                 
+----------------------------------------------
+
+CREATE TABLE AusenciasMedico (
+    ID INT PRIMARY KEY IDENTITY(1,1),
+
+    IDMedico INT NOT NULL,
+
+    Fecha DATE NOT NULL DEFAULT GETDATE(),
+
+    Motivo NVARCHAR(500)
+
+	CONSTRAINT FK_DiasNoDisponibles_Medicos
+		FOREIGN KEY (IDMedico)
+		REFERENCES Medicos(IDMedico)
+);
+GO
+
 
 ----------------------------------------------
 --               ESTADO TURNO                         
@@ -238,6 +286,8 @@ CREATE TABLE Turnos (
 
     FechaModificacion DATETIME NULL,
 
+	IDEspecialidad INT NULL,
+
 	-- Evita que un médico tenga dos turnos en la misma fecha y hora
     CONSTRAINT UQ_Turno_Medico_FechaHora
         UNIQUE (IDMedico, FechaHora), 
@@ -256,7 +306,11 @@ CREATE TABLE Turnos (
 
     CONSTRAINT FK_Turnos_EstadoTurno
         FOREIGN KEY (IDEstadoTurno)
-        REFERENCES EstadoTurno(IDEstadoTurno)
+        REFERENCES EstadoTurno(IDEstadoTurno),
+
+	CONSTRAINT FK_Turnos_Especialidades
+	    FOREIGN KEY (IDEspecialidad)
+		REFERENCES Especialidades(IDEspecialidad)
 );
 GO
 
@@ -281,6 +335,9 @@ CREATE TABLE HistoriaClinica (
 
     Observaciones NVARCHAR(500),
 
+	Activo BIT NOT NULL DEFAULT 1,
+
+
     CONSTRAINT FK_HistoriaClinica_Pacientes
         FOREIGN KEY (IDPaciente)
         REFERENCES Pacientes(IDPaciente),
@@ -294,4 +351,3 @@ CREATE TABLE HistoriaClinica (
         REFERENCES Turnos(IDTurno)
 );
 GO
-

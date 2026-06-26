@@ -72,6 +72,7 @@
     <Content Include="Assets\CSS\Master.css" />
     <Content Include="Assets\IMG\logo-clinica.png" />
     <Content Include="Assets\IMG\Perfil.jpg" />
+    <Content Include="AtenderTurno.aspx" />
     <Content Include="Configuracion.aspx" />
     <Content Include="Configuracion\EstadosTurno.aspx" />
     <Content Include="Configuracion\Generos.aspx" />
@@ -98,6 +99,13 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AtenderTurno.aspx.cs">
+      <DependentUpon>AtenderTurno.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AtenderTurno.aspx.designer.cs">
+      <DependentUpon>AtenderTurno.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Clinica.Master.cs">
       <DependentUpon>Clinica.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

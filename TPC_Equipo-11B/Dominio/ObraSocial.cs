@@ -10,6 +10,9 @@ namespace Dominio
     {
         public int Id { get; set; }
         public string Nombre { get; set; }
+
+        public string TipoPlan { get; set; }
+        
         public bool Activo { get; set; }
     }
 }

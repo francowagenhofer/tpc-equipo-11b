@@ -24,6 +24,8 @@ namespace Dominio
 
         public string Observaciones { get; set; }
 
+        public bool Activo { get; set; }
+
         public Paciente Paciente { get; set; }
 
         public Medico Medico { get; set; }

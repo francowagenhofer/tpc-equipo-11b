@@ -7,11 +7,10 @@ using System.Web.UI.WebControls;
 
 namespace Presentación
 {
-    public partial class MiAgenda : PaginaProtegida
+    public partial class AtenderTurno : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            ValidarRoles("Medico", "Paciente");
 
         }
     }

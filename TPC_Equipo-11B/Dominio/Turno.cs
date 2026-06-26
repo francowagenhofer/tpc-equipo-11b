@@ -11,11 +11,11 @@ namespace Dominio {
         public int PacienteId { get; set; }     
         public int MedicoId { get; set; }
         public int EspecialidadId { get; set; }
-        public Especialidad Especialidad { get; set; }
         public DateTime FechaHora { get; set; }
         public int EstadoTurnoId { get; set; }
         public DateTime FechaCreacion { get; set; }
         public DateTime FechaModificacion { get; set; } = DateTime.Now;
+        public Especialidad Especialidad { get; set; }
         public Paciente Paciente { get; set; }
         public Medico Medico { get; set; }
         public EstadoTurno EstadoTurno { get; set; }

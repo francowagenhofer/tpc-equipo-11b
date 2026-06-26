@@ -18,26 +18,42 @@ namespace Negocio
             try
             {
                 datos.setearConsulta(@"
-                                    SELECT
-                                        u.IDUsuario,
-                                        u.Nombre,
-                                        u.Apellido,
-                                        u.Email,
-                                        u.Telefono,
-                                        u.Username,
-                                        u.PasswordHash,
-                                        u.ImagenUrl,
-                                        u.FechaAlta,
-                                        u.IDRol,
-                                        u.Activo,
-                                        r.Nombre AS NombreRol
-                                    FROM Usuarios u
-                                    INNER JOIN Roles r
-                                        ON u.IDRol = r.IDRol
-                                    WHERE u.Username = @username
-                                      AND u.PasswordHash = @password
-                                      AND u.Activo = 1
-                                      AND r.Activo = 1");
+                     SELECT
+                         U.IDUsuario,
+                         U.Nombre,
+                         U.Apellido,
+                         U.Email,
+                         U.Telefono,
+                         U.Username,
+                         U.PasswordHash,
+                         U.ImagenUrl,
+                         U.FechaAlta,
+                         U.IDRol,
+                         U.Activo,
+
+                         R.Nombre AS NombreRol,
+
+                         M.IDMedico,
+                         M.Matricula,
+
+                         P.IDPaciente,
+                         P.DNI
+
+                     FROM Usuarios U
+
+                     INNER JOIN Roles R
+                         ON U.IDRol = R.IDRol
+
+                     LEFT JOIN Medicos M
+                         ON U.IDUsuario = M.IDUsuario
+
+                     LEFT JOIN Pacientes P
+                         ON U.IDUsuario = P.IDUsuario
+
+                     WHERE U.Username = @username
+                       AND U.PasswordHash = @password
+                       AND U.Activo = 1
+                       AND R.Activo = 1");
 
                 datos.setearParametro("@username", username);
                 datos.setearParametro("@password", password);
@@ -53,22 +69,39 @@ namespace Negocio
                 usuario.Nombre = datos.Lector["Nombre"].ToString();
                 usuario.Apellido = datos.Lector["Apellido"].ToString();
                 usuario.Email = datos.Lector["Email"].ToString();
-                usuario.Telefono = datos.Lector["Telefono"] != DBNull.Value ? datos.Lector["Telefono"].ToString() : "";
+                usuario.Telefono = datos.Lector["Telefono"] != DBNull.Value
+                    ? datos.Lector["Telefono"].ToString()
+                    : "";
                 usuario.Username = datos.Lector["Username"].ToString();
                 usuario.Password = datos.Lector["PasswordHash"].ToString();
-                usuario.ImagenUrl = datos.Lector["ImagenUrl"] != DBNull.Value ? datos.Lector["ImagenUrl"].ToString() : "";
+                usuario.ImagenUrl = datos.Lector["ImagenUrl"] != DBNull.Value
+                    ? datos.Lector["ImagenUrl"].ToString()
+                    : "";
                 usuario.FechaAlta = (DateTime)datos.Lector["FechaAlta"];
                 usuario.Activo = (bool)datos.Lector["Activo"];
 
                 usuario.Rol = new Rol();
+
                 usuario.Rol.Id = (int)datos.Lector["IDRol"];
                 usuario.Rol.Nombre = datos.Lector["NombreRol"].ToString();
 
+                if (datos.Lector["IDMedico"] != DBNull.Value)
+                {
+                    usuario.Medico = new Medico();
+
+                    usuario.Medico.Id = (int)datos.Lector["IDMedico"];
+                    usuario.Medico.Matricula = datos.Lector["Matricula"].ToString();
+                }
+
+                if (datos.Lector["IDPaciente"] != DBNull.Value)
+                {
+                    usuario.Paciente = new Paciente();
+
+                    usuario.Paciente.Id = (int)datos.Lector["IDPaciente"];
+                    usuario.Paciente.DNI = datos.Lector["DNI"].ToString();
+                }
+
                 return usuario;
-            }
-            catch
-            {
-                throw;
             }
             finally
             {
@@ -367,7 +400,7 @@ namespace Negocio
 
             if (ExisteEmail(usuario.Email, usuario.Id))
                 throw new Exception("El email ya está registrado.");
-            
+
             if (usuario.RolId <= 0)
                 throw new Exception("Debe seleccionar un rol.");
         }
