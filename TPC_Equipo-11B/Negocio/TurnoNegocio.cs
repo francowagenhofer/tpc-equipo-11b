@@ -199,62 +199,71 @@ namespace Negocio
 
         public Turno ObtenerTurnoPorId(int idTurno)
         {
-
             AccesoDatos datos = new AccesoDatos();
+
             try
             {
                 datos.setearConsulta(@"
-                    SELECT
-                        T.IDTurno,
-                        T.Codigo,
-                        T.FechaHora,
-                    
-                        ET.IDEstadoTurno,
-                        ET.Nombre AS EstadoNombre,
-                    
-                        P.IDPaciente,
-                        P.DNI,
-                    
-                        U_P.Nombre AS PacienteNombre,
-                        U_P.Apellido AS PacienteApellido,
-                    
-                        OS.Nombre AS ObraSocial,
-                    
-                        M.IDMedico,
-                        M.Matricula,
-                    
-                        U_M.Nombre AS MedicoNombre,
-                        U_M.Apellido AS MedicoApellido,
-                    
-                        E.IDEspecialidad,
-                        E.Nombre AS Especialidad
-                    
-                    FROM Turnos T
-                    
-                    INNER JOIN EstadoTurno ET
-                    ON ET.IDEstadoTurno = T.IDEstadoTurno
-                    
-                    INNER JOIN Pacientes P
-                    ON P.IDPaciente = T.IDPaciente
-                    
-                    INNER JOIN Usuarios U_P
-                    ON U_P.IDUsuario = P.IDUsuario
-                    
-                    LEFT JOIN ObrasSociales OS
-                    ON OS.IDObraSocial = P.IDObraSocial
-                    
-                    INNER JOIN Medicos M
-                    ON M.IDMedico = T.IDMedico
-                    
-                    INNER JOIN Usuarios U_M
-                    ON U_M.IDUsuario = M.IDUsuario
-                    
-                    LEFT JOIN Especialidades E
-                    ON E.IDEspecialidad = T.IDEspecialidad
-                    
-                    WHERE T.IDTurno=@Id");
+                        SELECT
+                            T.IDTurno,
+                            T.Codigo,
+                            T.FechaHora,
 
-                datos.setearParametro("@id", idTurno);
+                            ET.IDEstadoTurno,
+                            ET.Nombre AS EstadoNombre,
+
+                            P.IDPaciente,
+                            P.DNI,
+                            P.FechaNacimiento,
+                            P.Direccion,
+                            P.IDObraSocial,
+
+                            G.Descripcion AS Genero,
+
+                            U_P.Nombre AS PacienteNombre,
+                            U_P.Apellido AS PacienteApellido,
+                            U_P.Telefono AS PacienteTelefono,
+
+                            OS.Nombre AS ObraSocial,
+
+                            M.IDMedico,
+                            M.Matricula,
+
+                            U_M.Nombre AS MedicoNombre,
+                            U_M.Apellido AS MedicoApellido,
+
+                            E.IDEspecialidad,
+                            E.Nombre AS Especialidad
+
+                        FROM Turnos T
+
+                        INNER JOIN EstadoTurno ET
+                            ON ET.IDEstadoTurno = T.IDEstadoTurno
+
+                        INNER JOIN Pacientes P
+                            ON P.IDPaciente = T.IDPaciente
+
+                        INNER JOIN Usuarios U_P
+                            ON U_P.IDUsuario = P.IDUsuario
+
+                        LEFT JOIN ObrasSociales OS
+                            ON OS.IDObraSocial = P.IDObraSocial
+
+                        LEFT JOIN Generos G
+                            ON G.IDGenero = P.IDGenero
+
+                        INNER JOIN Medicos M
+                            ON M.IDMedico = T.IDMedico
+
+                        INNER JOIN Usuarios U_M
+                            ON U_M.IDUsuario = M.IDUsuario
+
+                        LEFT JOIN Especialidades E
+                            ON E.IDEspecialidad = T.IDEspecialidad
+
+                        WHERE T.IDTurno = @Id");
+
+                datos.setearParametro("@Id", idTurno);
                 datos.ejecutarLectura();
 
                 if (datos.Lector.Read())
@@ -262,41 +271,58 @@ namespace Negocio
                     Turno turno = new Turno();
 
                     turno.Id = (int)datos.Lector["IDTurno"];
-                    turno.Codigo = (string)datos.Lector["Codigo"];
+                    turno.Codigo = datos.Lector["Codigo"].ToString();
                     turno.FechaHora = (DateTime)datos.Lector["FechaHora"];
 
                     turno.PacienteId = (int)datos.Lector["IDPaciente"];
                     turno.MedicoId = (int)datos.Lector["IDMedico"];
 
-                    // Estado
-                    turno.EstadoTurno = new EstadoTurno();
-                    turno.EstadoTurno.Id = (int)datos.Lector["IDEstadoTurno"];
-                    turno.EstadoTurno.Nombre = (string)datos.Lector["EstadoNombre"];
+                    turno.EstadoTurno = new EstadoTurno
+                    {
+                        Id = (int)datos.Lector["IDEstadoTurno"],
+                        Nombre = datos.Lector["EstadoNombre"].ToString()
+                    };
 
-                    // Paciente
                     turno.Paciente = new Paciente();
+
                     turno.Paciente.Id = (int)datos.Lector["IDPaciente"];
-                    turno.Paciente.DNI = (string)datos.Lector["DNI"];
+                    turno.Paciente.DNI = datos.Lector["DNI"].ToString();
+
+                    turno.Paciente.FechaNacimiento =
+                        datos.Lector["FechaNacimiento"] != DBNull.Value
+                        ? (DateTime)datos.Lector["FechaNacimiento"]
+                        : DateTime.MinValue;
+
+                    turno.Paciente.Direccion = datos.Lector["Direccion"] != DBNull.Value ? datos.Lector["Direccion"].ToString() : "";
+
+                    turno.Paciente.ObraSocialId = datos.Lector["IDObraSocial"] != DBNull.Value ? (int)datos.Lector["IDObraSocial"] : 0;
+
+                    turno.Paciente.Genero = datos.Lector["Genero"] != DBNull.Value ? new Genero { Descripcion = datos.Lector["Genero"].ToString()} : null;
 
                     turno.Paciente.Usuario = new Usuario();
-                    turno.Paciente.Usuario.Nombre = (string)datos.Lector["PacienteNombre"];
-                    turno.Paciente.Usuario.Apellido = (string)datos.Lector["PacienteApellido"];
+
+                    turno.Paciente.Usuario.Nombre = datos.Lector["PacienteNombre"].ToString();
+                    turno.Paciente.Usuario.Apellido = datos.Lector["PacienteApellido"].ToString();
+                    turno.Paciente.Usuario.Telefono =
+                        datos.Lector["PacienteTelefono"] != DBNull.Value ? datos.Lector["PacienteTelefono"].ToString() : "";
 
                     turno.Paciente.ObraSocial = new ObraSocial();
-                    turno.Paciente.ObraSocial.Nombre = datos.Lector["ObraSocial"] != DBNull.Value
-                        ? datos.Lector["ObraSocial"].ToString() : "";
 
-                    // Médico
+                    turno.Paciente.ObraSocial.Nombre =
+                        datos.Lector["ObraSocial"] != DBNull.Value ? datos.Lector["ObraSocial"].ToString() : "-";
+
                     turno.Medico = new Medico();
+
                     turno.Medico.Id = (int)datos.Lector["IDMedico"];
-                    turno.Medico.Matricula = (string)datos.Lector["Matricula"];
+                    turno.Medico.Matricula = datos.Lector["Matricula"].ToString();
 
                     turno.Medico.Usuario = new Usuario();
-                    turno.Medico.Usuario.Nombre = (string)datos.Lector["MedicoNombre"];
-                    turno.Medico.Usuario.Apellido = (string)datos.Lector["MedicoApellido"];
 
-                    // Especialidad
+                    turno.Medico.Usuario.Nombre = datos.Lector["MedicoNombre"].ToString();
+                    turno.Medico.Usuario.Apellido = datos.Lector["MedicoApellido"].ToString();
+
                     turno.Especialidad = new Especialidad();
+
                     if (datos.Lector["IDEspecialidad"] != DBNull.Value)
                     {
                         turno.Especialidad.Id = (int)datos.Lector["IDEspecialidad"];
@@ -306,19 +332,16 @@ namespace Negocio
                     return turno;
                 }
 
-
                 return null;
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
             finally
             {
                 datos.cerrarConexion();
             }
-
         }
 
         public Turno ObtenerTurnoPorCodigo(string codigo)
@@ -508,7 +531,26 @@ namespace Negocio
             }
         }
 
+        public void FinalizarTurno(int idTurno)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("UPDATE Turnos SET IDEstadoTurno = 4, FechaModificacion = @fechaMod WHERE IDTurno = @id");
+                datos.setearParametro("@id", idTurno);
+                datos.setearParametro("@fechaMod", DateTime.Now);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
 
+        }
     }
 }
 
