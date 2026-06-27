@@ -551,7 +551,43 @@ namespace Negocio
             }
 
         }
+
+        public List<DateTime> ObtenerHorasOcupadas(int idMedico, DateTime fecha)
+        {
+            List<DateTime> ocupadas = new List<DateTime>();
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT FechaHora 
+                    FROM Turnos
+                    WHERE IDMedico = @idMedico
+                    AND CAST(FechaHora AS DATE) = @fecha
+                    AND IDEstadoTurno <> 3"); // 3 = Cancelado
+
+                datos.setearParametro("@idMedico", idMedico);
+                datos.setearParametro("@fecha", fecha.Date);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    ocupadas.Add((DateTime)datos.Lector["FechaHora"]);
+                }
+                return ocupadas;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+
+
+
+
     }
+
+    
 }
 
 

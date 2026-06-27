@@ -4,21 +4,19 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Web.Services;
 using Negocio;
 using Dominio;
 
 namespace Presentación {
-    public partial class NuevoTurno : PaginaProtegida
-    {
+    public partial class NuevoTurno : PaginaProtegida {
         protected void Page_Load(object sender, EventArgs e)
         {
-           
-
             if (!IsPostBack)
             {
                 CargarPacientes();
                 CargarMedicos();
-                CargarHoras();
+                CargarHoras(); 
 
                 if (Request.QueryString["id"] != null)
                 {
@@ -33,12 +31,45 @@ namespace Presentación {
             ddlHora.Items.Clear();
             ddlHora.Items.Add(new ListItem("-- Seleccione una Hora --", ""));
 
-            // Programar turnos cada 60 minutos (1 hora) de 08:00 a 19:00
+            
             for (int hora = 8; hora <= 19; hora++)
             {
                 string valor = hora.ToString("D2") + ":00";
                 ddlHora.Items.Add(new ListItem(valor, valor));
             }
+        }
+
+        
+        [WebMethod]
+        public static List<string> ObtenerHorasOcupadasAjax(int idMedico, string fecha, int idTurnoActual)
+        {
+            List<string> resultado = new List<string>();
+
+            if (idMedico <= 0 || string.IsNullOrEmpty(fecha))
+                return resultado;
+
+            DateTime fechaParseada;
+            if (!DateTime.TryParse(fecha, out fechaParseada))
+                return resultado;
+
+            TurnoNegocio negocio = new TurnoNegocio();
+            List<DateTime> ocupadas = negocio.ObtenerHorasOcupadas(idMedico, fechaParseada);
+
+            foreach (DateTime dt in ocupadas)
+            {
+                // Si estoy editando un turno, no me bloqueo a mí mismo
+                if (idTurnoActual > 0)
+                {
+                    TurnoNegocio negTurno = new TurnoNegocio();
+                    Turno turnoActual = negTurno.ObtenerTurnoPorId(idTurnoActual);
+                    if (turnoActual != null && turnoActual.FechaHora == dt)
+                        continue;
+                }
+
+                resultado.Add(dt.ToString("HH:mm"));
+            }
+
+            return resultado;
         }
 
         private void CargarTurno(int idTurno)
@@ -54,7 +85,6 @@ namespace Presentación {
                     ddlPaciente.SelectedValue = turno.PacienteId.ToString();
                     ddlMedico.SelectedValue = turno.MedicoId.ToString();
 
-                    // Asignar fecha y hora por separado
                     txtFecha.Text = turno.FechaHora.ToString("yyyy-MM-dd");
                     ddlHora.SelectedValue = turno.FechaHora.ToString("HH:mm");
                 }
@@ -126,10 +156,9 @@ namespace Presentación {
                 nuevo.PacienteId = Convert.ToInt32(ddlPaciente.SelectedValue);
                 nuevo.MedicoId = Convert.ToInt32(ddlMedico.SelectedValue);
 
-                // Combinar la fecha y hora seleccionada
                 DateTime fecha = Convert.ToDateTime(txtFecha.Text);
 
-                // 1. Validación del lado del servidor para Fines de Semana
+                
                 if (fecha.DayOfWeek == DayOfWeek.Saturday || fecha.DayOfWeek == DayOfWeek.Sunday)
                 {
                     lblMensaje.Text = "No se permiten agendar turnos los fines de semana (sábados y domingos).";
@@ -138,7 +167,7 @@ namespace Presentación {
                     return;
                 }
 
-                // 2. Validación del lado del servidor para Feriados Nacionales
+                
                 List<string> feriados = new List<string> {
                     "01-01", "03-24", "04-02", "05-01", "05-25", "06-17", "06-20", "07-09", "08-17", "10-12", "11-20", "12-08", "12-25"
                 };
@@ -155,13 +184,29 @@ namespace Presentación {
                 nuevo.FechaHora = fecha.Date.Add(hora);
 
                 TurnoNegocio negocio = new TurnoNegocio();
-                bool resultado = false;
                 bool esNuevo = Request.QueryString["id"] == null;
+                int idTurnoEnEdicion = esNuevo ? 0 : Convert.ToInt32(Request.QueryString["id"]);
 
-                // Manejar si se está editando o creando un turno nuevo
+                
+                List<DateTime> ocupadas = negocio.ObtenerHorasOcupadas(nuevo.MedicoId, fecha);
+                bool horarioOcupado = ocupadas.Any(h =>
+                    h == nuevo.FechaHora && (esNuevo || h != ObtenerFechaHoraOriginal(idTurnoEnEdicion))
+                );
+
+                if (horarioOcupado)
+                {
+                    lblMensaje.Text = "Ese horario ya fue reservado para este médico. Por favor, elegí otro horario.";
+                    lblMensaje.CssClass = "alert alert-warning d-block text-center";
+                    lblMensaje.Visible = true;
+                    CargarHoras();
+                    return;
+                }
+
+                bool resultado = false;
+
                 if (!esNuevo)
                 {
-                    nuevo.Id = Convert.ToInt32(Request.QueryString["id"]);
+                    nuevo.Id = idTurnoEnEdicion;
                     resultado = negocio.ModificarTurno(nuevo);
                 }
                 else
@@ -172,7 +217,6 @@ namespace Presentación {
 
                 if (resultado)
                 {
-                    // Enviar correo de confirmación solo si es un turno NUEVO
                     if (esNuevo)
                     {
                         try
@@ -186,7 +230,6 @@ namespace Presentación {
                                 string nombreMedico = ddlMedico.SelectedItem.Text;
                                 string fechaHoraStr = nuevo.FechaHora.ToString("dd/MM/yyyy HH:mm") + " hs";
 
-                                // Generar URL de confirmación dinámica (funciona en localhost y en hosting de producción)
                                 string urlBase = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath.TrimEnd('/');
                                 string urlConfirmacion = $"{urlBase}/ConfirmarTurno.aspx?codigo={nuevo.Codigo}";
 
@@ -221,7 +264,6 @@ namespace Presentación {
                         }
                         catch (Exception ex)
                         {
-                            // Se registra el error en consola para depuración, pero no bloquea el flujo principal
                             System.Diagnostics.Debug.WriteLine("Error al enviar el correo: " + ex.Message);
                         }
                     }
@@ -237,6 +279,13 @@ namespace Presentación {
             }
         }
 
-
+        
+        private DateTime ObtenerFechaHoraOriginal(int idTurno)
+        {
+            if (idTurno <= 0) return DateTime.MinValue;
+            TurnoNegocio negocio = new TurnoNegocio();
+            Turno t = negocio.ObtenerTurnoPorId(idTurno);
+            return t != null ? t.FechaHora : DateTime.MinValue;
+        }
     }
 }

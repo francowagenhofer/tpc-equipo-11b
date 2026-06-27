@@ -50,7 +50,7 @@
                 <label class="form-label fw-semibold">Fecha</label>
                 <asp:TextBox ID="txtFecha" runat="server" ClientIDMode="Static" placeholder="Seleccione una fecha..." CssClass="form-control" required />
             </div>
-            
+
             <div class="col-md-6">
                 <label class="form-label fw-semibold">Hora (Turnos de 60 min)</label>
                 <asp:DropDownList ID="ddlHora" runat="server" ClientIDMode="Static" CssClass="form-select" required></asp:DropDownList>
@@ -203,6 +203,73 @@
             select.value = value;
             list.style.display = "none";
         }
+
+        // ID del turno actual si estamos editando (0 si es nuevo)
+        const idTurnoActual = <%= Request.QueryString["id"] != null ? Request.QueryString["id"] : "0" %>;
+
+        // Guarda el value de la hora seleccionada al cargar (útil al editar)
+        let horaPreseleccionada = document.getElementById('ddlHora').value;
+
+        function actualizarHorariosDisponibles() {
+            const idMedico = document.getElementById('ddlMedico').value;
+            const fecha = document.getElementById('txtFecha').value;
+            const ddlHora = document.getElementById('ddlHora');
+
+            if (!idMedico || !fecha) return;
+
+            fetch('NuevoTurno.aspx/ObtenerHorasOcupadasAjax', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json; charset=utf-8' },
+                body: JSON.stringify({
+                    idMedico: parseInt(idMedico),
+                    fecha: fecha,
+                    idTurnoActual: idTurnoActual
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const ocupadas = data.d; // PageMethods devuelve el array dentro de "d"
+                    const valorActual = ddlHora.value;
+
+                    for (let i = 0; i < ddlHora.options.length; i++) {
+                        const opt = ddlHora.options[i];
+                        if (opt.value === "") continue; // saltar el placeholder
+                        opt.disabled = ocupadas.includes(opt.value);
+                        opt.textContent = ocupadas.includes(opt.value) ? opt.value + " (Ocupado)" : opt.value;
+                    }
+
+                    // Si la hora que tenía seleccionada quedó ocupada por otro turno, la deselecciona
+                    if (ocupadas.includes(valorActual)) {
+                        ddlHora.value = "";
+                    }
+                })
+                .catch(err => console.error("Error al consultar horarios ocupados:", err));
+        }
+
+        // Disparar el chequeo cuando cambia el médico (vía selección del autocompletado)
+        const ddlMedicoOriginal = document.getElementById('ddlMedico');
+        const observerMedico = new MutationObserver(actualizarHorariosDisponibles);
+        observerMedico.observe(ddlMedicoOriginal, { attributes: true, attributeFilter: ['value'] });
+
+        // Disparar también cuando cambia la fecha (Flatpickr dispara "change" sobre el input real)
+        document.getElementById('txtFecha').addEventListener('change', actualizarHorariosDisponibles);
+
+        // También conviene reforzar el disparo justo después de elegir médico en el autocompletado:
+        const seleccionarOpcionOriginal = seleccionarOpcion;
+        seleccionarOpcion = function (tipo, value, text) {
+            seleccionarOpcionOriginal(tipo, value, text);
+            if (tipo === 'Medico') {
+                actualizarHorariosDisponibles();
+            }
+        };
+
+        // Si estamos editando un turno, correr el chequeo apenas carga la página
+        document.addEventListener("DOMContentLoaded", function () {
+            if (idTurnoActual > 0) {
+                setTimeout(actualizarHorariosDisponibles, 300);
+            }
+        });
+
     </script>
 
 </asp:Content>
