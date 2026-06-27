@@ -10,159 +10,141 @@
 namespace Presentación {
 
 
-    public partial class MiDisponibilidad {
+    public partial class PerfilMedico {
 
         /// <summary>
-        /// pnlAvisoSinConfigurar control.
+        /// lblError control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlAvisoSinConfigurar;
+        protected global::System.Web.UI.WebControls.Label lblError;
 
         /// <summary>
-        /// pnlEncabezadoAdmin control.
+        /// pnlContenido control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlEncabezadoAdmin;
+        protected global::System.Web.UI.WebControls.Panel pnlContenido;
 
         /// <summary>
-        /// litNombreMedicoAdmin control.
+        /// litNombreCompleto control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litNombreMedicoAdmin;
+        protected global::System.Web.UI.WebControls.Literal litNombreCompleto;
 
         /// <summary>
-        /// pnlFormulario control.
+        /// litEspecialidad control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlFormulario;
+        protected global::System.Web.UI.WebControls.Literal litEspecialidad;
 
         /// <summary>
-        /// hfIdDisponibilidad control.
+        /// litMatricula control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hfIdDisponibilidad;
+        protected global::System.Web.UI.WebControls.Literal litMatricula;
 
         /// <summary>
-        /// lblMensajeError control.
+        /// badgeEstado control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMensajeError;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl badgeEstado;
 
         /// <summary>
-        /// chkLunes control.
+        /// litEmail control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkLunes;
+        protected global::System.Web.UI.WebControls.Literal litEmail;
 
         /// <summary>
-        /// chkMartes control.
+        /// litTelefono control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkMartes;
+        protected global::System.Web.UI.WebControls.Literal litTelefono;
 
         /// <summary>
-        /// chkMiercoles control.
+        /// pnlAvisoSinDisponibilidad control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkMiercoles;
+        protected global::System.Web.UI.WebControls.Panel pnlAvisoSinDisponibilidad;
 
         /// <summary>
-        /// chkJueves control.
+        /// rptDisponibilidad control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkJueves;
+        protected global::System.Web.UI.WebControls.Repeater rptDisponibilidad;
 
         /// <summary>
-        /// chkViernes control.
+        /// lblSinDisponibilidad control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkViernes;
+        protected global::System.Web.UI.WebControls.Label lblSinDisponibilidad;
 
         /// <summary>
-        /// chkSabado control.
+        /// rptAusencias control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkSabado;
+        protected global::System.Web.UI.WebControls.Repeater rptAusencias;
 
         /// <summary>
-        /// chkDomingo control.
+        /// lblSinAusencias control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkDomingo;
+        protected global::System.Web.UI.WebControls.Label lblSinAusencias;
 
         /// <summary>
-        /// ddlHoraInicio control.
+        /// rptTurnos control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlHoraInicio;
+        protected global::System.Web.UI.WebControls.Repeater rptTurnos;
 
         /// <summary>
-        /// ddlHoraFin control.
+        /// lblSinTurnos control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlHoraFin;
-
-        /// <summary>
-        /// btnGuardarDisponibilidad control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnGuardarDisponibilidad;
-
-        /// <summary>
-        /// dgvDisponibilidad control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView dgvDisponibilidad;
+        protected global::System.Web.UI.WebControls.Label lblSinTurnos;
     }
 }

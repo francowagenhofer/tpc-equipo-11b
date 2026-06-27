@@ -509,17 +509,61 @@ namespace Negocio
             }
         }
 
-        public bool ConfirmarTurnoPorCodigo(string codigo)
+        public class ResultadoConfirmacion {
+            public bool Exito { get; set; }
+            public bool YaEstabaConfirmado { get; set; }
+            public string Mensaje { get; set; }
+            public Turno Turno { get; set; }
+        }
+
+        public ResultadoConfirmacion ConfirmarTurnoPorCodigo(string codigo)
         {
+            Turno turno = ObtenerTurnoPorCodigo(codigo);
+
+            if (turno == null)
+            {
+                return new ResultadoConfirmacion { Exito = false, Mensaje = "No se encontró ningún turno registrado con el código ingresado." };
+            }
+
+            if (turno.EstadoTurno != null && turno.EstadoTurno.Nombre.ToLower() == "cancelado")
+            {
+                return new ResultadoConfirmacion { Exito = false, Mensaje = "Este turno fue cancelado y no puede confirmarse.", Turno = turno };
+            }
+
+            if (turno.EstadoTurno != null && turno.EstadoTurno.Nombre.ToLower() == "confirmado")
+            {
+                // Ya estaba confirmado antes: no es un error, simplemente se informa.
+                return new ResultadoConfirmacion { Exito = true, YaEstabaConfirmado = true, Mensaje = "Este turno ya había sido confirmado anteriormente.", Turno = turno };
+            }
+
+            if (turno.FechaHora < DateTime.Now)
+            {
+                return new ResultadoConfirmacion { Exito = false, Mensaje = "Este turno ya pasó su fecha y hora, por lo que el enlace ya no es válido.", Turno = turno };
+            }
+
+            if (turno.FechaCreacion != DateTime.MinValue && (DateTime.Now - turno.FechaCreacion).TotalHours > 48)
+            {
+                return new ResultadoConfirmacion { Exito = false, Mensaje = "El enlace de confirmación venció (las confirmaciones tienen un plazo de 48 horas).", Turno = turno };
+            }
+
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                // IDEstadoTurno = 2 corresponde a "Confirmado"
-                datos.setearConsulta("UPDATE Turnos SET IDEstadoTurno = 2, FechaModificacion = @fechaMod WHERE Codigo = @codigo");
+                datos.setearConsulta(@"
+            UPDATE Turnos 
+            SET IDEstadoTurno = 2, FechaModificacion = @fechaMod 
+            WHERE Codigo = @codigo AND IDEstadoTurno NOT IN (3)"); // 3 = Cancelado, doble chequeo a nivel SQL
+
                 datos.setearParametro("@codigo", codigo);
                 datos.setearParametro("@fechaMod", DateTime.Now);
-                datos.ejecutarAccion();
-                return true;
+                int filasAfectadas = datos.ejecutarAccion();
+
+                if (filasAfectadas == 0)
+                {
+                    return new ResultadoConfirmacion { Exito = false, Mensaje = "No se pudo confirmar el turno. Es posible que su estado haya cambiado.", Turno = turno };
+                }
+
+                return new ResultadoConfirmacion { Exito = true, Mensaje = "Turno confirmado con éxito.", Turno = turno };
             }
             catch (Exception ex)
             {
@@ -529,7 +573,7 @@ namespace Negocio
             {
                 datos.cerrarConexion();
             }
-        }
+        } 
 
         public void FinalizarTurno(int idTurno)
         {
@@ -581,7 +625,37 @@ namespace Negocio
             }
         }
 
+        public bool MedicoDisponibleEnFechaHora(int idMedico, DateTime fechaHora)
+        {
+            DisponibilidadMedicoNegocio dispNegocio = new DisponibilidadMedicoNegocio();
+            AusenciaMedicoNegocio ausenciaNegocio = new AusenciaMedicoNegocio();
 
+            if (ausenciaNegocio.TieneAusencia(idMedico, fechaHora.Date))
+            {
+                return false;
+            }
+
+            List<DisponibilidadMedico> disponibilidades = dispNegocio.ListarDisponibilidadesPorMedico(idMedico);
+            bool medicoTieneConfiguracion = disponibilidades.Any(d => d.Activo);
+
+            if (!medicoTieneConfiguracion)
+            {
+       
+                return false;
+            }
+
+            int diaSemanaSistema = ((int)fechaHora.DayOfWeek == 0) ? 7 : (int)fechaHora.DayOfWeek;
+            TimeSpan horaConsulta = fechaHora.TimeOfDay;
+
+            bool tieneDisponibilidadEseDia = disponibilidades.Any(d =>
+                d.Activo &&
+                d.DiaSemana == diaSemanaSistema &&
+                horaConsulta >= d.HoraInicio &&
+                horaConsulta < d.HoraFin
+            );
+
+            return tieneDisponibilidadEseDia;
+        }
 
 
 

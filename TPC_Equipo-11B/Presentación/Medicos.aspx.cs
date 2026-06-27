@@ -32,6 +32,8 @@ namespace Presentación
                 Session["listaMedicos"] = lista;
                 dgvMedicos.DataSource = lista;
                 dgvMedicos.DataBind();
+                
+                CargarAlertaSinDisponibilidad(lista);
             }
             catch (Exception ex)
             {
@@ -198,6 +200,38 @@ namespace Presentación
             {
                 Response.Write("<script>alert('" + ex.Message + "')</script>");
             }
+        }
+
+        private void CargarAlertaSinDisponibilidad(List<Medico> listaMedicos)
+        {
+            List<int> idsActivos = listaMedicos
+                .Where(m => m.Activo)
+                .Select(m => m.Id)
+                .ToList();
+
+            if (idsActivos.Count == 0)
+            {
+                pnlAlertaSinDisponibilidad.Visible = false;
+                return;
+            }
+
+            DisponibilidadMedicoNegocio dispNegocio = new DisponibilidadMedicoNegocio();
+            List<int> idsSinDisponibilidad = dispNegocio.ListarIdsMedicosSinDisponibilidad(idsActivos);
+
+            if (idsSinDisponibilidad.Count == 0)
+            {
+                pnlAlertaSinDisponibilidad.Visible = false;
+                return;
+            }
+
+            List<Medico> medicosSinDisponibilidad = listaMedicos
+                .Where(m => idsSinDisponibilidad.Contains(m.Id))
+                .ToList();
+
+            rptMedicosSinDisponibilidad.DataSource = medicosSinDisponibilidad;
+            rptMedicosSinDisponibilidad.DataBind();
+
+            pnlAlertaSinDisponibilidad.Visible = true;
         }
 
     }

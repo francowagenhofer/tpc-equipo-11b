@@ -46,13 +46,13 @@ namespace Datos
             }
         }
 
-        public void ejecutarAccion()
+        public int ejecutarAccion()
         {
             comando.Connection = conexion;
             try
             {
                 conexion.Open();
-                comando.ExecuteNonQuery();
+                return comando.ExecuteNonQuery();
             }
             catch (Exception ex)
             {

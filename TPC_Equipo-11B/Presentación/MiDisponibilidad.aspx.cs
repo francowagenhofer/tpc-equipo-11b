@@ -4,19 +4,105 @@ using System;
 using System.Collections.Generic;
 using System.Web.UI.WebControls;
 
-namespace Presentación
-{
-    public partial class MiDisponibilidad : PaginaProtegida
-    {
+namespace Presentación {
+    public partial class MiDisponibilidad : PaginaProtegida {
+        private int MedicoIdActual
+        {
+            get
+            {
+                if (EsModoAdmin)
+                {
+                    return Convert.ToInt32(Request.QueryString["idMedico"]);
+                }
+                return UsuarioLogueado.Medico.Id;
+            }
+        }
+
+        private bool EsModoAdmin
+        {
+            get
+            {
+                return UsuarioLogueado.Rol.Nombre == "Administrador"
+                    && Request.QueryString["idMedico"] != null
+                    && int.TryParse(Request.QueryString["idMedico"], out _);
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             ValidarRoles("Medico", "Administrador");
 
             if (!IsPostBack)
             {
+                CargarHorasDisponibles();
+
+                if (!CargarEncabezadoSiCorresponde())
+                    return;
+
                 CargarDisponibilidades();
                 LimpiarFormulario();
             }
+        }
+
+        protected void ddlHoraInicio_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CargarHorasFin();
+        }
+
+
+        private void CargarHorasDisponibles()
+        {
+            ddlHoraInicio.Items.Clear();
+
+            for (int hora = 8; hora <= 19; hora++)
+            {
+                string valor = hora.ToString("D2") + ":00";
+                ddlHoraInicio.Items.Add(new ListItem(valor, valor));
+            }
+
+            CargarHorasFin();
+        }
+
+        private void CargarHorasFin()
+        {
+            string horaInicioSeleccionada = ddlHoraInicio.SelectedValue;
+            ddlHoraFin.Items.Clear();
+
+            int horaInicioInt = 8;
+            if (!string.IsNullOrEmpty(horaInicioSeleccionada))
+            {
+                horaInicioInt = int.Parse(horaInicioSeleccionada.Split(':')[0]);
+            }
+
+            for (int hora = horaInicioInt + 1; hora <= 19; hora++)
+            {
+                string valor = hora.ToString("D2") + ":00";
+                ddlHoraFin.Items.Add(new ListItem(valor, valor));
+            }
+        }
+
+        private bool CargarEncabezadoSiCorresponde()
+        {
+            if (!EsModoAdmin)
+            {
+                pnlEncabezadoAdmin.Visible = false;
+                return true;
+            }
+
+            MedicoNegocio medicoNegocio = new MedicoNegocio();
+            Medico medico = medicoNegocio.ObtenerMedicoPorId(MedicoIdActual);
+
+            if (medico == null)
+            {
+                MostrarError("El médico solicitado no existe.");
+                pnlFormulario.Visible = false;
+                pnlEncabezadoAdmin.Visible = false;
+                return false;
+            }
+
+            litNombreMedicoAdmin.Text = $"Dr. {medico.Usuario.Apellido}, {medico.Usuario.Nombre} (Mat: {medico.Matricula})";
+            pnlEncabezadoAdmin.Visible = true;
+            return true;
         }
 
         protected string ObtenerNombreDia(int diaSemana)
@@ -54,9 +140,11 @@ namespace Presentación
             DisponibilidadMedicoNegocio negocio = new DisponibilidadMedicoNegocio();
 
             dgvDisponibilidad.DataSource =
-                negocio.ListarDisponibilidadesPorMedico(UsuarioLogueado.Medico.Id);
+                negocio.ListarDisponibilidadesPorMedico(MedicoIdActual);
 
             dgvDisponibilidad.DataBind();
+
+            pnlAvisoSinConfigurar.Visible = !negocio.TieneDisponibilidad(MedicoIdActual);
         }
 
         protected void btnGuardarDisponibilidad_Click(object sender, EventArgs e)
@@ -65,8 +153,8 @@ namespace Presentación
 
             try
             {
-                if (string.IsNullOrWhiteSpace(txtHoraInicio.Text) ||
-                    string.IsNullOrWhiteSpace(txtHoraFin.Text))
+                if (string.IsNullOrWhiteSpace(ddlHoraInicio.SelectedValue) ||
+                    string.IsNullOrWhiteSpace(ddlHoraFin.SelectedValue))
                 {
                     MostrarError("Debe completar todos los campos.");
                     return;
@@ -80,8 +168,8 @@ namespace Presentación
                     return;
                 }
 
-                TimeSpan horaInicio = TimeSpan.Parse(txtHoraInicio.Text);
-                TimeSpan horaFin = TimeSpan.Parse(txtHoraFin.Text);
+                TimeSpan horaInicio = TimeSpan.Parse(ddlHoraInicio.SelectedValue);
+                TimeSpan horaFin = TimeSpan.Parse(ddlHoraFin.SelectedValue);
 
                 if (horaInicio >= horaFin)
                 {
@@ -94,10 +182,16 @@ namespace Presentación
                 // MODIFICAR
                 if (!string.IsNullOrWhiteSpace(hfIdDisponibilidad.Value))
                 {
+                    if (diasSeleccionados.Count > 1)
+                    {
+                        MostrarError("Al modificar un horario existente, seleccioná un solo día.");
+                        return;
+                    }
+
                     DisponibilidadMedico disponibilidad = new DisponibilidadMedico();
 
                     disponibilidad.Id = int.Parse(hfIdDisponibilidad.Value);
-                    disponibilidad.MedicoId = UsuarioLogueado.Medico.Id;
+                    disponibilidad.MedicoId = MedicoIdActual;
                     disponibilidad.DiaSemana = diasSeleccionados[0];
                     disponibilidad.HoraInicio = horaInicio;
                     disponibilidad.HoraFin = horaFin;
@@ -118,7 +212,7 @@ namespace Presentación
                     {
                         DisponibilidadMedico disponibilidad = new DisponibilidadMedico();
 
-                        disponibilidad.MedicoId = UsuarioLogueado.Medico.Id;
+                        disponibilidad.MedicoId = MedicoIdActual;
                         disponibilidad.DiaSemana = dia;
                         disponibilidad.HoraInicio = horaInicio;
                         disponibilidad.HoraFin = horaFin;
@@ -173,8 +267,11 @@ namespace Presentación
                     case 7: chkDomingo.Checked = true; break;
                 }
 
-                txtHoraInicio.Text = disponibilidad.HoraInicio.ToString(@"hh\:mm");
-                txtHoraFin.Text = disponibilidad.HoraFin.ToString(@"hh\:mm");
+                ddlHoraInicio.SelectedValue = disponibilidad.HoraInicio.ToString(@"hh\:mm");
+                CargarHorasFin(); // repobla ddlHoraFin según la nueva hora de inicio
+                ddlHoraFin.SelectedValue = disponibilidad.HoraFin.ToString(@"hh\:mm");
+
+                hfIdDisponibilidad.Value = disponibilidad.Id.ToString();
 
                 btnGuardarDisponibilidad.Text = "Actualizar";
             }
@@ -202,8 +299,8 @@ namespace Presentación
             chkSabado.Checked = false;
             chkDomingo.Checked = false;
 
-            txtHoraInicio.Text = "";
-            txtHoraFin.Text = "";
+            ddlHoraInicio.SelectedIndex = 0;
+            ddlHoraFin.SelectedIndex = 0;
 
             btnGuardarDisponibilidad.Text = "Guardar disponibilidad";
 

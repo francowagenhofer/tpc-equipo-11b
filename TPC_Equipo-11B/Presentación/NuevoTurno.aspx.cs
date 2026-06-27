@@ -57,16 +57,25 @@ namespace Presentación {
 
             foreach (DateTime dt in ocupadas)
             {
-                // Si estoy editando un turno, no me bloqueo a mí mismo
                 if (idTurnoActual > 0)
                 {
-                    TurnoNegocio negTurno = new TurnoNegocio();
-                    Turno turnoActual = negTurno.ObtenerTurnoPorId(idTurnoActual);
+                    Turno turnoActual = negocio.ObtenerTurnoPorId(idTurnoActual);
                     if (turnoActual != null && turnoActual.FechaHora == dt)
                         continue;
                 }
-
                 resultado.Add(dt.ToString("HH:mm"));
+            }
+
+            // Horas fuera de disponibilidad o en día de ausencia del médico
+            for (int hora = 8; hora <= 19; hora++)
+            {
+                DateTime horaCandidata = fechaParseada.Date.AddHours(hora);
+                string horaStr = hora.ToString("D2") + ":00";
+
+                if (!resultado.Contains(horaStr) && !negocio.MedicoDisponibleEnFechaHora(idMedico, horaCandidata))
+                {
+                    resultado.Add(horaStr);
+                }
             }
 
             return resultado;
@@ -217,6 +226,8 @@ namespace Presentación {
 
                 if (resultado)
                 {
+                    bool errorEnvioMail = false;
+
                     if (esNuevo)
                     {
                         try
@@ -235,28 +246,28 @@ namespace Presentación {
 
                                 string asunto = "Confirmación de Turno Médico - " + nuevo.Codigo;
                                 string cuerpo = $@"
-                                    <html>
-                                    <body style='font-family: Arial, sans-serif; color: #333; line-height: 1.6;'>
-                                        <div style='max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;'>
-                                            <h2 style='color: #0d6efd; text-align: center;'>¡Hola, {nombrePaciente}!</h2>
-                                            <p>Hemos registrado una solicitud de turno médico en nuestro sistema. A continuación se detallan los datos del turno:</p>
-                                            
-                                            <div style='background-color: #f8f9fa; padding: 15px; border-radius: 6px; margin: 20px 0; border-left: 4px solid #0d6efd;'>
-                                                <p style='margin: 5px 0;'><strong>Código de Turno:</strong> {nuevo.Codigo}</p>
-                                                <p style='margin: 5px 0;'><strong>Médico:</strong> {nombreMedico}</p>
-                                                <p style='margin: 5px 0;'><strong>Fecha y Hora:</strong> {fechaHoraStr}</p>
-                                            </div>
+                    <html>
+                    <body style='font-family: Arial, sans-serif; color: #333; line-height: 1.6;'>
+                        <div style='max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;'>
+                            <h2 style='color: #0d6efd; text-align: center;'>¡Hola, {nombrePaciente}!</h2>
+                            <p>Hemos registrado una solicitud de turno médico en nuestro sistema. A continuación se detallan los datos del turno:</p>
+                            
+                            <div style='background-color: #f8f9fa; padding: 15px; border-radius: 6px; margin: 20px 0; border-left: 4px solid #0d6efd;'>
+                                <p style='margin: 5px 0;'><strong>Código de Turno:</strong> {nuevo.Codigo}</p>
+                                <p style='margin: 5px 0;'><strong>Médico:</strong> {nombreMedico}</p>
+                                <p style='margin: 5px 0;'><strong>Fecha y Hora:</strong> {fechaHoraStr}</p>
+                            </div>
 
-                                            <p style='text-align: center; margin: 30px 0;'>
-                                                <a href='{urlConfirmacion}' style='background-color: #198754; color: white; padding: 12px 25px; text-decoration: none; border-radius: 50px; font-weight: bold; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.1);'>Confirmar mi Turno</a>
-                                            </p>
+                            <p style='text-align: center; margin: 30px 0;'>
+                                <a href='{urlConfirmacion}' style='background-color: #198754; color: white; padding: 12px 25px; text-decoration: none; border-radius: 50px; font-weight: bold; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.1);'>Confirmar mi Turno</a>
+                            </p>
 
-                                            <p style='font-size: 0.9em; color: #666;'>Si tú no solicitaste este turno, por favor ignora este correo.</p>
-                                            <hr style='border: none; border-top: 1px solid #eee; margin: 20px 0;' />
-                                            <p style='font-size: 0.8em; color: #999; text-align: center;'>© 2026 Sistema Clínica. Todos los derechos reservados.</p>
-                                        </div>
-                                    </body>
-                                    </html>";
+                            <p style='font-size: 0.9em; color: #666;'>Este enlace vence en 48 horas o al llegar la fecha del turno. Si tú no solicitaste este turno, por favor ignora este correo.</p>
+                            <hr style='border: none; border-top: 1px solid #eee; margin: 20px 0;' />
+                            <p style='font-size: 0.8em; color: #999; text-align: center;'>© 2026 Sistema Clínica. Todos los derechos reservados.</p>
+                        </div>
+                    </body>
+                    </html>";
 
                                 EmailService emailService = new EmailService();
                                 emailService.EnviarCorreo(pac.Usuario.Email, asunto, cuerpo);
@@ -264,11 +275,19 @@ namespace Presentación {
                         }
                         catch (Exception ex)
                         {
-                            System.Diagnostics.Debug.WriteLine("Error al enviar el correo: " + ex.Message);
+                            //System.Diagnostics.Debug.WriteLine("Error al enviar el correo: " + ex.Message);
+                            //errorEnvioMail = true;
+                            lblMensaje.Text = ex.ToString();
+                            lblMensaje.CssClass = "alert alert-danger d-block text-center";
+                            lblMensaje.Visible = true;
+                            errorEnvioMail = true;
                         }
                     }
 
-                    Response.Redirect("Turnos.aspx", false);
+                    if (!errorEnvioMail)
+                    {
+                        Response.Redirect("Turnos.aspx", false);
+                    }
                 }
             }
             catch (Exception ex)

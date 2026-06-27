@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Dominio;
+using Negocio;
+using System;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Negocio;
-using Dominio;
+using static Negocio.TurnoNegocio;
 
 namespace Presentación {
     public partial class ConfirmarTurno : System.Web.UI.Page {
@@ -19,7 +20,7 @@ namespace Presentación {
                 else
                 {
                     pnlError.Visible = true;
-                    lblMensajeError.Text = "El enlace de confirmación no es válido o ha expirado.";
+                    lblMensajeError.Text = "El enlace de confirmación no es válido.";
                 }
             }
         }
@@ -29,37 +30,22 @@ namespace Presentación {
             TurnoNegocio negocio = new TurnoNegocio();
             try
             {
-                Turno turno = negocio.ObtenerTurnoPorCodigo(codigo);
-                if (turno != null)
-                {
-                    if (turno.EstadoTurno != null && turno.EstadoTurno.Nombre.ToLower() == "confirmado")
-                    {
-                        pnlExito.Visible = true;
-                        lblCodigo.Text = turno.Codigo;
-                        lblPaciente.Text = $"{turno.Paciente.Usuario.Apellido}, {turno.Paciente.Usuario.Nombre}";
-                        lblMedico.Text = $"Dr. {turno.Medico.Usuario.Apellido}, {turno.Medico.Usuario.Nombre}";
-                        lblFechaHora.Text = turno.FechaHora.ToString("dd/MM/yyyy HH:mm") + " hs";
-                        return; // ya estaba confirmado previamente
-                    }
+                ResultadoConfirmacion resultado = negocio.ConfirmarTurnoPorCodigo(codigo);
 
-                    if (negocio.ConfirmarTurnoPorCodigo(codigo))
-                    {
-                        pnlExito.Visible = true;
-                        lblCodigo.Text = turno.Codigo;
-                        lblPaciente.Text = $"{turno.Paciente.Usuario.Apellido}, {turno.Paciente.Usuario.Nombre}";
-                        lblMedico.Text = $"Dr. {turno.Medico.Usuario.Apellido}, {turno.Medico.Usuario.Nombre}";
-                        lblFechaHora.Text = turno.FechaHora.ToString("dd/MM/yyyy HH:mm") + " hs";
-                    }
-                    else
-                    {
-                        pnlError.Visible = true;
-                        lblMensajeError.Text = "No se pudo confirmar el turno. Intente nuevamente.";
-                    }
+                if (resultado.Exito)
+                {
+                    pnlExito.Visible = true;
+                    Turno turno = resultado.Turno;
+
+                    lblCodigo.Text = turno.Codigo;
+                    lblPaciente.Text = $"{turno.Paciente.Usuario.Apellido}, {turno.Paciente.Usuario.Nombre}";
+                    lblMedico.Text = $"Dr. {turno.Medico.Usuario.Apellido}, {turno.Medico.Usuario.Nombre}";
+                    lblFechaHora.Text = turno.FechaHora.ToString("dd/MM/yyyy HH:mm") + " hs";
                 }
                 else
                 {
                     pnlError.Visible = true;
-                    lblMensajeError.Text = "No se encontró ningún turno registrado con el código ingresado.";
+                    lblMensajeError.Text = resultado.Mensaje;
                 }
             }
             catch (Exception ex)

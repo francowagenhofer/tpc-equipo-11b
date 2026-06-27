@@ -347,5 +347,21 @@ namespace Negocio
             }
         }
 
+        public List<int> ListarIdsMedicosSinDisponibilidad(List<int> idsMedicosActivos)
+        {
+            List<int> sinDisponibilidad = new List<int>();
+
+            foreach (int idMedico in idsMedicosActivos)
+            {
+                if (!TieneDisponibilidad(idMedico))
+                {
+                    sinDisponibilidad.Add(idMedico);
+                }
+            }
+
+            return sinDisponibilidad;
+        }
+
+
     }
 }

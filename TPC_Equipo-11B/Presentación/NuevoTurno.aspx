@@ -23,7 +23,11 @@
                     <input type="text" id="txtPacienteBusqueda" class="form-control" autocomplete="off" placeholder="Escribe DNI, apellido o nombre del paciente..." oninput="filtrarOpciones('Paciente')" onfocus="mostrarOpciones('Paciente')" />
                 </div>
                 <!-- El DropDownList real queda oculto y sincronizado -->
-                <asp:DropDownList ID="ddlPaciente" runat="server" ClientIDMode="Static" style="display: none;" required></asp:DropDownList>
+                <asp:DropDownList ID="ddlPaciente"
+    runat="server"
+    ClientIDMode="Static"
+    style="display:none;">
+</asp:DropDownList>
                 
                 <!-- Lista de sugerencias dinámica -->
                 <ul id="sugerenciasPaciente" class="list-group position-absolute w-100 mt-1 shadow-lg" style="display: none; z-index: 1000; max-height: 200px; overflow-y: auto;">
@@ -38,7 +42,11 @@
                     <input type="text" id="txtMedicoBusqueda" class="form-control" autocomplete="off" placeholder="Escribe matrícula, apellido o nombre del médico..." oninput="filtrarOpciones('Medico')" onfocus="mostrarOpciones('Medico')" />
                 </div>
                 <!-- El DropDownList real queda oculto y sincronizado -->
-                <asp:DropDownList ID="ddlMedico" runat="server" ClientIDMode="Static" style="display: none;" required></asp:DropDownList>
+                <asp:DropDownList ID="ddlMedico"
+runat="server"
+ClientIDMode="Static"
+style="display:none;">
+</asp:DropDownList>
                 
                 <!-- Lista de sugerencias dinámica -->
                 <ul id="sugerenciasMedico" class="list-group position-absolute w-100 mt-1 shadow-lg" style="display: none; z-index: 1000; max-height: 200px; overflow-y: auto;">
@@ -48,12 +56,22 @@
             <!-- Fecha (Flatpickr) y Hora por Separado -->
             <div class="col-md-6">
                 <label class="form-label fw-semibold">Fecha</label>
-                <asp:TextBox ID="txtFecha" runat="server" ClientIDMode="Static" placeholder="Seleccione una fecha..." CssClass="form-control" required />
+                <asp:TextBox
+ID="txtFecha"
+runat="server"
+ClientIDMode="Static"
+placeholder="Seleccione una fecha..."
+CssClass="form-control" />
             </div>
 
             <div class="col-md-6">
                 <label class="form-label fw-semibold">Hora (Turnos de 60 min)</label>
-                <asp:DropDownList ID="ddlHora" runat="server" ClientIDMode="Static" CssClass="form-select" required></asp:DropDownList>
+                <asp:DropDownList
+ID="ddlHora"
+runat="server"
+ClientIDMode="Static"
+CssClass="form-select">
+</asp:DropDownList>
             </div>
 
             <div class="col-12 d-flex justify-content-end gap-2 mt-4">
@@ -230,17 +248,35 @@
                 .then(data => {
                     const ocupadas = data.d; // PageMethods devuelve el array dentro de "d"
                     const valorActual = ddlHora.value;
+                    let disponibles = 0;
 
                     for (let i = 0; i < ddlHora.options.length; i++) {
                         const opt = ddlHora.options[i];
                         if (opt.value === "") continue; // saltar el placeholder
-                        opt.disabled = ocupadas.includes(opt.value);
-                        opt.textContent = ocupadas.includes(opt.value) ? opt.value + " (Ocupado)" : opt.value;
+                        const estaOcupada = ocupadas.includes(opt.value);
+                        opt.disabled = estaOcupada;
+                        opt.textContent = estaOcupada ? opt.value + " (No disponible)" : opt.value;
+                        if (!estaOcupada) disponibles++;
                     }
 
-                    // Si la hora que tenía seleccionada quedó ocupada por otro turno, la deselecciona
+                    // Si la hora que tenía seleccionada quedó ocupada/no disponible, la deselecciona
                     if (ocupadas.includes(valorActual)) {
                         ddlHora.value = "";
+                    }
+
+                    // Mostrar aviso si no quedan horarios disponibles ese día
+                    const avisoId = 'avisoSinHorarios';
+                    let aviso = document.getElementById(avisoId);
+                    if (disponibles === 0) {
+                        if (!aviso) {
+                            aviso = document.createElement('div');
+                            aviso.id = avisoId;
+                            aviso.className = 'alert alert-warning mt-2';
+                            aviso.textContent = 'El médico no tiene disponibilidad configurada o está ausente en la fecha seleccionada. Probá con otra fecha o médico.';
+                            ddlHora.closest('.col-md-6').appendChild(aviso);
+                        }
+                    } else if (aviso) {
+                        aviso.remove();
                     }
                 })
                 .catch(err => console.error("Error al consultar horarios ocupados:", err));
