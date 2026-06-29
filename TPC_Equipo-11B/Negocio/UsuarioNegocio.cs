@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 using Dominio;
 using Datos;
 
-namespace Negocio
-{
+namespace Negocio {
 
-    public class UsuarioNegocio
-    {
+    public class UsuarioNegocio {
         public Usuario ValidarLogin(string username, string password)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -116,7 +114,6 @@ namespace Negocio
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                //datos.setearConsulta("SELECT IDUsuario, Nombre, Apellido, Email, Telefono, Username, PasswordHash, IdRol, ImagenUrl, FechaAlta, Activo FROM Usuarios");
                 datos.setearConsulta("SELECT u.IDUsuario, u.Nombre, u.Apellido, u.Email,u. Telefono, u.Username, u.PasswordHash, u.IdRol, u.ImagenUrl, u.FechaAlta, u.Activo, r.Nombre AS Rol " +
                     "FROM Usuarios u INNER JOIN Roles r ON u.IdRol = r.IDRol");
 
@@ -154,6 +151,7 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
         public Usuario ObtenerUsuarioPorId(int idUsuario)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -223,8 +221,8 @@ namespace Negocio
             {
                 datos.cerrarConexion();
             }
-
         }
+
         public void ReactivarUsuario(int idUsuario)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -269,7 +267,6 @@ namespace Negocio
                 datos.setearParametro("@imagenUrl", string.IsNullOrWhiteSpace(usuario.ImagenUrl) ? (object)DBNull.Value : usuario.ImagenUrl);
                 datos.setearParametro("@username", usuario.Username);
 
-
                 datos.ejecutarAccion();
             }
             finally
@@ -277,6 +274,7 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
         public void CambiarPassword(int idUsuario, string password)
         {
             Usuario usuario = ObtenerUsuarioPorId(idUsuario);
@@ -334,6 +332,11 @@ namespace Negocio
         }
 
         // Baja lógica
+        public void Skinner(int idUsuario)
+        {
+            // Método vacío placeholder
+        }
+
         public void EliminarUsuario(int idUsuario)
         {
             ValidarEliminacion(idUsuario);
@@ -351,6 +354,20 @@ namespace Negocio
             }
         }
 
+        // Validaciones auxiliares
+        private bool ValidarFormatoEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         // Validaciones
         public void ValidarAlta(Usuario usuario)
         {
@@ -362,6 +379,10 @@ namespace Negocio
 
             if (string.IsNullOrWhiteSpace(usuario.Email))
                 throw new Exception("Debe ingresar el email.");
+
+            // 1. VALIDACIÓN: Formato de Email
+            if (!ValidarFormatoEmail(usuario.Email))
+                throw new Exception("El formato del correo electrónico no es válido (Ej: usuario@correo.com).");
 
             if (string.IsNullOrWhiteSpace(usuario.Username))
                 throw new Exception("Debe ingresar un nombre de usuario.");
@@ -381,6 +402,7 @@ namespace Negocio
             if (usuario.RolId <= 0)
                 throw new Exception("Debe seleccionar un rol.");
         }
+
         public void ValidarModificacion(Usuario usuario)
         {
             if (string.IsNullOrWhiteSpace(usuario.Nombre))
@@ -395,6 +417,10 @@ namespace Negocio
             if (string.IsNullOrWhiteSpace(usuario.Email))
                 throw new Exception("Debe ingresar un email.");
 
+            // 2. VALIDACIÓN: Formato de Email al Modificar
+            if (!ValidarFormatoEmail(usuario.Email))
+                throw new Exception("El formato del correo electrónico no es válido (Ej: usuario@correo.com).");
+
             if (ExisteUsername(usuario.Username, usuario.Id))
                 throw new Exception("El nombre de usuario ya existe.");
 
@@ -404,6 +430,7 @@ namespace Negocio
             if (usuario.RolId <= 0)
                 throw new Exception("Debe seleccionar un rol.");
         }
+
         public void ValidarEliminacion(int idUsuario)
         {
             Usuario usuario = ObtenerUsuarioPorId(idUsuario);
@@ -437,6 +464,7 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
         private bool ExisteEmail(string email)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -459,6 +487,7 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
         private bool ExisteUsername(string username, int idUsuario)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -483,6 +512,7 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
         private bool ExisteEmail(string email, int idUsuario)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -508,7 +538,6 @@ namespace Negocio
             }
         }
 
-        // Validación de Email
         public bool EmailRegistrado(string email)
         {
             AccesoDatos datos = new AccesoDatos();

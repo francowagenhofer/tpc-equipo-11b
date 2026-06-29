@@ -16,7 +16,7 @@ namespace Presentación {
             {
                 CargarPacientes();
                 CargarMedicos();
-                CargarHoras(); 
+                CargarHoras();
 
                 if (Request.QueryString["id"] != null)
                 {
@@ -31,7 +31,6 @@ namespace Presentación {
             ddlHora.Items.Clear();
             ddlHora.Items.Add(new ListItem("-- Seleccione una Hora --", ""));
 
-            
             for (int hora = 8; hora <= 19; hora++)
             {
                 string valor = hora.ToString("D2") + ":00";
@@ -39,7 +38,6 @@ namespace Presentación {
             }
         }
 
-        
         [WebMethod]
         public static List<string> ObtenerHorasOcupadasAjax(int idMedico, string fecha, int idTurnoActual)
         {
@@ -166,37 +164,23 @@ namespace Presentación {
                 nuevo.MedicoId = Convert.ToInt32(ddlMedico.SelectedValue);
 
                 DateTime fecha = Convert.ToDateTime(txtFecha.Text);
-
-                
-                if (fecha.DayOfWeek == DayOfWeek.Saturday || fecha.DayOfWeek == DayOfWeek.Sunday)
-                {
-                    lblMensaje.Text = "No se permiten agendar turnos los fines de semana (sábados y domingos).";
-                    lblMensaje.CssClass = "alert alert-warning d-block text-center";
-                    lblMensaje.Visible = true;
-                    return;
-                }
-
-                
-                List<string> feriados = new List<string> {
-                    "01-01", "03-24", "04-02", "05-01", "05-25", "06-17", "06-20", "07-09", "08-17", "10-12", "11-20", "12-08", "12-25"
-                };
-                string mesDiaStr = fecha.ToString("MM-dd");
-                if (feriados.Contains(mesDiaStr))
-                {
-                    lblMensaje.Text = "El día seleccionado es un feriado nacional y la clínica permanece cerrada.";
-                    lblMensaje.CssClass = "alert alert-warning d-block text-center";
-                    lblMensaje.Visible = true;
-                    return;
-                }
-
                 TimeSpan hora = TimeSpan.Parse(ddlHora.SelectedValue);
                 nuevo.FechaHora = fecha.Date.Add(hora);
+
+                // 1. VALIDACIÓN: Evitar turnos en el pasado
+                if (nuevo.FechaHora < DateTime.Now)
+                {
+                    lblMensaje.Text = "No se permiten agendar turnos en una fecha y hora que ya pasaron.";
+                    lblMensaje.CssClass = "alert alert-warning d-block text-center";
+                    lblMensaje.Visible = true;
+                    return;
+                }
 
                 TurnoNegocio negocio = new TurnoNegocio();
                 bool esNuevo = Request.QueryString["id"] == null;
                 int idTurnoEnEdicion = esNuevo ? 0 : Convert.ToInt32(Request.QueryString["id"]);
 
-                
+                // 2. VALIDACIÓN: Superposición de turnos para el médico
                 List<DateTime> ocupadas = negocio.ObtenerHorasOcupadas(nuevo.MedicoId, fecha);
                 bool horarioOcupado = ocupadas.Any(h =>
                     h == nuevo.FechaHora && (esNuevo || h != ObtenerFechaHoraOriginal(idTurnoEnEdicion))
@@ -208,6 +192,15 @@ namespace Presentación {
                     lblMensaje.CssClass = "alert alert-warning d-block text-center";
                     lblMensaje.Visible = true;
                     CargarHoras();
+                    return;
+                }
+
+                // 3. VALIDACIÓN: Superposición de turnos para el paciente
+                if (!negocio.PacienteDisponibleEnFechaHora(nuevo.PacienteId, nuevo.FechaHora, idTurnoEnEdicion))
+                {
+                    lblMensaje.Text = "El paciente ya tiene un turno reservado para esa misma fecha y hora.";
+                    lblMensaje.CssClass = "alert alert-warning d-block text-center";
+                    lblMensaje.Visible = true;
                     return;
                 }
 
@@ -275,8 +268,6 @@ namespace Presentación {
                         }
                         catch (Exception ex)
                         {
-                            //System.Diagnostics.Debug.WriteLine("Error al enviar el correo: " + ex.Message);
-                            //errorEnvioMail = true;
                             lblMensaje.Text = ex.ToString();
                             lblMensaje.CssClass = "alert alert-danger d-block text-center";
                             lblMensaje.Visible = true;
@@ -298,7 +289,6 @@ namespace Presentación {
             }
         }
 
-        
         private DateTime ObtenerFechaHoraOriginal(int idTurno)
         {
             if (idTurno <= 0) return DateTime.MinValue;

@@ -94,29 +94,12 @@ namespace Presentación {
                 );
             }
 
-            // 3. Filtro por Fecha (solo fechas válidas de trabajo)
+            // 3. Filtro por Fecha
             if (!string.IsNullOrEmpty(txtFechaFiltro.Text) && DateTime.TryParse(txtFechaFiltro.Text, out DateTime fecha))
             {
-                
-                bool esFinDeSemana = (fecha.DayOfWeek == DayOfWeek.Saturday || fecha.DayOfWeek == DayOfWeek.Sunday);
-
-                
-                List<string> feriados = new List<string> {
-                    "01-01", "03-24", "04-02", "05-01", "05-25", "06-17", "06-20", "07-09", "08-17", "10-12", "11-20", "12-08", "12-25"
-                };
-                string mesDiaStr = fecha.ToString("MM-dd");
-                bool esFeriado = feriados.Contains(mesDiaStr);
-
-                if (esFinDeSemana || esFeriado)
-                {
-                    lista = new List<Turno>();
-                    Response.Write("<script>alert('La clínica permanece cerrada los fines de semana y feriados. No se muestran turnos.');</script>");
-                }
-                else
-                {
-                    lista = lista.FindAll(x => x.FechaHora.Date == fecha.Date);
-                }
+                lista = lista.FindAll(x => x.FechaHora.Date == fecha.Date);
             }
+
 
             dgvTurnos.DataSource = lista;
             dgvTurnos.DataBind();

@@ -657,11 +657,40 @@ namespace Negocio
             return tieneDisponibilidadEseDia;
         }
 
+        public bool PacienteDisponibleEnFechaHora(int idPaciente, DateTime fechaHora, int idTurnoActual = 0)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT COUNT(*) 
+                    FROM Turnos 
+                    WHERE IDPaciente = @idPaciente 
+                    AND FechaHora = @fechaHora 
+                    AND IDEstadoTurno <> 3 -- 3 = Cancelado
+                    AND IDTurno <> @idTurnoActual");
+
+                datos.setearParametro("@idPaciente", idPaciente);
+                datos.setearParametro("@fechaHora", fechaHora);
+                datos.setearParametro("@idTurnoActual", idTurnoActual);
+
+                datos.ejecutarLectura();
+                if (datos.Lector.Read())
+                {
+                    return Convert.ToInt32(datos.Lector[0]) == 0;
+                }
+                return true;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
 
 
     }
 
-    
+
 }
 
 

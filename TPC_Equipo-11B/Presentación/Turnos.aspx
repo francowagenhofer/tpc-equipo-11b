@@ -217,20 +217,6 @@
             flatpickr("#txtFechaFiltro", {
                 locale: "es",
                 dateFormat: "Y-m-d",
-                // Permitimos ver fechas pasadas (no usamos minDate: "today") 
-                // para que el usuario pueda consultar turnos anteriores
-                disable: [
-                    function (date) {
-                        // 1. Deshabilitar Sábados (6) y Domingos (0)
-                        if (date.getDay() === 0 || date.getDay() === 6) {
-                            return true;
-                        }
-
-                        // 2. Deshabilitar feriados
-                        const mesDia = String(date.getMonth() + 1).padStart(2, '0') + "-" + String(date.getDate()).padStart(2, '0');
-                        return feriadosNacionales.includes(mesDia);
-                    }
-                ],
                 onChange: function (selectedDates, dateStr, instance) {
                     // Disparar el evento de cambio nativo para que ASP.NET realice el postback automáticamente
                     const el = document.getElementById('txtFechaFiltro');
@@ -243,6 +229,7 @@
                     }
                 }
             });
+
         });
     </script>
 

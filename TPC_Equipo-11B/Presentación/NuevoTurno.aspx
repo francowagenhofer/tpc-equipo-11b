@@ -112,20 +112,10 @@ CssClass="form-select">
             flatpickr("#txtFecha", {
                 locale: "es",
                 dateFormat: "Y-m-d",
-                minDate: "today", // Evita reservar turnos en el pasado
-                disable: [
-                    function (date) {
-                        // 1. Deshabilitar Sábados (6) y Domingos (0)
-                        if (date.getDay() === 0 || date.getDay() === 6) {
-                            return true;
-                        }
-
-                        // 2. Deshabilitar feriados
-                        const mesDia = String(date.getMonth() + 1).padStart(2, '0') + "-" + String(date.getDate()).padStart(2, '0');
-                        return feriadosNacionales.includes(mesDia);
-                    }
-                ]
+                minDate: "today" // Evita reservar turnos en el pasado
             });
+
+
 
             // Cargar datos de pacientes y médicos
             inicializarDatos('Paciente', 'ddlPaciente', 'txtPacienteBusqueda');
