@@ -6,10 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Negocio
-{
-    public class AusenciaMedicoNegocio
-    {
+namespace Negocio {
+    public class AusenciaMedicoNegocio {
         public List<AusenciaMedico> ListarAusencias()
         {
             List<AusenciaMedico> lista = new List<AusenciaMedico>();
@@ -210,8 +208,62 @@ namespace Negocio
             }
         }
 
+        // Método auxiliar: verificar si el médico tiene turnos activos en una fecha
+        public bool MedicoTieneTurnosEnFecha(int idMedico, DateTime fecha)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT COUNT(*) 
+                    FROM Turnos 
+                    WHERE IDMedico = @IDMedico 
+                      AND CAST(FechaHora AS DATE) = @Fecha 
+                      AND IDEstadoTurno NOT IN (
+                          SELECT IDEstadoTurno FROM EstadosTurno WHERE Nombre = 'Cancelado'
+                      )");
+
+                datos.setearParametro("@IDMedico", idMedico);
+                datos.setearParametro("@Fecha", fecha.Date);
+
+                return datos.ejecutarEscalar() > 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
         public void AgregarAusencia(AusenciaMedico ausencia)
         {
+            // 1. VALIDACIÓN: No permitir ausencias en el pasado
+            if (ausencia.Fecha.Date < DateTime.Today)
+            {
+                throw new Exception("No se pueden registrar ausencias para fechas que ya pasaron.");
+            }
+
+            // 2. VALIDACIÓN: No permitir ausencias duplicadas
+            if (TieneAusencia(ausencia.IdMedico, ausencia.Fecha))
+            {
+                throw new Exception("Ya existe una ausencia registrada para el médico en la fecha seleccionada.");
+            }
+
+            // 3. VALIDACIÓN: No permitir ausencias si hay turnos activos ese día
+            if (MedicoTieneTurnosEnFecha(ausencia.IdMedico, ausencia.Fecha))
+            {
+                throw new Exception("No se puede registrar la ausencia porque el médico tiene turnos asignados para ese día. Debe cancelarlos o reprogramarlos primero.");
+            }
+
+            // Validación de motivo obligatorio
+            if (string.IsNullOrWhiteSpace(ausencia.Motivo))
+            {
+                throw new Exception("Debe ingresar el motivo de la ausencia.");
+            }
+
             AccesoDatos datos = new AccesoDatos();
 
             try
