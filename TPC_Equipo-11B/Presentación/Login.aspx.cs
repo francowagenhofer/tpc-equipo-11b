@@ -8,7 +8,8 @@ using Dominio;
 using Negocio;
 
 namespace Presentación {
-    public partial class Login : System.Web.UI.Page {
+    public partial class Login : System.Web.UI.Page 
+    {
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["usuarioLogueado"] != null)

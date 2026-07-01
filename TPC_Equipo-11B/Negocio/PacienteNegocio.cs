@@ -7,8 +7,8 @@ using Dominio;
 using Datos;
 
 namespace Negocio {
-    public class PacienteNegocio {
-        // Listado
+    public class PacienteNegocio 
+    {  
         public List<Paciente> ListarPacientes(bool soloActivos = true)
         {
             List<Paciente> lista = new List<Paciente>();
@@ -98,7 +98,6 @@ namespace Negocio {
                 datos.cerrarConexion();
             }
         }
-
         public Paciente ObtenerPacientePorId(int idPaciente)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -187,8 +186,6 @@ namespace Negocio {
                 datos.cerrarConexion();
             }
         }
-
-        // Alta 
         public void RegistrarPaciente(Paciente paciente)
         {
             AccesoDatos datosRol = new AccesoDatos();
@@ -230,7 +227,6 @@ namespace Negocio {
 
             AgregarRegistroPaciente(idUsuario, paciente);
         }
-
         private int AgregarRegistroPaciente(int idUsuario, Paciente paciente)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -262,7 +258,6 @@ namespace Negocio {
                 datos.cerrarConexion();
             }
         }
-
         public void ReactivarPaciente(int idPaciente)
         {
             ValidarReactivacion(idPaciente);
@@ -280,8 +275,6 @@ namespace Negocio {
                 datos.cerrarConexion();
             }
         }
-
-        // Modificación
         public void ModificarPaciente(Paciente paciente)
         {
             ValidarModificacion(paciente);
@@ -318,8 +311,6 @@ namespace Negocio {
                 datos.cerrarConexion();
             }
         }
-
-        // Baja lógica 
         public void EliminarPaciente(int idPaciente)
         {
             ValidarEliminacion(idPaciente);
@@ -337,8 +328,6 @@ namespace Negocio {
                 datos.cerrarConexion();
             }
         }
-
-        // Validaciones
         private void ValidarAlta(Paciente paciente)
         {
             UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
@@ -368,7 +357,6 @@ namespace Negocio {
             if (paciente.ObraSocial == null || paciente.ObraSocial.Id == 0)
                 throw new Exception("Debe seleccionar una obra social.");
         }
-
         private void ValidarModificacion(Paciente paciente)
         {
             UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
@@ -398,7 +386,6 @@ namespace Negocio {
             if (paciente.ObraSocial == null || paciente.ObraSocial.Id == 0)
                 throw new Exception("Debe seleccionar una obra social.");
         }
-
         private void ValidarEliminacion(int idPaciente)
         {
             Paciente paciente = ObtenerPacientePorId(idPaciente);
@@ -428,7 +415,6 @@ namespace Negocio {
                 datos.cerrarConexion();
             }
         }
-
         private void ValidarReactivacion(int idPaciente)
         {
             Paciente paciente = ObtenerPacientePorId(idPaciente);
@@ -439,7 +425,6 @@ namespace Negocio {
             if (paciente.Activo)
                 throw new Exception("El paciente ya se encuentra activo.");
         }
-
         private bool ExisteDNI(string dni)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -457,7 +442,6 @@ namespace Negocio {
                 datos.cerrarConexion();
             }
         }
-
         private bool ExisteDNI(string dni, int idPaciente)
         {
             AccesoDatos datos = new AccesoDatos();

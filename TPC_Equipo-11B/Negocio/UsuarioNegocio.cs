@@ -8,7 +8,107 @@ using Datos;
 
 namespace Negocio {
 
-    public class UsuarioNegocio {
+    public class UsuarioNegocio 
+    {
+        //public Usuario ValidarLogin(string username, string password)
+        //{
+        //    AccesoDatos datos = new AccesoDatos();
+
+        //    try
+        //    {
+        //        datos.setearConsulta(@"
+        //             SELECT
+        //                 U.IDUsuario,
+        //                 U.Nombre,
+        //                 U.Apellido,
+        //                 U.Email,
+        //                 U.Telefono,
+        //                 U.Username,
+        //                 U.PasswordHash,
+        //                 U.ImagenUrl,
+        //                 U.FechaAlta,
+        //                 U.IDRol,
+        //                 U.Activo,
+
+        //                 R.Nombre AS NombreRol,
+
+        //                 M.IDMedico,
+        //                 M.Matricula,
+
+        //                 P.IDPaciente,
+        //                 P.DNI
+
+        //             FROM Usuarios U
+
+        //             INNER JOIN Roles R
+        //                 ON U.IDRol = R.IDRol
+
+        //             LEFT JOIN Medicos M
+        //                 ON U.IDUsuario = M.IDUsuario
+
+        //             LEFT JOIN Pacientes P
+        //                 ON U.IDUsuario = P.IDUsuario
+
+        //             WHERE U.Username = @username
+        //               AND U.PasswordHash = @password
+        //               AND U.Activo = 1
+        //               AND R.Activo = 1");
+
+        //        datos.setearParametro("@username", username);
+        //        datos.setearParametro("@password", password);
+
+        //        datos.ejecutarLectura();
+
+        //        if (!datos.Lector.Read())
+        //            return null;
+
+        //        Usuario usuario = new Usuario();
+
+        //        usuario.Id = (int)datos.Lector["IDUsuario"];
+        //        usuario.Nombre = datos.Lector["Nombre"].ToString();
+        //        usuario.Apellido = datos.Lector["Apellido"].ToString();
+        //        usuario.Email = datos.Lector["Email"].ToString();
+        //        usuario.Telefono = datos.Lector["Telefono"] != DBNull.Value
+        //            ? datos.Lector["Telefono"].ToString()
+        //            : "";
+        //        usuario.Username = datos.Lector["Username"].ToString();
+        //        usuario.Password = datos.Lector["PasswordHash"].ToString();
+        //        usuario.ImagenUrl = datos.Lector["ImagenUrl"] != DBNull.Value
+        //            ? datos.Lector["ImagenUrl"].ToString()
+        //            : "";
+        //        usuario.FechaAlta = (DateTime)datos.Lector["FechaAlta"];
+        //        usuario.Activo = (bool)datos.Lector["Activo"];
+        //        usuario.RolId = (int)datos.Lector["IDRol"];
+
+        //        usuario.Rol = new Rol();
+
+        //        usuario.Rol.Id = (int)datos.Lector["IDRol"];
+        //        usuario.Rol.Nombre = datos.Lector["NombreRol"].ToString();
+
+        //        if (datos.Lector["IDMedico"] != DBNull.Value)
+        //        {
+        //            usuario.Medico = new Medico();
+
+        //            usuario.Medico.Id = (int)datos.Lector["IDMedico"];
+        //            usuario.Medico.Matricula = datos.Lector["Matricula"].ToString();
+        //        }
+
+        //        if (datos.Lector["IDPaciente"] != DBNull.Value)
+        //        {
+        //            usuario.Paciente = new Paciente();
+
+        //            usuario.Paciente.Id = (int)datos.Lector["IDPaciente"];
+        //            usuario.Paciente.DNI = datos.Lector["DNI"].ToString();
+        //        }
+
+        //        return usuario;
+        //    }
+        //    finally
+        //    {
+        //        datos.cerrarConexion();
+        //    }
+        //}
+
         public Usuario ValidarLogin(string username, string password)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -16,42 +116,13 @@ namespace Negocio {
             try
             {
                 datos.setearConsulta(@"
-                     SELECT
-                         U.IDUsuario,
-                         U.Nombre,
-                         U.Apellido,
-                         U.Email,
-                         U.Telefono,
-                         U.Username,
-                         U.PasswordHash,
-                         U.ImagenUrl,
-                         U.FechaAlta,
-                         U.IDRol,
-                         U.Activo,
-
-                         R.Nombre AS NombreRol,
-
-                         M.IDMedico,
-                         M.Matricula,
-
-                         P.IDPaciente,
-                         P.DNI
-
-                     FROM Usuarios U
-
-                     INNER JOIN Roles R
-                         ON U.IDRol = R.IDRol
-
-                     LEFT JOIN Medicos M
-                         ON U.IDUsuario = M.IDUsuario
-
-                     LEFT JOIN Pacientes P
-                         ON U.IDUsuario = P.IDUsuario
-
-                     WHERE U.Username = @username
-                       AND U.PasswordHash = @password
-                       AND U.Activo = 1
-                       AND R.Activo = 1");
+                    SELECT U.IDUsuario
+                    FROM Usuarios U
+                    INNER JOIN Roles R ON U.IDRol = R.IDRol
+                    WHERE U.Username = @username
+                      AND U.PasswordHash = @password
+                      AND U.Activo = 1
+                      AND R.Activo = 1");
 
                 datos.setearParametro("@username", username);
                 datos.setearParametro("@password", password);
@@ -61,45 +132,9 @@ namespace Negocio {
                 if (!datos.Lector.Read())
                     return null;
 
-                Usuario usuario = new Usuario();
+                int idUsuario = (int)datos.Lector["IDUsuario"];
 
-                usuario.Id = (int)datos.Lector["IDUsuario"];
-                usuario.Nombre = datos.Lector["Nombre"].ToString();
-                usuario.Apellido = datos.Lector["Apellido"].ToString();
-                usuario.Email = datos.Lector["Email"].ToString();
-                usuario.Telefono = datos.Lector["Telefono"] != DBNull.Value
-                    ? datos.Lector["Telefono"].ToString()
-                    : "";
-                usuario.Username = datos.Lector["Username"].ToString();
-                usuario.Password = datos.Lector["PasswordHash"].ToString();
-                usuario.ImagenUrl = datos.Lector["ImagenUrl"] != DBNull.Value
-                    ? datos.Lector["ImagenUrl"].ToString()
-                    : "";
-                usuario.FechaAlta = (DateTime)datos.Lector["FechaAlta"];
-                usuario.Activo = (bool)datos.Lector["Activo"];
-
-                usuario.Rol = new Rol();
-
-                usuario.Rol.Id = (int)datos.Lector["IDRol"];
-                usuario.Rol.Nombre = datos.Lector["NombreRol"].ToString();
-
-                if (datos.Lector["IDMedico"] != DBNull.Value)
-                {
-                    usuario.Medico = new Medico();
-
-                    usuario.Medico.Id = (int)datos.Lector["IDMedico"];
-                    usuario.Medico.Matricula = datos.Lector["Matricula"].ToString();
-                }
-
-                if (datos.Lector["IDPaciente"] != DBNull.Value)
-                {
-                    usuario.Paciente = new Paciente();
-
-                    usuario.Paciente.Id = (int)datos.Lector["IDPaciente"];
-                    usuario.Paciente.DNI = datos.Lector["DNI"].ToString();
-                }
-
-                return usuario;
+                return ObtenerUsuarioPorId(idUsuario);
             }
             finally
             {
@@ -107,7 +142,6 @@ namespace Negocio {
             }
         }
 
-        // Listado
         public List<Usuario> ListarUsuarios()
         {
             List<Usuario> lista = new List<Usuario>();
@@ -151,31 +185,139 @@ namespace Negocio {
                 datos.cerrarConexion();
             }
         }
-
         public Usuario ObtenerUsuarioPorId(int idUsuario)
         {
             AccesoDatos datos = new AccesoDatos();
+
             try
             {
-                datos.setearConsulta("SELECT IDUsuario, Nombre, Apellido, Email, Telefono, Username, PasswordHash, IdRol, ImagenUrl, FechaAlta, Activo FROM Usuarios WHERE IDUsuario = @id");
+                datos.setearConsulta(@"
+                    SELECT
+                        U.IDUsuario,
+                        U.Nombre,
+                        U.Apellido,
+                        U.Email,
+                        U.Telefono,
+                        U.Username,
+                        U.PasswordHash,
+                        U.ImagenUrl,
+                        U.FechaAlta,
+                        U.Activo,
+
+                        R.IDRol,
+                        R.Nombre AS NombreRol,
+
+                        M.IDMedico,
+                        M.Matricula,
+
+                        E.IDEspecialidad,
+                        E.Nombre AS NombreEspecialidad,
+                        E.Descripcion AS DescripcionEspecialidad,
+
+                        P.IDPaciente,
+                        P.DNI,
+                        P.FechaNacimiento,
+                        P.Direccion,
+
+                        G.IDGenero,
+                        G.Descripcion AS DescripcionGenero,
+
+                        OS.IDObraSocial,
+                        OS.Nombre AS NombreObraSocial,
+                        OS.TipoPlan
+
+                    FROM Usuarios U
+
+                    INNER JOIN Roles R
+                        ON U.IDRol = R.IDRol
+
+                    LEFT JOIN Medicos M
+                        ON U.IDUsuario = M.IDUsuario
+
+                    LEFT JOIN MedicoEspecialidad ME
+                        ON M.IDMedico = ME.IDMedico
+
+                    LEFT JOIN Especialidades E
+                        ON ME.IDEspecialidad = E.IDEspecialidad
+
+                    LEFT JOIN Pacientes P
+                        ON U.IDUsuario = P.IDUsuario
+
+                    LEFT JOIN Generos G
+                        ON P.IDGenero = G.IDGenero
+
+                    LEFT JOIN ObrasSociales OS
+                        ON P.IDObraSocial = OS.IDObraSocial
+
+                    WHERE U.IDUsuario = @id");
+
                 datos.setearParametro("@id", idUsuario);
                 datos.ejecutarLectura();
+
                 if (datos.Lector.Read())
                 {
                     Usuario aux = new Usuario();
+
                     aux.Id = (int)datos.Lector["IDUsuario"];
-                    aux.Nombre = (string)datos.Lector["Nombre"];
-                    aux.Apellido = (string)datos.Lector["Apellido"];
-                    aux.Email = (string)datos.Lector["Email"];
-                    aux.Telefono = datos.Lector["Telefono"] != DBNull.Value ? (string)datos.Lector["Telefono"] : "";
-                    aux.Username = (string)datos.Lector["Username"];
-                    aux.Password = (string)datos.Lector["PasswordHash"];
-                    aux.ImagenUrl = datos.Lector["ImagenUrl"] != DBNull.Value ? (string)datos.Lector["ImagenUrl"] : "";
+                    aux.Nombre = datos.Lector["Nombre"].ToString();
+                    aux.Apellido = datos.Lector["Apellido"].ToString();
+                    aux.Email = datos.Lector["Email"].ToString();
+                    aux.Telefono = datos.Lector["Telefono"] != DBNull.Value ? datos.Lector["Telefono"].ToString() : "";
+                    aux.Username = datos.Lector["Username"].ToString();
+                    aux.Password = datos.Lector["PasswordHash"].ToString();
+                    aux.ImagenUrl = datos.Lector["ImagenUrl"] != DBNull.Value ? datos.Lector["ImagenUrl"].ToString() : "";
                     aux.FechaAlta = (DateTime)datos.Lector["FechaAlta"];
-                    aux.RolId = (int)datos.Lector["IDRol"];
                     aux.Activo = (bool)datos.Lector["Activo"];
+
+                    aux.RolId = (int)datos.Lector["IDRol"];
+                    aux.Rol = new Rol();
+                    aux.Rol.Id = (int)datos.Lector["IDRol"];
+                    aux.Rol.Nombre = datos.Lector["NombreRol"].ToString();
+
+                    if (datos.Lector["IDMedico"] != DBNull.Value)
+                    {
+                        aux.Medico = new Medico();
+
+                        aux.Medico.Id = (int)datos.Lector["IDMedico"];
+                        aux.Medico.Matricula = datos.Lector["Matricula"].ToString();
+
+                        if (datos.Lector["IDEspecialidad"] != DBNull.Value)
+                        {
+                            aux.Medico.Especialidad = new Especialidad();
+                            aux.Medico.Especialidad.Id = (int)datos.Lector["IDEspecialidad"];
+                            aux.Medico.Especialidad.Nombre = datos.Lector["NombreEspecialidad"].ToString();
+                            aux.Medico.Especialidad.Descripcion = datos.Lector["DescripcionEspecialidad"] != DBNull.Value ? datos.Lector["DescripcionEspecialidad"].ToString() : "";
+                        }
+                    }
+
+                    if (datos.Lector["IDPaciente"] != DBNull.Value)
+                    {
+                        aux.Paciente = new Paciente();
+
+                        aux.Paciente.Id = (int)datos.Lector["IDPaciente"];
+                        aux.Paciente.DNI = datos.Lector["DNI"].ToString();
+                        aux.Paciente.FechaNacimiento = (DateTime)datos.Lector["FechaNacimiento"];
+                        aux.Paciente.Direccion = datos.Lector["Direccion"] != DBNull.Value ? datos.Lector["Direccion"].ToString() : "";
+
+                        if (datos.Lector["IDGenero"] != DBNull.Value)
+                        {
+                            aux.Paciente.Genero = new Genero();
+                            aux.Paciente.Genero.Id = (int)datos.Lector["IDGenero"];
+                            aux.Paciente.Genero.Descripcion = datos.Lector["DescripcionGenero"].ToString();
+                        }
+
+                        if (datos.Lector["IDObraSocial"] != DBNull.Value)
+                        {
+                            aux.Paciente.ObraSocial = new ObraSocial();
+                            aux.Paciente.ObraSocial.Id = (int)datos.Lector["IDObraSocial"];
+                            aux.Paciente.ObraSocial.Nombre = datos.Lector["NombreObraSocial"].ToString();
+                            aux.Paciente.ObraSocial.TipoPlan = datos.Lector["TipoPlan"].ToString();
+                        }
+                    }
+
                     return aux;
                 }
+
                 return null;
             }
             catch (Exception ex)
@@ -187,8 +329,6 @@ namespace Negocio {
                 datos.cerrarConexion();
             }
         }
-
-        // Alta
         public int RegistrarUsuario(Usuario nuevo)
         {
             ValidarAlta(nuevo);
@@ -222,7 +362,6 @@ namespace Negocio {
                 datos.cerrarConexion();
             }
         }
-
         public void ReactivarUsuario(int idUsuario)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -238,8 +377,6 @@ namespace Negocio {
                 datos.cerrarConexion();
             }
         }
-
-        // Modificación
         public void ModificarUsuario(Usuario usuario)
         {
             ValidarModificacion(usuario);
@@ -274,7 +411,6 @@ namespace Negocio {
                 datos.cerrarConexion();
             }
         }
-
         public void CambiarPassword(int idUsuario, string password)
         {
             Usuario usuario = ObtenerUsuarioPorId(idUsuario);
@@ -304,8 +440,6 @@ namespace Negocio {
                 datos.cerrarConexion();
             }
         }
-
-        // Para administradores
         public void CambiarRolUsuario(int idUsuario, int nuevoRolId, Usuario usuarioLogueado)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -330,13 +464,6 @@ namespace Negocio {
                 datos.cerrarConexion();
             }
         }
-
-        // Baja lógica
-        public void Skinner(int idUsuario)
-        {
-            // Método vacío placeholder
-        }
-
         public void EliminarUsuario(int idUsuario)
         {
             ValidarEliminacion(idUsuario);
@@ -353,8 +480,6 @@ namespace Negocio {
                 datos.cerrarConexion();
             }
         }
-
-        // Validaciones auxiliares
         private bool ValidarFormatoEmail(string email)
         {
             try
@@ -367,8 +492,6 @@ namespace Negocio {
                 return false;
             }
         }
-
-        // Validaciones
         public void ValidarAlta(Usuario usuario)
         {
             if (string.IsNullOrWhiteSpace(usuario.Nombre))
@@ -402,7 +525,6 @@ namespace Negocio {
             if (usuario.RolId <= 0)
                 throw new Exception("Debe seleccionar un rol.");
         }
-
         public void ValidarModificacion(Usuario usuario)
         {
             if (string.IsNullOrWhiteSpace(usuario.Nombre))
@@ -417,7 +539,6 @@ namespace Negocio {
             if (string.IsNullOrWhiteSpace(usuario.Email))
                 throw new Exception("Debe ingresar un email.");
 
-            // 2. VALIDACIÓN: Formato de Email al Modificar
             if (!ValidarFormatoEmail(usuario.Email))
                 throw new Exception("El formato del correo electrónico no es válido (Ej: usuario@correo.com).");
 
@@ -430,7 +551,6 @@ namespace Negocio {
             if (usuario.RolId <= 0)
                 throw new Exception("Debe seleccionar un rol.");
         }
-
         public void ValidarEliminacion(int idUsuario)
         {
             Usuario usuario = ObtenerUsuarioPorId(idUsuario);
@@ -441,7 +561,6 @@ namespace Negocio {
             if (!usuario.Activo)
                 throw new Exception("El usuario ya se encuentra inactivo.");
         }
-
         private bool ExisteUsername(string username)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -464,7 +583,6 @@ namespace Negocio {
                 datos.cerrarConexion();
             }
         }
-
         private bool ExisteEmail(string email)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -487,8 +605,7 @@ namespace Negocio {
                 datos.cerrarConexion();
             }
         }
-
-        private bool ExisteUsername(string username, int idUsuario)
+        public bool ExisteUsername(string username, int idUsuario)
         {
             AccesoDatos datos = new AccesoDatos();
 
@@ -512,7 +629,6 @@ namespace Negocio {
                 datos.cerrarConexion();
             }
         }
-
         private bool ExisteEmail(string email, int idUsuario)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -537,7 +653,6 @@ namespace Negocio {
                 datos.cerrarConexion();
             }
         }
-
         public bool EmailRegistrado(string email)
         {
             AccesoDatos datos = new AccesoDatos();
