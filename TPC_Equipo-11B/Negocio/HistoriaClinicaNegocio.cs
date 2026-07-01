@@ -10,97 +10,54 @@ namespace Negocio
 {
     public class HistoriaClinicaNegocio
     {
+        public List<HistoriaClinica> ListarHC()
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(ConsultaHistoriaClinica() + @" ORDER BY HC.Fecha DESC");
+
+                datos.ejecutarLectura();
+
+                List<HistoriaClinica> lista = new List<HistoriaClinica>();
+
+                while (datos.Lector.Read())
+                    lista.Add(MapearHistoriaClinica(datos));
+
+                return lista;
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
         public List<HistoriaClinica> ListarHCPorPaciente(int idPaciente)
         {
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                datos.setearConsulta(@"
-                    SELECT
-                    
-                    HC.IDHistoriaClinica,
-                    HC.Fecha,
-                    HC.Diagnostico,
-                    HC.Tratamiento,
-                    HC.Observaciones,
-                    HC.Activo,
-                    
-                    P.IDPaciente,
-                    
-                    M.IDMedico,
-                    M.Matricula,
-                    
-                    U.IDUsuario,
-                    U.Nombre,
-                    U.Apellido,
-                    
-                    T.IDTurno,
-                    T.Codigo
-                    
-                    FROM HistoriaClinica HC
-                    
-                    INNER JOIN Pacientes P
-                    ON HC.IDPaciente=P.IDPaciente
-                    
-                    INNER JOIN Medicos M
-                    ON HC.IDMedico=M.IDMedico
-                    
-                    INNER JOIN Usuarios U
-                    ON M.IDUsuario=U.IDUsuario
-                    
-                    LEFT JOIN Turnos T
-                    ON HC.IDTurno=T.IDTurno
-                    
-                    WHERE HC.IDPaciente = @IDPaciente
-                    ORDER BY HC.Fecha DESC");
-
+                datos.setearConsulta(ConsultaHistoriaClinica() + @" WHERE HC.IDPaciente = @IDPaciente ORDER BY HC.Fecha DESC");
                 datos.setearParametro("@IDPaciente", idPaciente);
+
                 datos.ejecutarLectura();
 
                 List<HistoriaClinica> lista = new List<HistoriaClinica>();
 
-
                 while (datos.Lector.Read())
-                {
-
-                    HistoriaClinica aux = new HistoriaClinica();
-
-                    aux.Paciente = new Paciente();
-                    aux.Medico = new Medico();
-                    aux.Medico.Usuario = new Usuario();
-                    aux.Turno = new Turno();
-
-                    aux.Id = (int)datos.Lector["IDHistoriaClinica"];
-                    aux.Fecha = (DateTime)datos.Lector["Fecha"];
-                    aux.Diagnostico = (string)datos.Lector["Diagnostico"];
-                    aux.Tratamiento = datos.Lector["Tratamiento"] as string;
-                    aux.Observaciones = datos.Lector["Observaciones"] as string;
-                    aux.Activo = (bool)datos.Lector["Activo"];
-
-                    aux.Paciente.Id = (int)datos.Lector["IDPaciente"];
-
-                    aux.Medico.Id = (int)datos.Lector["IDMedico"];
-                    aux.Medico.Matricula = (string)datos.Lector["Matricula"];
-
-                    aux.Medico.Usuario.Id = (int)datos.Lector["IDUsuario"];
-                    aux.Medico.Usuario.Nombre = (string)datos.Lector["Nombre"];
-                    aux.Medico.Usuario.Apellido = (string)datos.Lector["Apellido"];
-
-                    if (!(datos.Lector["IDTurno"] is DBNull))
-                    {
-                        aux.Turno.Id = (int)datos.Lector["IDTurno"];
-                        aux.Turno.Codigo = (string)datos.Lector["Codigo"];
-                    }
-
-                    lista.Add(aux);
-                }
+                    lista.Add(MapearHistoriaClinica(datos));
 
                 return lista;
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -114,91 +71,20 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta(@"
-                    SELECT
-                    
-                    HC.IDHistoriaClinica,
-                    HC.Fecha,
-                    HC.Diagnostico,
-                    HC.Tratamiento,
-                    HC.Observaciones,
-                    HC.Activo,
-                    
-                    P.IDPaciente,
-                    
-                    M.IDMedico,
-                    M.Matricula,
-                    
-                    U.IDUsuario,
-                    U.Nombre,
-                    U.Apellido,
-                    
-                    T.IDTurno,
-                    T.Codigo
-                    
-                    FROM HistoriaClinica HC
-                    
-                    INNER JOIN Pacientes P
-                    ON HC.IDPaciente=P.IDPaciente
-                    
-                    INNER JOIN Medicos M
-                    ON HC.IDMedico=M.IDMedico
-                    
-                    INNER JOIN Usuarios U
-                    ON M.IDUsuario=U.IDUsuario
-                    
-                    LEFT JOIN Turnos T
-                    ON HC.IDTurno=T.IDTurno
-                    
-                    WHERE HC.IDMedico = @IDMedico
-                    ORDER BY HC.Fecha DESC");
-
-                datos.setearParametro("@IdMedico", idMedico);
+                datos.setearConsulta(ConsultaHistoriaClinica() + @" WHERE HC.IDMedico = @IDMedico ORDER BY HC.Fecha DESC");
+                datos.setearParametro("@IDMedico", idMedico);
                 datos.ejecutarLectura();
 
                 List<HistoriaClinica> lista = new List<HistoriaClinica>();
 
-
                 while (datos.Lector.Read())
-                {
-
-                    HistoriaClinica aux = new HistoriaClinica();
-
-                    aux.Paciente = new Paciente();
-                    aux.Medico = new Medico();
-                    aux.Medico.Usuario = new Usuario();
-                    aux.Turno = new Turno();
-
-                    aux.Id = (int)datos.Lector["IDHistoriaClinica"];
-                    aux.Fecha = (DateTime)datos.Lector["Fecha"];
-                    aux.Diagnostico = (string)datos.Lector["Diagnostico"];
-                    aux.Tratamiento = datos.Lector["Tratamiento"] as string;
-                    aux.Observaciones = datos.Lector["Observaciones"] as string;
-                    aux.Activo = (bool)datos.Lector["Activo"];
-
-                    aux.Paciente.Id = (int)datos.Lector["IDPaciente"];
-
-                    aux.Medico.Id = (int)datos.Lector["IDMedico"];
-                    aux.Medico.Matricula = (string)datos.Lector["Matricula"];
-
-                    aux.Medico.Usuario.Id = (int)datos.Lector["IDUsuario"];
-                    aux.Medico.Usuario.Nombre = (string)datos.Lector["Nombre"];
-                    aux.Medico.Usuario.Apellido = (string)datos.Lector["Apellido"];
-
-                    if (!(datos.Lector["IDTurno"] is DBNull))
-                    {
-                        aux.Turno.Id = (int)datos.Lector["IDTurno"];
-                        aux.Turno.Codigo = (string)datos.Lector["Codigo"];
-                    }
-
-                    lista.Add(aux);
-                }
+                    lista.Add(MapearHistoriaClinica(datos));
 
                 return lista;
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -212,87 +98,19 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta(@"
-                    SELECT
-                    
-                    HC.IDHistoriaClinica,
-                    HC.Fecha,
-                    HC.Diagnostico,
-                    HC.Tratamiento,
-                    HC.Observaciones,
-                    HC.Activo,
-                    
-                    P.IDPaciente,
-                    
-                    M.IDMedico,
-                    M.Matricula,
-                    
-                    U.IDUsuario,
-                    U.Nombre,
-                    U.Apellido,
-                    
-                    T.IDTurno,
-                    T.Codigo
-                    
-                    FROM HistoriaClinica HC
-                    
-                    INNER JOIN Pacientes P
-                    ON HC.IDPaciente=P.IDPaciente
-                    
-                    INNER JOIN Medicos M
-                    ON HC.IDMedico=M.IDMedico
-                    
-                    INNER JOIN Usuarios U
-                    ON M.IDUsuario=U.IDUsuario
-                    
-                    LEFT JOIN Turnos T
-                    ON HC.IDTurno=T.IDTurno
-                    
-                    WHERE HC.IDHistoriaClinica=@Id");
-
-                datos.setearParametro("@Id", id);
+                datos.setearConsulta(ConsultaHistoriaClinica() + @" WHERE HC.IDHistoriaClinica = @ID");
+                datos.setearParametro("@ID", id);
 
                 datos.ejecutarLectura();
 
                 if (datos.Lector.Read())
-                {
-                    HistoriaClinica aux = new HistoriaClinica();
-
-                    aux.Paciente = new Paciente();
-                    aux.Medico = new Medico();
-                    aux.Medico.Usuario = new Usuario();
-                    aux.Turno = new Turno();
-
-                    aux.Id = (int)datos.Lector["IDHistoriaClinica"];
-                    aux.Fecha = (DateTime)datos.Lector["Fecha"];
-                    aux.Diagnostico = (string)datos.Lector["Diagnostico"];
-                    aux.Tratamiento = datos.Lector["Tratamiento"] as string;
-                    aux.Observaciones = datos.Lector["Observaciones"] as string;
-                    aux.Activo = (bool)datos.Lector["Activo"];
-
-                    aux.Paciente.Id = (int)datos.Lector["IDPaciente"];
-
-                    aux.Medico.Id = (int)datos.Lector["IDMedico"];
-                    aux.Medico.Matricula = (string)datos.Lector["Matricula"];
-
-                    aux.Medico.Usuario.Id = (int)datos.Lector["IDUsuario"];
-                    aux.Medico.Usuario.Nombre = (string)datos.Lector["Nombre"];
-                    aux.Medico.Usuario.Apellido = (string)datos.Lector["Apellido"];
-
-                    if (!(datos.Lector["IDTurno"] is DBNull))
-                    {
-                        aux.Turno.Id = (int)datos.Lector["IDTurno"];
-                        aux.Turno.Codigo = (string)datos.Lector["Codigo"];
-                    }
-
-                    return aux;
-                }
+                    return MapearHistoriaClinica(datos);
 
                 return null;
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -300,98 +118,155 @@ namespace Negocio
             }
         }
 
-        public HistoriaClinica ObtenerHCPorTurno(int idTurno) 
+        public HistoriaClinica ObtenerHCPorTurno(int idTurno)
         {
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                datos.setearConsulta(@"
-                    SELECT
-                    
-                    HC.IDHistoriaClinica,
-                    HC.Fecha,
-                    HC.Diagnostico,
-                    HC.Tratamiento,
-                    HC.Observaciones,
-                    HC.Activo,
-                    
-                    P.IDPaciente,
-                    
-                    M.IDMedico,
-                    M.Matricula,
-                    
-                    U.IDUsuario,
-                    U.Nombre,
-                    U.Apellido,
-                    
-                    T.IDTurno,
-                    T.Codigo
-                    
-                    FROM HistoriaClinica HC
-                    
-                    INNER JOIN Pacientes P
-                    ON HC.IDPaciente=P.IDPaciente
-                    
-                    INNER JOIN Medicos M
-                    ON HC.IDMedico=M.IDMedico
-                    
-                    INNER JOIN Usuarios U
-                    ON M.IDUsuario=U.IDUsuario
-                    
-                    LEFT JOIN Turnos T
-                    ON HC.IDTurno=T.IDTurno
-                    
-                    WHERE HC.IDTurno = @IDTurno");
-
+                datos.setearConsulta(ConsultaHistoriaClinica() + @" WHERE HC.IDTurno = @IDTurno");
                 datos.setearParametro("@IDTurno", idTurno);
 
                 datos.ejecutarLectura();
 
                 if (datos.Lector.Read())
-                {
-                    HistoriaClinica aux = new HistoriaClinica();
-
-                    aux.Paciente = new Paciente();
-                    aux.Medico = new Medico();
-                    aux.Medico.Usuario = new Usuario();
-                    aux.Turno = new Turno();
-
-                    aux.Id = (int)datos.Lector["IDHistoriaClinica"];
-                    aux.Fecha = (DateTime)datos.Lector["Fecha"];
-                    aux.Diagnostico = (string)datos.Lector["Diagnostico"];
-                    aux.Tratamiento = datos.Lector["Tratamiento"] as string;
-                    aux.Observaciones = datos.Lector["Observaciones"] as string;
-                    aux.Activo = (bool)datos.Lector["Activo"];
-
-                    aux.Paciente.Id = (int)datos.Lector["IDPaciente"];
-
-                    aux.Medico.Id = (int)datos.Lector["IDMedico"];
-                    aux.Medico.Matricula = (string)datos.Lector["Matricula"];
-
-                    aux.Medico.Usuario.Id = (int)datos.Lector["IDUsuario"];
-                    aux.Medico.Usuario.Nombre = (string)datos.Lector["Nombre"];
-                    aux.Medico.Usuario.Apellido = (string)datos.Lector["Apellido"];
-
-                    if (!(datos.Lector["IDTurno"] is DBNull))
-                    {
-                        aux.Turno.Id = (int)datos.Lector["IDTurno"];
-                        aux.Turno.Codigo = (string)datos.Lector["Codigo"];
-                    }
-
-                    return aux;
-                }
+                    return MapearHistoriaClinica(datos);
 
                 return null;
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
             finally
             {
                 datos.cerrarConexion();
             }
+        }
+
+        private string ConsultaHistoriaClinica()
+        {
+            return @"
+                SELECT
+
+                HC.IDHistoriaClinica,
+                HC.Fecha,
+                HC.Diagnostico,
+                HC.Tratamiento,
+                HC.Observaciones,
+                HC.Activo,
+
+                P.IDPaciente,
+                P.DNI,
+                P.FechaNacimiento,
+
+                UP.Nombre AS PacienteNombre,
+                UP.Apellido AS PacienteApellido,
+                UP.Telefono,
+
+                OS.Nombre AS ObraSocial,
+
+                G.Descripcion AS Genero,
+
+                M.IDMedico,
+                M.Matricula,
+
+                UM.Nombre AS MedicoNombre,
+                UM.Apellido AS MedicoApellido,
+
+                T.IDTurno,
+                T.Codigo,
+
+                E.Nombre AS Especialidad
+
+                FROM HistoriaClinica HC
+
+                INNER JOIN Pacientes P
+                    ON HC.IDPaciente = P.IDPaciente
+
+                INNER JOIN Usuarios UP
+                    ON P.IDUsuario = UP.IDUsuario
+
+                LEFT JOIN ObrasSociales OS
+                    ON P.IDObraSocial = OS.IDObraSocial
+
+                LEFT JOIN Generos G
+                    ON P.IDGenero = G.IDGenero
+
+                INNER JOIN Medicos M
+                    ON HC.IDMedico = M.IDMedico
+
+                INNER JOIN Usuarios UM
+                    ON M.IDUsuario = UM.IDUsuario
+
+                LEFT JOIN Turnos T
+                    ON HC.IDTurno = T.IDTurno
+
+                LEFT JOIN Especialidades E
+                    ON T.IDEspecialidad = E.IDEspecialidad
+            ";
+        }
+        private HistoriaClinica MapearHistoriaClinica(AccesoDatos datos)
+        {
+            HistoriaClinica aux = new HistoriaClinica();
+
+            aux.Paciente = new Paciente();
+            aux.Paciente.Usuario = new Usuario();
+            aux.Paciente.ObraSocial = new ObraSocial();
+            aux.Paciente.Genero = new Genero();
+
+            aux.Medico = new Medico();
+            aux.Medico.Usuario = new Usuario();
+            aux.Medico.Especialidad = new Especialidad();
+
+            aux.Turno = new Turno();
+
+            // Historia Clínica
+            aux.Id = (int)datos.Lector["IDHistoriaClinica"];
+            aux.Fecha = (DateTime)datos.Lector["Fecha"];
+            aux.Diagnostico = datos.Lector["Diagnostico"].ToString();
+            aux.Tratamiento = datos.Lector["Tratamiento"] as string;
+            aux.Observaciones = datos.Lector["Observaciones"] as string;
+            aux.Activo = (bool)datos.Lector["Activo"];
+
+            // Paciente
+            aux.Paciente.Id = (int)datos.Lector["IDPaciente"];
+            aux.Paciente.DNI = datos.Lector["DNI"].ToString();
+
+            if (datos.Lector["FechaNacimiento"] != DBNull.Value)
+                aux.Paciente.FechaNacimiento = (DateTime)datos.Lector["FechaNacimiento"];
+
+            aux.Paciente.Usuario.Nombre = datos.Lector["PacienteNombre"].ToString();
+            aux.Paciente.Usuario.Apellido = datos.Lector["PacienteApellido"].ToString();
+
+            if (datos.Lector["Telefono"] != DBNull.Value)
+                aux.Paciente.Usuario.Telefono = datos.Lector["Telefono"].ToString();
+
+            if (datos.Lector["ObraSocial"] != DBNull.Value)
+                aux.Paciente.ObraSocial.Nombre = datos.Lector["ObraSocial"].ToString();
+
+            if (datos.Lector["Genero"] != DBNull.Value)
+                aux.Paciente.Genero.Descripcion = datos.Lector["Genero"].ToString();
+
+            // Médico
+            aux.Medico.Id = (int)datos.Lector["IDMedico"];
+            aux.Medico.Matricula = datos.Lector["Matricula"].ToString();
+
+            aux.Medico.Usuario.Nombre = datos.Lector["MedicoNombre"].ToString();
+            aux.Medico.Usuario.Apellido = datos.Lector["MedicoApellido"].ToString();
+
+            // Turno
+            if (datos.Lector["IDTurno"] != DBNull.Value)
+            {
+                aux.Turno.Id = (int)datos.Lector["IDTurno"];
+                aux.Turno.Codigo = datos.Lector["Codigo"].ToString();
+            }
+
+            // Especialidad
+            if (datos.Lector["Especialidad"] != DBNull.Value)
+                aux.Medico.Especialidad.Nombre = datos.Lector["Especialidad"].ToString();
+
+            return aux;
         }
 
         public void AgregarHC(HistoriaClinica historia)
@@ -440,104 +315,5 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-
-        public void ModificarHC(HistoriaClinica historia)
-        {
-            AccesoDatos datos = new AccesoDatos();
-
-            try
-            {
-                datos.setearConsulta(
-                    @"UPDATE HistoriaClinica
-                     SET Diagnostico = @Diagnostico,
-                         Tratamiento = @Tratamiento,
-                         Observaciones = @Observaciones
-                     WHERE IDHistoriaClinica = @Id");
-
-                datos.setearParametro("@Diagnostico", historia.Diagnostico);
-                datos.setearParametro("@Tratamiento", historia.Tratamiento);
-                datos.setearParametro("@Observaciones", historia.Observaciones);
-                datos.setearParametro("@Id", historia.Id);
-
-                datos.ejecutarAccion();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
-        }
-
-        public void ReactivarHC(int id)
-        {
-            AccesoDatos datos = new AccesoDatos();
-
-            try
-            {
-                datos.setearConsulta(@"UPDATE HistoriaClinica SET Activo = 1 WHERE IDHistoriaClinica = @Id");
-                datos.setearParametro("@Id", id);
-
-                datos.ejecutarAccion();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
-        }
-
-        public void EliminarHC(int id)
-        {
-            AccesoDatos datos = new AccesoDatos();
-
-            try
-            {
-                datos.setearConsulta(@"UPDATE HistoriaClinica SET Activo = 0 WHERE IDHistoriaClinica = @Id");
-
-                datos.setearParametro("@Id", id);
-
-                datos.ejecutarAccion();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
-        }
-
-        public bool ExisteHCParaTurno(int idTurno)
-        {
-            AccesoDatos datos = new AccesoDatos();
-
-            try
-            {
-                datos.setearConsulta(@"SELECT COUNT(*) FROM HistoriaClinica WHERE IDTurno=@IDTurno AND Activo=1");
-
-                datos.setearParametro("@IDTurno", idTurno);
-
-                return datos.ejecutarEscalar() > 0;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
-        }
-
-        //ExportarPdf
-        //GenerarQr
-
     }
 }
