@@ -4,8 +4,10 @@ using System.Linq;
 using Dominio;
 using Negocio;
 
-namespace Presentación {
-    public partial class PerfilMedico : PaginaProtegida {
+namespace Presentación
+{
+    public partial class PerfilMedico : PaginaProtegida
+    {
         protected void Page_Load(object sender, EventArgs e)
         {
             ValidarRoles("Administrador", "Recepcionista");
@@ -41,6 +43,7 @@ namespace Presentación {
                 litMatricula.Text = medico.Matricula;
                 litEmail.Text = medico.Usuario.Email;
                 litTelefono.Text = string.IsNullOrEmpty(medico.Usuario.Telefono) ? "-" : medico.Usuario.Telefono;
+                imgPerfil.ImageUrl = string.IsNullOrWhiteSpace(medico.Usuario.ImagenUrl) ? "~/Assets/IMG/Perfil.jpg": medico.Usuario.ImagenUrl;
 
                 badgeEstado.InnerText = medico.Activo ? "Activo" : "Inactivo";
                 badgeEstado.Attributes["class"] = medico.Activo ? "badge bg-success" : "badge bg-danger";

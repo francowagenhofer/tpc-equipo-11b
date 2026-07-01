@@ -31,30 +31,35 @@ INSERT INTO ObrasSociales (Nombre,TipoPlan) VALUES
 ('Particular','Sin Cobertura');
 GO
 
-INSERT INTO Usuarios (Nombre,Apellido,Email,Telefono,Username,PasswordHash,ImagenUrl,IDRol) VALUES
-('Admin','Sistema','admin@clinica.com','1100000001','admin','1234',NULL,1),
-('Carla','Gomez','cgomez@clinica.com','1100000002','cgomez','1234',NULL,2),
-('Martin','Lopez','mlopez@clinica.com','1100000003','mlopez','1234',NULL,2),
-('Juan','Perez','jperez@clinica.com','1100000004','jperez','1234',NULL,3),
-('Maria','Gonzalez','mgonzalez@clinica.com','1100000005','mgonzalez','1234',NULL,3),
-('Carlos','Diaz','cdiaz@clinica.com','1100000006','cdiaz','1234',NULL,3),
-('Ana','Fernandez','afernandez@clinica.com','1100000007','afernandez','1234',NULL,3),
-('Luis','Martinez','lmartinez@clinica.com','1100000008','lmartinez','1234',NULL,3),
-('Lucia','Romero','lromero@clinica.com','1100000009','lromero','1234',NULL,3),
-('Sofia','Ruiz','sruiz@clinica.com','1100000010','sruiz','1234',NULL,4),
-('Diego','Sanchez','dsanchez@clinica.com','1100000011','dsanchez','1234',NULL,4),
-('Valentina','Torres','vtorres@clinica.com','1100000012','vtorres','1234',NULL,4),
-('Mateo','Herrera','mherrera@clinica.com','1100000013','mherrera','1234',NULL,4),
-('Camila','Castro','ccastro@clinica.com','1100000014','ccastro','1234',NULL,4),
-('Nicolas','Vega','nvega@clinica.com','1100000015','nvega','1234',NULL,4),
-('Julieta','Silva','jsilva@clinica.com','1100000016','jsilva','1234',NULL,4),
-('Federico','Acosta','facosta@clinica.com','1100000017','facosta','1234',NULL,4),
-('Paula','Benitez','pbenitez@clinica.com','1100000018','pbenitez','1234',NULL,4),
-('Agustin','Suarez','asuarez@clinica.com','1100000019','asuarez','1234',NULL,4),
-('Florencia','Mendez','fmendez@clinica.com','1100000020','fmendez','1234',NULL,4),
-('Bruno','Ortiz','bortiz@clinica.com','1100000021','bortiz','1234',NULL,4),
-('Lara','Rios','lrios@clinica.com','1100000022','lrios','1234',NULL,4),
-('Tomas','Nuñez','tnuñez@clinica.com','1100000023','tnuñez','1234',NULL,4);
+INSERT INTO Usuarios
+(Nombre,Apellido,Email,Telefono,Username,PasswordHash,ImagenUrl,IDRol)
+VALUES
+('Admin','Sistema','admin@clinica.com','1100000001','admin','1234','https://randomuser.me/api/portraits/men/1.jpg',1),
+
+('Carla','Gomez','cgomez@clinica.com','1100000002','cgomez','1234','https://randomuser.me/api/portraits/women/12.jpg',2),
+('Martin','Lopez','mlopez@clinica.com','1100000003','mlopez','1234','https://randomuser.me/api/portraits/men/13.jpg',2),
+
+('Juan','Perez','jperez@clinica.com','1100000004','jperez','1234','https://randomuser.me/api/portraits/men/21.jpg',3),
+('Maria','Gonzalez','mgonzalez@clinica.com','1100000005','mgonzalez','1234','https://randomuser.me/api/portraits/women/22.jpg',3),
+('Carlos','Diaz','cdiaz@clinica.com','1100000006','cdiaz','1234','https://randomuser.me/api/portraits/men/23.jpg',3),
+('Ana','Fernandez','afernandez@clinica.com','1100000007','afernandez','1234','https://randomuser.me/api/portraits/women/24.jpg',3),
+('Luis','Martinez','lmartinez@clinica.com','1100000008','lmartinez','1234','https://randomuser.me/api/portraits/men/25.jpg',3),
+('Lucia','Romero','lromero@clinica.com','1100000009','lromero','1234','https://randomuser.me/api/portraits/women/26.jpg',3),
+
+('Sofia','Ruiz','sruiz@clinica.com','1100000010','sruiz','1234','https://randomuser.me/api/portraits/women/31.jpg',4),
+('Diego','Sanchez','dsanchez@clinica.com','1100000011','dsanchez','1234','https://randomuser.me/api/portraits/men/32.jpg',4),
+('Valentina','Torres','vtorres@clinica.com','1100000012','vtorres','1234','https://randomuser.me/api/portraits/women/33.jpg',4),
+('Mateo','Herrera','mherrera@clinica.com','1100000013','mherrera','1234','https://randomuser.me/api/portraits/men/34.jpg',4),
+('Camila','Castro','ccastro@clinica.com','1100000014','ccastro','1234','https://randomuser.me/api/portraits/women/35.jpg',4),
+('Nicolas','Vega','nvega@clinica.com','1100000015','nvega','1234','https://randomuser.me/api/portraits/men/36.jpg',4),
+('Julieta','Silva','jsilva@clinica.com','1100000016','jsilva','1234','https://randomuser.me/api/portraits/women/37.jpg',4),
+('Federico','Acosta','facosta@clinica.com','1100000017','facosta','1234','https://randomuser.me/api/portraits/men/38.jpg',4),
+('Paula','Benitez','pbenitez@clinica.com','1100000018','pbenitez','1234','https://randomuser.me/api/portraits/women/39.jpg',4),
+('Agustin','Suarez','asuarez@clinica.com','1100000019','asuarez','1234','https://randomuser.me/api/portraits/men/40.jpg',4),
+('Florencia','Mendez','fmendez@clinica.com','1100000020','fmendez','1234','https://randomuser.me/api/portraits/women/41.jpg',4),
+('Bruno','Ortiz','bortiz@clinica.com','1100000021','bortiz','1234','https://randomuser.me/api/portraits/men/42.jpg',4),
+('Lara','Rios','lrios@clinica.com','1100000022','lrios','1234','https://randomuser.me/api/portraits/women/43.jpg',4),
+('Tomas','Nuñez','tnuñez@clinica.com','1100000023','tnuñez','1234','https://randomuser.me/api/portraits/men/44.jpg',4);
 GO
 
 INSERT INTO Medicos (IDUsuario,Matricula) VALUES
@@ -186,87 +191,76 @@ INSERT INTO Turnos (Codigo,IDPaciente,IDMedico,FechaHora,IDEstadoTurno,IDEspecia
 ('T0415823',1,1,'2026-09-01 09:00',1,1),
 ('T1937461',2,2,'2026-09-02 15:00',2,2),
 ('T5829134',3,3,'2026-09-03 09:00',3,3),
-('T0746358',4,4,'2026-09-04 15:00',4,4),
+('T0746358',4,4,'2026-09-04 15:00',2,4),
 ('T3164827',5,5,'2026-09-05 09:00',1,5),
 ('T8519472',6,6,'2026-09-06 15:00',2,6),
 ('T1275638',7,1,'2026-09-07 09:00',3,1),
-('T6642915',8,2,'2026-09-08 15:00',4,2),
+('T6642915',8,2,'2026-09-08 15:00',2,2),
 ('T2458716',9,3,'2026-09-09 09:00',1,3),
 ('T9183425',10,4,'2026-09-10 15:00',2,4),
 ('T5361749',11,5,'2026-09-11 09:00',3,5),
-('T1028457',12,6,'2026-09-12 15:00',4,6),
+('T1028457',12,6,'2026-09-12 15:00',2,6),
 ('T7834196',13,1,'2026-09-13 09:00',1,1),
 ('T2956481',14,2,'2026-09-14 15:00',2,2),
 ('T4671935',1,3,'2026-09-15 09:00',3,3),
-('T8592714',2,4,'2026-09-16 15:00',4,4),
+('T8592714',2,4,'2026-09-16 15:00',2,4),
 ('T1386247',3,5,'2026-09-17 09:00',1,5),
 ('T6049812',4,6,'2026-09-18 15:00',2,6),
 ('T3718259',5,1,'2026-09-19 09:00',3,1),
-('T9471368',6,2,'2026-09-20 15:00',4,2),
-('T2865743',7,3,'2026-09-01 09:00',1,3),
-('T7159284',8,4,'2026-09-02 15:00',2,4),
-('T4528631',9,5,'2026-09-03 09:00',3,5),
-('T8231475',10,6,'2026-09-04 15:00',4,6),
-('T1647582',11,1,'2026-09-05 09:00',1,1),
-('T5984217',12,2,'2026-09-06 15:00',2,2),
-('T2769138',13,3,'2026-09-07 09:00',3,3),
-('T9045176',14,4,'2026-09-08 15:00',4,4),
-('T4312865',1,5,'2026-09-09 09:00',1,5),
-('T6871542',2,6,'2026-09-10 15:00',2,6),
-('T1587436',3,1,'2026-09-11 09:00',3,1),
-('T7924681',4,2,'2026-09-12 15:00',4,2),
-('T3458197',5,3,'2026-09-13 09:00',1,3),
-('T6182754',6,4,'2026-09-14 15:00',2,4),
-('T2396418',7,5,'2026-09-15 09:00',3,5),
-('T8753246',8,6,'2026-09-16 15:00',4,6),
-('T4819573',9,1,'2026-09-17 09:00',1,1),
-('T1263845',10,2,'2026-09-18 15:00',2,2),
-('T7546189',11,3,'2026-09-19 09:00',3,3),
-('T3927154',12,4,'2026-09-20 15:00',4,4);
-GO
-INSERT INTO HistoriaClinica (IDPaciente,IDMedico,IDTurno,Diagnostico,Tratamiento,Observaciones) VALUES
-(1,1,1,'Diagnostico 1','Tratamiento 1','Observacion 1'),
-(2,2,2,'Diagnostico 2','Tratamiento 2','Observacion 2'),
-(3,3,3,'Diagnostico 3','Tratamiento 3','Observacion 3'),
-(4,4,4,'Diagnostico 4','Tratamiento 4','Observacion 4'),
-(5,5,5,'Diagnostico 5','Tratamiento 5','Observacion 5'),
-(6,6,6,'Diagnostico 6','Tratamiento 6','Observacion 6'),
-(7,1,7,'Diagnostico 7','Tratamiento 7','Observacion 7'),
-(8,2,8,'Diagnostico 8','Tratamiento 8','Observacion 8'),
-(9,3,9,'Diagnostico 9','Tratamiento 9','Observacion 9'),
-(10,4,10,'Diagnostico 10','Tratamiento 10','Observacion 10'),
-(11,5,11,'Diagnostico 11','Tratamiento 11','Observacion 11'),
-(12,6,12,'Diagnostico 12','Tratamiento 12','Observacion 12'),
-(13,1,13,'Diagnostico 13','Tratamiento 13','Observacion 13'),
-(14,2,14,'Diagnostico 14','Tratamiento 14','Observacion 14'),
-(1,3,15,'Diagnostico 15','Tratamiento 15','Observacion 15'),
-(2,4,16,'Diagnostico 16','Tratamiento 16','Observacion 16'),
-(3,5,17,'Diagnostico 17','Tratamiento 17','Observacion 17'),
-(4,6,18,'Diagnostico 18','Tratamiento 18','Observacion 18'),
-(5,1,19,'Diagnostico 19','Tratamiento 19','Observacion 19'),
-(6,2,20,'Diagnostico 20','Tratamiento 20','Observacion 20'),
-(7,3,NULL,'Diagnostico 21','Tratamiento 21','Observacion 21'),
-(8,4,NULL,'Diagnostico 22','Tratamiento 22','Observacion 22'),
-(9,5,NULL,'Diagnostico 23','Tratamiento 23','Observacion 23'),
-(10,6,NULL,'Diagnostico 24','Tratamiento 24','Observacion 24'),
-(11,1,NULL,'Diagnostico 25','Tratamiento 25','Observacion 25');
-GO
-
-
-
--- Turnos del día (dashboard)
-INSERT INTO Turnos
-(Codigo,IDPaciente,IDMedico,FechaHora,IDEstadoTurno,IDEspecialidad)
-VALUES
-('T-J-001',1,1,CAST(CONVERT(date,GETDATE()) AS datetime)+'09:00:00',2,1),
-('T-J-002',2,2,CAST(CONVERT(date,GETDATE()) AS datetime)+'10:00:00',1,2),
-('T-J-003',3,3,CAST(CONVERT(date,GETDATE()) AS datetime)+'11:00:00',4,3),
-('T-J-004',4,4,CAST(CONVERT(date,GETDATE()) AS datetime)+'14:00:00',2,4),
-('T-J-005',5,5,CAST(CONVERT(date,GETDATE()) AS datetime)+'16:00:00',1,5);
+('T9471368',6,2,'2026-09-20 15:00',2,2),
+('T2865743',7,3,'2026-09-21 09:00',1,3),
+('T7159284',8,4,'2026-09-22 15:00',2,4),
+('T4528631',9,5,'2026-09-23 09:00',3,5),
+('T8231475',10,6,'2026-09-24 15:00',2,6),
+('T1647582',11,1,'2026-09-25 09:00',1,1),
+('T5984217',12,2,'2026-09-26 15:00',2,2),
+('T2769138',13,3,'2026-09-27 09:00',3,3),
+('T9045176',14,4,'2026-09-28 15:00',2,4),
+('T4312865',1,5,'2026-09-29 09:00',1,5),
+('T6871542',2,6,'2026-09-30 15:00',2,6),
+('T1587436',3,1,'2026-10-01 09:00',1,1),
+('T7924681',4,2,'2026-10-02 15:00',2,2),
+('T3458197',5,3,'2026-10-03 09:00',1,3),
+('T6182754',6,4,'2026-10-04 15:00',2,4),
+('T2396418',7,5,'2026-10-05 09:00',1,5),
+('T8753246',8,6,'2026-10-06 15:00',2,6),
+('T4819573',9,1,'2026-10-07 09:00',1,1),
+('T1263845',10,2,'2026-10-08 15:00',2,2),
+('T7546189',11,3,'2026-10-09 09:00',1,3),
+('T3927154',12,4,'2026-10-10 15:00',2,4),
+('T2398241',1,1,'2026-10-11 09:00',2,1),
+('T4039422',2,2,'2026-10-12 10:00',1,2),
+('T506023',3,3,'2026-10-13 11:00',2,3),
+('T223944',4,4,'2026-10-14 14:00',1,4),
+('T103945',5,5,'2026-10-15 16:00',2,5),
+('T6547812',6,6,'2026-10-16 09:00',4,6),
+('T8429135',7,1,'2026-10-17 10:00',4,1),
+('T1973468',8,2,'2026-10-18 11:00',4,2),
+('T5287641',9,3,'2026-10-19 14:00',4,3),
+('T3847195',10,4,'2026-10-20 15:00',4,4),
+('T9156283',11,5,'2026-10-21 09:30',4,5),
+('T2468917',12,6,'2026-10-22 16:00',4,6),
+('T7319548',13,1,'2026-10-23 08:30',4,1),
+('T4682173',14,2,'2026-10-24 15:30',4,2),
+('T8596341',1,3,'2026-10-25 10:30',4,3);
 GO
 
 INSERT INTO HistoriaClinica
-(IDPaciente,IDMedico,IDTurno,Diagnostico,Tratamiento,Observaciones)
+(IDPaciente, IDMedico, IDTurno, Diagnostico, Tratamiento, Observaciones)
 VALUES
-(3,3,43,'Control general','Sin tratamiento','Paciente estable');
+(4,4,4,'Esguince de tobillo grado I','Reposo, hielo y antiinflamatorios.','Se indicó uso de tobillera durante una semana.'),
+(8,2,8,'Faringitis viral','Reposo e hidratación.','No requiere antibióticos.'),
+(12,6,12,'Acné inflamatorio moderado','Adapaleno tópico nocturno.','Control dermatológico en 60 días.'),
+(2,4,16,'Contusión de rodilla','Reposo, hielo y analgésicos.','Sin compromiso ligamentario.'),
+(6,2,20,'Infección urinaria baja','Nitrofurantoína durante 5 días.','Control posterior al tratamiento.'),
+(6,6,46,'Dermatitis atópica', 'Crema con corticoides tópicos durante 7 días.', 'Se recomienda mantener la piel hidratada.'),
+(12,6,52,'Psoriasis en placas leve', 'Tratamiento con corticoides tópicos y emolientes.','Control dermatológico en 30 días.'),
+(7,1,47,'Hipertensión arterial controlada','Continuar Losartán 50 mg diarios.','Presión arterial dentro de valores normales.'),
+(8,2,48,'Sinusitis aguda','Amoxicilina con ácido clavulánico por 7 días.','Control si persisten los síntomas.'),
+(9,3,49,'Control pediátrico anual','Sin tratamiento.','Paciente con crecimiento y desarrollo normales.'),
+(10,4,50,'Tendinitis de hombro derecho','Reposo relativo, hielo y kinesiología.','Se recomienda evitar esfuerzos por dos semanas.'),
+(11,5,51,'Cefalea tensional','Paracetamol según necesidad y manejo del estrés.','Sin signos de alarma.'),
+(13,1,53,'Dislipidemia','Dieta hipolipídica y actividad física.','Solicitado laboratorio de control.'),
+(14,2,54,'Bronquitis aguda','Broncodilatador e hidratación abundante.','Reconsulta si presenta fiebre persistente.'),
+(1,3,55,'Faringoamigdalitis bacteriana','Amoxicilina durante 10 días.','Paciente afebril al finalizar la consulta.');
 GO

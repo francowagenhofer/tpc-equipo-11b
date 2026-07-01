@@ -43,6 +43,9 @@ namespace Presentación
                 litDni.Text = paciente.DNI;
                 litEmail.Text = paciente.Usuario.Email;
                 litTelefono.Text = string.IsNullOrWhiteSpace(paciente.Usuario.Telefono) ? "-" : paciente.Usuario.Telefono;
+                
+                imgPerfil.ImageUrl = string.IsNullOrWhiteSpace(paciente.Usuario.ImagenUrl) ? "~/Assets/IMG/Perfil.jpg" : paciente.Usuario.ImagenUrl;
+
                 litObraSocial.Text = paciente.ObraSocial?.Nombre ?? "-";
                 litGenero.Text = paciente.Genero?.Descripcion ?? "-";
                 litDireccion.Text = paciente.Direccion ?? "-";
@@ -52,6 +55,8 @@ namespace Presentación
 
                 badgeEstado.InnerText = paciente.Activo ? "Activo" : "Inactivo";
                 badgeEstado.Attributes["class"] = paciente.Activo ? "badge bg-success" : "badge bg-danger";
+
+
 
                 TurnoNegocio turnoNegocio = new TurnoNegocio();
                 HistoriaClinicaNegocio historiaNegocio = new HistoriaClinicaNegocio();

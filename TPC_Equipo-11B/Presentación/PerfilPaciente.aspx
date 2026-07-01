@@ -15,9 +15,13 @@
 
                     <div class="d-flex align-items-center gap-3">
 
-                        <div class="rounded-circle bg-light d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
-                            <i class="bi bi-person-fill fs-1 text-secondary"></i>
-                        </div>
+                        <asp:Image
+                            ID="imgPerfil"
+                            runat="server"
+                            CssClass="rounded-circle border"
+                            Width="64"
+                            Height="64"
+                            ImageUrl="~/Assets/IMG/Perfil.jpg" />
 
                         <div>
                             <h2 class="fw-bold mb-1">
@@ -26,7 +30,9 @@
 
                             <p class="text-muted mb-0">
                                 DNI
-                                <asp:Literal ID="litDni" runat="server" /> &nbsp;•&nbsp; <asp:Literal ID="litGenero" runat="server" />
+                                <asp:Literal ID="litDni" runat="server" />
+                                &nbsp;•&nbsp;
+                                <asp:Literal ID="litGenero" runat="server" />
                             </p>
                         </div>
 

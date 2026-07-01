@@ -13,15 +13,23 @@
         <div class="card card-custom p-4 shadow-sm border-0 mb-4">
             <div class="d-flex justify-content-between align-items-start">
                 <div class="d-flex align-items-center gap-3">
-                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
-                        <i class="bi bi-person-fill fs-1 text-secondary"></i>
-                    </div>
+
+                    <asp:Image
+                        ID="imgPerfil"
+                        runat="server"
+                        CssClass="rounded-circle border"
+                        Width="64"
+                        Height="64"
+                        ImageUrl="~/Assets/IMG/Perfil.jpg" />
+
                     <div>
-                        <h2 class="fw-bold mb-1">
-                            Dr. <asp:Literal ID="litNombreCompleto" runat="server" />
+                        <h2 class="fw-bold mb-1">Dr.
+                            <asp:Literal ID="litNombreCompleto" runat="server" />
                         </h2>
                         <p class="text-muted mb-0">
-                            <asp:Literal ID="litEspecialidad" runat="server" /> &middot; Matrícula <asp:Literal ID="litMatricula" runat="server" />
+                            <asp:Literal ID="litEspecialidad" runat="server" />
+                            &middot; Matrícula
+                            <asp:Literal ID="litMatricula" runat="server" />
                         </p>
                     </div>
                 </div>
@@ -33,11 +41,13 @@
             <div class="row g-3">
                 <div class="col-md-6">
                     <small class="text-muted d-block">Email</small>
-                    <span class="fw-semibold"><asp:Literal ID="litEmail" runat="server" /></span>
+                    <span class="fw-semibold">
+                        <asp:Literal ID="litEmail" runat="server" /></span>
                 </div>
                 <div class="col-md-6">
                     <small class="text-muted d-block">Teléfono</small>
-                    <span class="fw-semibold"><asp:Literal ID="litTelefono" runat="server" /></span>
+                    <span class="fw-semibold">
+                        <asp:Literal ID="litTelefono" runat="server" /></span>
                 </div>
             </div>
         </div>
@@ -64,7 +74,11 @@
                             <HeaderTemplate>
                                 <table class="table table-sm">
                                     <thead>
-                                        <tr><th>Día</th><th>Desde</th><th>Hasta</th></tr>
+                                        <tr>
+                                            <th>Día</th>
+                                            <th>Desde</th>
+                                            <th>Hasta</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
                             </HeaderTemplate>
@@ -76,7 +90,7 @@
                                 </tr>
                             </ItemTemplate>
                             <FooterTemplate>
-                                    </tbody>
+                                </tbody>
                                 </table>
                             </FooterTemplate>
                         </asp:Repeater>
@@ -96,7 +110,10 @@
                             <HeaderTemplate>
                                 <table class="table table-sm">
                                     <thead>
-                                        <tr><th>Fecha</th><th>Motivo</th></tr>
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Motivo</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
                             </HeaderTemplate>
@@ -107,7 +124,7 @@
                                 </tr>
                             </ItemTemplate>
                             <FooterTemplate>
-                                    </tbody>
+                                </tbody>
                                 </table>
                             </FooterTemplate>
                         </asp:Repeater>
@@ -127,7 +144,12 @@
                             <HeaderTemplate>
                                 <table class="table table-sm table-hover">
                                     <thead>
-                                        <tr><th>Código</th><th>Paciente</th><th>Fecha y Hora</th><th>Estado</th></tr>
+                                        <tr>
+                                            <th>Código</th>
+                                            <th>Paciente</th>
+                                            <th>Fecha y Hora</th>
+                                            <th>Estado</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
                             </HeaderTemplate>
@@ -140,7 +162,7 @@
                                 </tr>
                             </ItemTemplate>
                             <FooterTemplate>
-                                    </tbody>
+                                </tbody>
                                 </table>
                             </FooterTemplate>
                         </asp:Repeater>
@@ -152,13 +174,13 @@
         </div>
 
         <div class="mt-4 d-flex gap-2">
-    <a href="Medicos.aspx" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-left me-1"></i>Volver a Médicos
-    </a>
-    <a href='MiDisponibilidad.aspx?idMedico=<%= Request.QueryString["id"] %>' class="btn btn-primary">
-        <i class="bi bi-calendar-plus me-1"></i>Configurar Disponibilidad
-    </a>
-</div>
+            <a href="Medicos.aspx" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i>Volver a Médicos
+            </a>
+            <a href='MiDisponibilidad.aspx?idMedico=<%= Request.QueryString["id"] %>' class="btn btn-primary">
+                <i class="bi bi-calendar-plus me-1"></i>Configurar Disponibilidad
+            </a>
+        </div>
 
 
 
