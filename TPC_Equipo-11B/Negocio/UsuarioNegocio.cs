@@ -108,7 +108,6 @@ namespace Negocio {
         //        datos.cerrarConexion();
         //    }
         //}
-
         public Usuario ValidarLogin(string username, string password)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -141,7 +140,6 @@ namespace Negocio {
                 datos.cerrarConexion();
             }
         }
-
         public List<Usuario> ListarUsuarios()
         {
             List<Usuario> lista = new List<Usuario>();
@@ -673,5 +671,54 @@ namespace Negocio {
                 datos.cerrarConexion();
             }
         }
+
+        // Metodos para el dashboard
+        public int CantidadUsuarios()
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("SELECT COUNT(*) AS Total FROM Usuarios");
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (int)datos.Lector["Total"];
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public int CantidadUsuariosActivos()
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("SELECT COUNT(*) AS Total FROM Usuarios WHERE Activo = 1");
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (int)datos.Lector["Total"];
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
     }
 }

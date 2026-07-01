@@ -461,5 +461,30 @@ namespace Negocio {
                 datos.cerrarConexion();
             }
         }
+
+        // Metodos para el dashboard
+        public int CantidadPacientes()
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("SELECT COUNT(*) AS Total FROM Pacientes WHERE Activo = 1");
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (int)datos.Lector["Total"];
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }

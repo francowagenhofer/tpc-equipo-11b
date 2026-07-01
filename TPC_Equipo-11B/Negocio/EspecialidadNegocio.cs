@@ -118,5 +118,37 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
+        // Metodos para el dashboard
+        public string ObtenerEspecialidadMasSolicitada()
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT TOP 1 E.Nombre
+                    FROM Turnos T
+                    INNER JOIN Especialidades E
+                        ON T.IDEspecialidad = E.IDEspecialidad
+                    GROUP BY E.Nombre
+                    ORDER BY COUNT(*) DESC");
+
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return datos.Lector["Nombre"].ToString();
+
+                return "Sin datos";
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }

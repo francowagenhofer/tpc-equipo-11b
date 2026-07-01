@@ -251,3 +251,22 @@ INSERT INTO HistoriaClinica (IDPaciente,IDMedico,IDTurno,Diagnostico,Tratamiento
 (10,6,NULL,'Diagnostico 24','Tratamiento 24','Observacion 24'),
 (11,1,NULL,'Diagnostico 25','Tratamiento 25','Observacion 25');
 GO
+
+
+
+-- Turnos del día (dashboard)
+INSERT INTO Turnos
+(Codigo,IDPaciente,IDMedico,FechaHora,IDEstadoTurno,IDEspecialidad)
+VALUES
+('T-J-001',1,1,CAST(CONVERT(date,GETDATE()) AS datetime)+'09:00:00',2,1),
+('T-J-002',2,2,CAST(CONVERT(date,GETDATE()) AS datetime)+'10:00:00',1,2),
+('T-J-003',3,3,CAST(CONVERT(date,GETDATE()) AS datetime)+'11:00:00',4,3),
+('T-J-004',4,4,CAST(CONVERT(date,GETDATE()) AS datetime)+'14:00:00',2,4),
+('T-J-005',5,5,CAST(CONVERT(date,GETDATE()) AS datetime)+'16:00:00',1,5);
+GO
+
+INSERT INTO HistoriaClinica
+(IDPaciente,IDMedico,IDTurno,Diagnostico,Tratamiento,Observaciones)
+VALUES
+(3,3,43,'Control general','Sin tratamiento','Paciente estable');
+GO

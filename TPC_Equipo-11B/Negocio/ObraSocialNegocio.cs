@@ -141,6 +141,38 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
+        // Metodos para el dashboard
+        public string ObtenerObraSocialMasUtilizada()
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+            SELECT TOP 1 OS.Nombre
+            FROM Pacientes P
+            INNER JOIN ObrasSociales OS
+                ON P.IDObraSocial = OS.IDObraSocial
+            GROUP BY OS.Nombre
+            ORDER BY COUNT(*) DESC");
+
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return datos.Lector["Nombre"].ToString();
+
+                return "Sin datos";
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }
     

@@ -102,7 +102,6 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-
         public List<Turno> ListarTurnosPorMedico(int idMedico)
         {
             List<Turno> lista = new List<Turno>();
@@ -118,8 +117,11 @@ namespace Negocio
                         T.FechaHora,
                     
                         T.IDEstadoTurno,
-                    
                         ET.Nombre EstadoNombre,
+        
+                        T.IDEspecialidad,
+                        E.Nombre AS EspecialidadNombre,
+                        E.Descripcion AS EspecialidadDescripcion,
                     
                         P.IDPaciente,
                         P.DNI,
@@ -149,6 +151,9 @@ namespace Negocio
                     
                     INNER JOIN EstadoTurno ET
                     ON T.IDEstadoTurno=ET.IDEstadoTurno
+
+                    INNER JOIN Especialidades E
+                    ON T.IDEspecialidad = E.IDEspecialidad
                     
                     WHERE T.IDMedico=@IDMedico
                     
@@ -170,6 +175,12 @@ namespace Negocio
                     aux.EstadoTurno.Id = (int)datos.Lector["IDEstadoTurno"];
                     aux.EstadoTurno.Nombre = (string)datos.Lector["EstadoNombre"];
 
+                    aux.Especialidad = new Especialidad();
+                    aux.Especialidad.Id = (int)datos.Lector["IDEspecialidad"];
+                    aux.Especialidad.Nombre = datos.Lector["EspecialidadNombre"].ToString();
+                    aux.Especialidad.Descripcion = datos.Lector["EspecialidadDescripcion"] != DBNull.Value
+                        ? datos.Lector["EspecialidadDescripcion"].ToString() : "";
+
                     aux.Paciente = new Paciente();
                     aux.Paciente.Id = (int)datos.Lector["IDPaciente"];
                     aux.Paciente.DNI = (string)datos.Lector["DNI"];
@@ -185,6 +196,114 @@ namespace Negocio
                     aux.Medico.Usuario = new Usuario();
                     aux.Medico.Usuario.Nombre = (string)datos.Lector["MedicoNombre"];
                     aux.Medico.Usuario.Apellido = (string)datos.Lector["MedicoApellido"];
+
+                    lista.Add(aux);
+                }
+
+                return lista;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public List<Turno> ListarTurnosPorPaciente(int idPaciente)
+        {
+            List<Turno> lista = new List<Turno>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT
+                        T.IDTurno,
+                        T.Codigo,
+                        T.FechaHora,
+
+                        T.IDEstadoTurno,
+                        ET.Nombre AS EstadoNombre,
+
+                        T.IDEspecialidad,
+                        E.Nombre AS EspecialidadNombre,
+
+                        P.IDPaciente,
+                        P.DNI,
+
+                        U_Pac.IDUsuario AS IDUsuarioPaciente,
+                        U_Pac.Nombre AS PacienteNombre,
+                        U_Pac.Apellido AS PacienteApellido,
+
+                        M.IDMedico,
+                        M.Matricula,
+
+                        U_Med.IDUsuario AS IDUsuarioMedico,
+                        U_Med.Nombre AS MedicoNombre,
+                        U_Med.Apellido AS MedicoApellido
+
+                    FROM Turnos T
+
+                    INNER JOIN Pacientes P
+                        ON T.IDPaciente = P.IDPaciente
+
+                    INNER JOIN Usuarios U_Pac
+                        ON P.IDUsuario = U_Pac.IDUsuario
+
+                    INNER JOIN Medicos M
+                        ON T.IDMedico = M.IDMedico
+
+                    INNER JOIN Usuarios U_Med
+                        ON M.IDUsuario = U_Med.IDUsuario
+
+                    INNER JOIN EstadoTurno ET
+                        ON T.IDEstadoTurno = ET.IDEstadoTurno
+
+                    LEFT JOIN Especialidades E
+                        ON T.IDEspecialidad = E.IDEspecialidad
+
+                    WHERE T.IDPaciente = @IDPaciente
+
+                    ORDER BY T.FechaHora");
+
+                datos.setearParametro("@IDPaciente", idPaciente);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Turno aux = new Turno();
+
+                    aux.Id = (int)datos.Lector["IDTurno"];
+                    aux.Codigo = datos.Lector["Codigo"] != DBNull.Value ? datos.Lector["Codigo"].ToString() : "";
+                    aux.FechaHora = (DateTime)datos.Lector["FechaHora"];
+
+                    aux.EstadoTurno = new EstadoTurno();
+                    aux.EstadoTurno.Id = (int)datos.Lector["IDEstadoTurno"];
+                    aux.EstadoTurno.Nombre = datos.Lector["EstadoNombre"].ToString();
+
+                    aux.Especialidad = new Especialidad();
+
+                    if (datos.Lector["IDEspecialidad"] != DBNull.Value)
+                    {
+                        aux.Especialidad.Id = (int)datos.Lector["IDEspecialidad"];
+                        aux.Especialidad.Nombre = datos.Lector["EspecialidadNombre"].ToString();
+                    }
+
+                    aux.Paciente = new Paciente();
+                    aux.Paciente.Id = (int)datos.Lector["IDPaciente"];
+                    aux.Paciente.DNI = datos.Lector["DNI"].ToString();
+
+                    aux.Paciente.Usuario = new Usuario();
+                    aux.Paciente.Usuario.Id = (int)datos.Lector["IDUsuarioPaciente"];
+                    aux.Paciente.Usuario.Nombre = datos.Lector["PacienteNombre"].ToString();
+                    aux.Paciente.Usuario.Apellido = datos.Lector["PacienteApellido"].ToString();
+
+                    aux.Medico = new Medico();
+                    aux.Medico.Id = (int)datos.Lector["IDMedico"];
+                    aux.Medico.Matricula = datos.Lector["Matricula"].ToString();
+
+                    aux.Medico.Usuario = new Usuario();
+                    aux.Medico.Usuario.Id = (int)datos.Lector["IDUsuarioMedico"];
+                    aux.Medico.Usuario.Nombre = datos.Lector["MedicoNombre"].ToString();
+                    aux.Medico.Usuario.Apellido = datos.Lector["MedicoApellido"].ToString();
 
                     lista.Add(aux);
                 }
@@ -297,7 +416,7 @@ namespace Negocio
 
                     turno.Paciente.ObraSocialId = datos.Lector["IDObraSocial"] != DBNull.Value ? (int)datos.Lector["IDObraSocial"] : 0;
 
-                    turno.Paciente.Genero = datos.Lector["Genero"] != DBNull.Value ? new Genero { Descripcion = datos.Lector["Genero"].ToString()} : null;
+                    turno.Paciente.Genero = datos.Lector["Genero"] != DBNull.Value ? new Genero { Descripcion = datos.Lector["Genero"].ToString() } : null;
 
                     turno.Paciente.Usuario = new Usuario();
 
@@ -343,7 +462,6 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-
         public Turno ObtenerTurnoPorCodigo(string codigo)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -409,7 +527,6 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-
         public bool AgregarTurno(Turno nuevo)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -450,7 +567,6 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-
         public bool ModificarTurno(Turno modificado)
         {
 
@@ -487,7 +603,6 @@ namespace Negocio
 
 
         }
-
         public bool CancelarTurno(int idTurno)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -508,14 +623,13 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-
-        public class ResultadoConfirmacion {
+        public class ResultadoConfirmacion
+        {
             public bool Exito { get; set; }
             public bool YaEstabaConfirmado { get; set; }
             public string Mensaje { get; set; }
             public Turno Turno { get; set; }
         }
-
         public ResultadoConfirmacion ConfirmarTurnoPorCodigo(string codigo)
         {
             Turno turno = ObtenerTurnoPorCodigo(codigo);
@@ -573,8 +687,7 @@ namespace Negocio
             {
                 datos.cerrarConexion();
             }
-        } 
-
+        }
         public void FinalizarTurno(int idTurno)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -595,7 +708,6 @@ namespace Negocio
             }
 
         }
-
         public List<DateTime> ObtenerHorasOcupadas(int idMedico, DateTime fecha)
         {
             List<DateTime> ocupadas = new List<DateTime>();
@@ -624,7 +736,6 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-
         public bool MedicoDisponibleEnFechaHora(int idMedico, DateTime fechaHora)
         {
             DisponibilidadMedicoNegocio dispNegocio = new DisponibilidadMedicoNegocio();
@@ -640,7 +751,7 @@ namespace Negocio
 
             if (!medicoTieneConfiguracion)
             {
-       
+
                 return false;
             }
 
@@ -656,7 +767,6 @@ namespace Negocio
 
             return tieneDisponibilidadEseDia;
         }
-
         public bool PacienteDisponibleEnFechaHora(int idPaciente, DateTime fechaHora, int idTurnoActual = 0)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -688,9 +798,610 @@ namespace Negocio
         }
 
 
+        // Metodos para el dashboard
+
+        // Administrador
+        public int CantidadTurnosHoy()
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT COUNT(*) AS Total
+                    FROM Turnos
+                    WHERE CAST(FechaHora AS DATE) = CAST(GETDATE() AS DATE)");
+
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (int)datos.Lector["Total"];
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public int CantidadPendientes()
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT COUNT(*) AS Total
+                    FROM Turnos T
+                    INNER JOIN EstadoTurno E ON T.IDEstadoTurno = E.IDEstadoTurno
+                    WHERE E.Nombre = 'Pendiente'");
+
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (int)datos.Lector["Total"];
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public int CantidadConfirmados()
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT COUNT(*) AS Total
+                    FROM Turnos T
+                    INNER JOIN EstadoTurno E ON T.IDEstadoTurno = E.IDEstadoTurno
+                    WHERE E.Nombre = 'Confirmado'");
+
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (int)datos.Lector["Total"];
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public int CantidadCanceladosHoy()
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT COUNT(*) AS Total
+                    FROM Turnos T
+                    INNER JOIN EstadoTurno E ON T.IDEstadoTurno = E.IDEstadoTurno
+                    WHERE E.Nombre = 'Cancelado'
+                    AND CAST(T.FechaHora AS DATE) = CAST(GETDATE() AS DATE)");
+
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (int)datos.Lector["Total"];
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public List<Turno> ListarTurnosHoy()
+        {
+            return ListarTurnos()
+                .Where(x => x.FechaHora.Date == DateTime.Today)
+                .OrderBy(x => x.FechaHora)
+                .ToList();
+        }
+
+        // Recepcionista
+        public int CantidadTurnosConfirmadosHoy()
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+            SELECT COUNT(*) AS Total
+            FROM Turnos T
+            INNER JOIN EstadoTurno E ON T.IDEstadoTurno = E.IDEstadoTurno
+            WHERE E.Nombre = 'Confirmado'
+            AND CAST(T.FechaHora AS DATE)=CAST(GETDATE() AS DATE)");
+
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (int)datos.Lector["Total"];
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public int CantidadTurnosPendientesHoy()
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT COUNT(*) AS Total
+                    FROM Turnos T
+                    INNER JOIN EstadoTurno E ON T.IDEstadoTurno = E.IDEstadoTurno
+                    WHERE E.Nombre='Pendiente'
+                    AND CAST(T.FechaHora AS DATE)=CAST(GETDATE() AS DATE)");
+
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (int)datos.Lector["Total"];
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public int CantidadTurnosCreadosHoy()
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT COUNT(*) AS Total
+                    FROM Turnos
+                    WHERE CAST(FechaCreacion AS DATE)=CAST(GETDATE() AS DATE)");
+
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (int)datos.Lector["Total"];
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public int CantidadTurnosReprogramadosHoy()
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT COUNT(*) AS Total
+                    FROM Turnos T
+                    INNER JOIN EstadoTurno E
+                        ON T.IDEstadoTurno = E.IDEstadoTurno
+                    WHERE E.Nombre = 'Reprogramado'
+                    AND CAST(T.FechaModificacion AS DATE) = CAST(GETDATE() AS DATE)");
+
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (int)datos.Lector["Total"];
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        // Medico
+        public int CantidadTurnosHoyMedico(int idMedico)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+            SELECT COUNT(*) AS Total
+            FROM Turnos
+            WHERE IDMedico = @idMedico
+            AND CAST(FechaHora AS DATE) = CAST(GETDATE() AS DATE)");
+
+                datos.setearParametro("@idMedico", idMedico);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (int)datos.Lector["Total"];
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public int CantidadPendientesMedico(int idMedico)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT COUNT(*) AS Total
+                    FROM Turnos T
+                    INNER JOIN EstadoTurno E ON T.IDEstadoTurno = E.IDEstadoTurno
+                    WHERE T.IDMedico = @idMedico
+                    AND E.Nombre = 'Pendiente'");
+
+                datos.setearParametro("@idMedico", idMedico);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (int)datos.Lector["Total"];
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public int CantidadFinalizadosMedico(int idMedico)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT COUNT(*) AS Total
+                    FROM Turnos T
+                    INNER JOIN EstadoTurno E ON T.IDEstadoTurno = E.IDEstadoTurno
+                    WHERE T.IDMedico = @idMedico
+                    AND E.Nombre = 'Finalizado'");
+
+                datos.setearParametro("@idMedico", idMedico);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (int)datos.Lector["Total"];
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public int CantidadCanceladosMedico(int idMedico)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+            SELECT COUNT(*) AS Total
+            FROM Turnos T
+            INNER JOIN EstadoTurno E ON T.IDEstadoTurno = E.IDEstadoTurno
+            WHERE T.IDMedico = @idMedico
+            AND E.Nombre = 'Cancelado'");
+
+                datos.setearParametro("@idMedico", idMedico);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (int)datos.Lector["Total"];
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public int CantidadFinalizadosHoyMedico(int idMedico)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT COUNT(*) AS Total
+                    FROM Turnos T
+                    INNER JOIN EstadoTurno E ON T.IDEstadoTurno = E.IDEstadoTurno
+                    WHERE T.IDMedico = @idMedico
+                    AND E.Nombre = 'Finalizado'
+                    AND CAST(T.FechaHora AS DATE) = CAST(GETDATE() AS DATE)");
+
+                datos.setearParametro("@idMedico", idMedico);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (int)datos.Lector["Total"];
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public int CantidadPacientesAtendidos(int idMedico)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT COUNT(DISTINCT IDPaciente) AS Total
+                    FROM Turnos T
+                    INNER JOIN EstadoTurno E ON T.IDEstadoTurno = E.IDEstadoTurno
+                    WHERE T.IDMedico = @idMedico
+                    AND E.Nombre = 'Finalizado'");
+
+                datos.setearParametro("@idMedico", idMedico);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (int)datos.Lector["Total"];
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public int CantidadAusentesMedico(int idMedico)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+            SELECT COUNT(*) AS Total
+            FROM Turnos T
+            INNER JOIN EstadoTurno E ON T.IDEstadoTurno = E.IDEstadoTurno
+            WHERE T.IDMedico = @idMedico
+            AND E.Nombre = 'Ausente'");
+
+                datos.setearParametro("@idMedico", idMedico);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (int)datos.Lector["Total"];
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public Turno ObtenerProximoTurnoMedico(int idMedico)
+        {
+            List<Turno> lista = ListarTurnosPorMedico(idMedico);
+
+            return lista
+                .Where(x => x.FechaHora >= DateTime.Now)
+                .OrderBy(x => x.FechaHora)
+                .FirstOrDefault();
+        }
+        public List<Turno> ListarAgendaHoyMedico(int idMedico)
+        {
+            return ListarTurnosPorMedico(idMedico)
+                .Where(x => x.FechaHora.Date == DateTime.Today)
+                .OrderBy(x => x.FechaHora)
+                .ToList();
+        }
+
+        // Paciente
+        public int CantidadPendientesPaciente(int idPaciente)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT COUNT(*) AS Total
+                    FROM Turnos T
+                    INNER JOIN EstadoTurno E ON T.IDEstadoTurno = E.IDEstadoTurno
+                    WHERE T.IDPaciente = @idPaciente
+                    AND E.Nombre = 'Pendiente'");
+
+                datos.setearParametro("@idPaciente", idPaciente);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (int)datos.Lector["Total"];
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public int CantidadFinalizadosPaciente(int idPaciente)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT COUNT(*) AS Total
+                    FROM Turnos T
+                    INNER JOIN EstadoTurno E ON T.IDEstadoTurno = E.IDEstadoTurno
+                    WHERE T.IDPaciente = @idPaciente
+                    AND E.Nombre = 'Finalizado'");
+
+                datos.setearParametro("@idPaciente", idPaciente);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (int)datos.Lector["Total"];
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public string ObtenerFechaProximoControl(int idPaciente)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT TOP 1 FechaHora
+                    FROM Turnos
+                    WHERE IDPaciente = @idPaciente
+                    AND FechaHora >= GETDATE()
+                    ORDER BY FechaHora");
+
+                datos.setearParametro("@idPaciente", idPaciente);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return ((DateTime)datos.Lector["FechaHora"]).ToString("dd/MM/yyyy");
+
+                return "Sin turno";
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public Turno ObtenerProximoTurnoPaciente(int idPaciente)
+        {
+            List<Turno> lista = ListarTurnosPorPaciente(idPaciente);
+
+            return lista
+                .Where(x => x.FechaHora >= DateTime.Now)
+                .OrderBy(x => x.FechaHora)
+                .FirstOrDefault();
+        }
+        public List<Turno> ListarUltimosTurnosPaciente(int idPaciente)
+        {
+            return ListarTurnosPorPaciente(idPaciente)
+                .OrderByDescending(x => x.FechaHora)
+                .Take(10)
+                .ToList();
+        }
+        public int CantidadTurnosPaciente(int idPaciente)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT COUNT(*) AS Total
+                    FROM Turnos
+                    WHERE IDPaciente = @idPaciente");
+
+                datos.setearParametro("@idPaciente", idPaciente);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (int)datos.Lector["Total"];
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
-
-
 }
 
 

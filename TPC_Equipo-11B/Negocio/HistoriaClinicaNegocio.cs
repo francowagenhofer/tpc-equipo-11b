@@ -36,7 +36,6 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-
         public List<HistoriaClinica> ListarHCPorPaciente(int idPaciente)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -64,7 +63,6 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-
         public List<HistoriaClinica> ListarHCPorMedico(int idMedico)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -91,7 +89,6 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-
         public HistoriaClinica ObtenerHCPorId(int id)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -117,7 +114,6 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-
         public HistoriaClinica ObtenerHCPorTurno(int idTurno)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -143,7 +139,6 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-
         private string ConsultaHistoriaClinica()
         {
             return @"
@@ -268,7 +263,6 @@ namespace Negocio
 
             return aux;
         }
-
         public void AgregarHC(HistoriaClinica historia)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -305,6 +299,119 @@ namespace Negocio
                 datos.setearParametro("@Observaciones", historia.Observaciones);
 
                 datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        // Metodos para el dashboard
+        public int CantidadHistorias()
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("SELECT COUNT(*) AS Total FROM HistoriaClinica WHERE Activo = 1");
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (int)datos.Lector["Total"];
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public int CantidadHistoriasPaciente(int idPaciente)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT COUNT(*) AS Total
+                    FROM HistoriaClinica
+                    WHERE IDPaciente = @idPaciente
+                    AND Activo = 1");
+
+                datos.setearParametro("@idPaciente", idPaciente);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (int)datos.Lector["Total"];
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public string ObtenerFechaUltimaConsulta(int idPaciente)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT MAX(Fecha) AS UltimaConsulta
+                    FROM HistoriaClinica
+                    WHERE IDPaciente = @idPaciente
+                    AND Activo = 1");
+
+                datos.setearParametro("@idPaciente", idPaciente);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read() && datos.Lector["UltimaConsulta"] != DBNull.Value)
+                    return ((DateTime)datos.Lector["UltimaConsulta"]).ToString("dd/MM/yyyy");
+
+                return "-";
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public string ObtenerUltimoDiagnostico(int idPaciente)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT TOP 1 Diagnostico
+                    FROM HistoriaClinica
+                    WHERE IDPaciente = @idPaciente
+                    AND Activo = 1
+                    ORDER BY Fecha DESC");
+
+                datos.setearParametro("@idPaciente", idPaciente);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return datos.Lector["Diagnostico"].ToString();
+
+                return "-";
             }
             catch (Exception ex)
             {
