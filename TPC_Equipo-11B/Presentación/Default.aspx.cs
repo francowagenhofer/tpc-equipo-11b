@@ -136,6 +136,9 @@ namespace Presentación
                 lblMedicoProximaHora.Text = proximo.FechaHora.ToString("HH:mm");
                 lblMedicoMotivo.Text = proximo.Especialidad.Nombre;
                 lblMedicoEstadoTurno.Text = proximo.EstadoTurno.Nombre;
+
+                lnkAtenderPaciente.NavigateUrl = $"~/AtenderTurno.aspx?id={proximo.Id}";
+                lnkAtenderPaciente.Visible = true;
             }
             else
             {
@@ -143,6 +146,8 @@ namespace Presentación
                 lblMedicoProximaHora.Text = "-";
                 lblMedicoMotivo.Text = "-";
                 lblMedicoEstadoTurno.Text = "Sin turnos";
+
+                lnkAtenderPaciente.Visible = false;
             }
 
             lblMedicoKpiTurnosHoy.Text = turnoNegocio.CantidadTurnosHoyMedico(UsuarioLogueado.Medico.Id).ToString();
@@ -205,5 +210,8 @@ namespace Presentación
             gvUltimosTurnosPaciente.DataSource = turnoNegocio.ListarUltimosTurnosPaciente(UsuarioLogueado.Paciente.Id);
             gvUltimosTurnosPaciente.DataBind();
         }
+
+
+
     }
 }

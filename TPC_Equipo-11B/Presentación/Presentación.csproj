@@ -74,7 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\CSS\Autenticacion.css" />
-    <Content Include="Assets\CSS\Default.css" />
+    <Content Include="Assets\CSS\DefaultEstilo.css" />
     <Content Include="Assets\CSS\Master.css" />
     <Content Include="Assets\IMG\logo-clinica.png" />
     <Content Include="Assets\IMG\Perfil.jpg" />

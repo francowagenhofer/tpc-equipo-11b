@@ -123,51 +123,6 @@ namespace Presentación
         protected global::System.Web.UI.WebControls.Label lblTurnosHoy;
 
         /// <summary>
-        /// Control lnkPacientes.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkPacientes;
-
-        /// <summary>
-        /// Control lnkMedicos.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkMedicos;
-
-        /// <summary>
-        /// Control lnkTurnos.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkTurnos;
-
-        /// <summary>
-        /// Control lnkUsuarios.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkUsuarios;
-
-        /// <summary>
-        /// Control lnkConfiguracion.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkConfiguracion;
-
-        /// <summary>
         /// Control lblTurnosPendientes.
         /// </summary>
         /// <remarks>
@@ -337,42 +292,6 @@ namespace Presentación
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblRecepKpiCancelados;
-
-        /// <summary>
-        /// Control lnkNuevoPaciente.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkNuevoPaciente;
-
-        /// <summary>
-        /// Control lnkNuevoTurno.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkNuevoTurno;
-
-        /// <summary>
-        /// Control lnkGestionTurnos.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkGestionTurnos;
-
-        /// <summary>
-        /// Control lnkBuscarPaciente.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkBuscarPaciente;
 
         /// <summary>
         /// Control lblRecepPacientesRegistrados.
@@ -562,33 +481,6 @@ namespace Presentación
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblMedicoKpiCancelados;
-
-        /// <summary>
-        /// Control lnkMiAgenda.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkMiAgenda;
-
-        /// <summary>
-        /// Control lnkHistoriasClinicas.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkHistoriasClinicas;
-
-        /// <summary>
-        /// Control lnkDisponibilidad.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkDisponibilidad;
 
         /// <summary>
         /// Control gvAgendaMedico.
@@ -805,42 +697,6 @@ namespace Presentación
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblPacienteKpiHistorias;
-
-        /// <summary>
-        /// Control lnkSolicitarTurno.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSolicitarTurno;
-
-        /// <summary>
-        /// Control lnkMisTurnos.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkMisTurnos;
-
-        /// <summary>
-        /// Control lnkHistoriaPaciente.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkHistoriaPaciente;
-
-        /// <summary>
-        /// Control lnkPerfilPaciente.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkPerfilPaciente;
 
         /// <summary>
         /// Control gvUltimosTurnosPaciente.

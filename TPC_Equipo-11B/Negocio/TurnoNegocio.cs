@@ -733,7 +733,7 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-      
+
         public void FinalizarTurno(int idTurno)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -1300,7 +1300,10 @@ namespace Negocio
             List<Turno> lista = ListarTurnosPorMedico(idMedico);
 
             return lista
-                .Where(x => x.FechaHora >= DateTime.Now)
+                .Where(x =>
+                    x.FechaHora >= DateTime.Now &&
+                    (x.EstadoTurno.Nombre == "Pendiente" ||
+                     x.EstadoTurno.Nombre == "Confirmado"))
                 .OrderBy(x => x.FechaHora)
                 .FirstOrDefault();
         }
