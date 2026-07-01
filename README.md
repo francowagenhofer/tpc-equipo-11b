@@ -1,25 +1,76 @@
-Propuesta Clínica
+# Clínica Web
 
-Requisitos de finalización
-Se requiere una aplicación para administrar la asignación de turnos, pacientes y médicos de una
-clínica médica.
-En el sistema se cargarán los médicos, que estarán asociados a una o más especialidades y a un
-turno de trabajo, y los pacientes con toda su información personal. Los turnos de trabajo serán
-administrados por el usuario y podrán cargar el horario de entrada y salida que demanden;
-pudiendo haber tantos turnos de trabajo como se necesite.
-La funcionalidad central de la aplicación es gestionar los tiempos de los especialistas a partir de la
-asignación de turnos a los pacientes.
-Para dar de alta un turno el usuario deberá seleccionar un paciente (que deberá estar previamente cargado), y seleccionar una especialidad. A partir de la especialidad seleccionada el sistema debería proponerle algunas opciones en cuanto a horarios y médicos. Por ejemplo, si se elige “Dentista” el sistema debería sugerir tres horarios posibles con su respectivo médico. El usuario podrá elegirlo u optar por seguir cargando el formulario de manera manual. El siguiente dato a cargar es el médico, una vez allí se podrá seleccionar un día y se deberán mostrar los horarios disponibles del médico seleccionado en el día seleccionado.
-No puede existir más de un turno para el mismo médico, el mismo día a la misma hora. Lo mismo
-para el paciente. No se pueden dar de alta turnos vencidos. Por último, se deben cargar las
-observaciones que corresponden a la causa por la cual el paciente solicita el turno. Una vez dado
-de alta el turno, se le asigna un número y se envía por mail la confirmación del mismo con los
-datos correspondientes al paciente (debe tener cargado correctamente el correo electrónico en el
-sistema).
-Los turnos pueden ser re programados o cancelados pero nunca deberían ser eliminados.
-Se puede manejar un modelo de estado para los turnos con fines informativos y estadístcos a futuro. Por ejemplo: Nuevo, Reprogramado, Cancelado, No Asistió, Cerrado, etc.
-Los tiempos de los turnos se proponen se configuren de una hora de duración (de 10 a 11, de 11
-a 12, etc.).
-La aplicación debe manejar seguridad y perfiles de acceso. Por un lado administrador, que puede
-ver y manipular todo, por otro lado recepcionista, que puede administrar pacientes y médicos y
-dar de alta turnos, y finalmente médicos que sólo podrán ver sus turnos asociados y modificarlos para agregar las observaciones sobre el diagnóstico del paciente.
+Aplicación web desarrollada como proyecto final de Programación III para la gestión de una clínica médica.
+
+Permite administrar pacientes, médicos, usuarios y turnos, además de gestionar la atención médica y el historial clínico de los pacientes mediante un sistema de roles.
+
+## Tecnologías utilizadas
+
+- ASP.NET Web Forms (.NET Framework 4.8)
+- C#
+- SQL Server
+- ADO.NET
+- Bootstrap 5
+- Bootstrap Icons
+
+## Funcionalidades
+
+### Administración
+
+- Gestión de usuarios.
+- Gestión de médicos.
+- Gestión de pacientes.
+- Gestión de especialidades.
+- Gestión de obras sociales.
+- Gestión de géneros.
+- Gestión de estados de turno.
+- Gestión de turnos.
+- Visualización de información personal.
+
+### Médicos
+
+- Visualización de agenda.
+- Gestión de disponibilidad semanal.
+- Atención de pacientes.
+- Carga de historia clínica.
+- Consulta de historial clínico.
+
+### Pacientes
+
+- Consulta de turnos.
+- Consulta de historia clínica.
+- Visualización de información personal.
+
+### Recepción
+
+- Alta y administración de turnos.
+- Gestión de pacientes.
+- Gestión de médicos.
+- - Visualización de información personal.
+
+## Características
+
+- Autenticación con control de acceso por roles.
+- Dashboard personalizado según el tipo de usuario.
+- Historial clínico asociado a turnos finalizados.
+- Disponibilidad semanal de médicos.
+- Estados de turnos (Pendiente, Confirmado, Cancelado, Finalizado, No asistió y Reprogramado).
+- Eliminación lógica de los registros principales.
+
+## Roles
+
+- Administrador
+- Recepcionista
+- Médico
+- Paciente
+
+## Base de datos
+
+El proyecto incluye:
+
+- Script de creación de la base de datos.
+- Script de carga de datos de ejemplo.
+
+## Integrantes
+- Anderson Pozo
+- Franco Wagenhöfer
