@@ -150,13 +150,17 @@ namespace Presentación {
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(ddlPaciente.SelectedValue) || string.IsNullOrEmpty(ddlMedico.SelectedValue) || string.IsNullOrEmpty(txtFecha.Text) || string.IsNullOrEmpty(ddlHora.SelectedValue))
+            if (string.IsNullOrEmpty(ddlPaciente.SelectedValue) ||
+                string.IsNullOrEmpty(ddlMedico.SelectedValue) ||
+                string.IsNullOrEmpty(txtFecha.Text) ||
+                string.IsNullOrEmpty(ddlHora.SelectedValue))
             {
                 lblMensaje.Text = "Debe completar todos los campos (Paciente, Médico, Fecha y Hora).";
                 lblMensaje.CssClass = "alert alert-warning d-block text-center";
                 lblMensaje.Visible = true;
                 return;
             }
+
             try
             {
                 Turno nuevo = new Turno();
@@ -213,72 +217,17 @@ namespace Presentación {
                 }
                 else
                 {
-                    nuevo.Codigo = "T" + DateTime.Now.ToString("mmssfff");
+                    nuevo.Codigo = "TRN-" + DateTime.Now.ToString("yyyyMMdd-HHmmss");
                     resultado = negocio.AgregarTurno(nuevo);
                 }
 
                 if (resultado)
                 {
-                    bool errorEnvioMail = false;
+                    // CORREO TEMPORALMENTE DESACTIVADO
+                    // Reactivar cuando se configuren las credenciales SMTP reales en Web.config
+                    // (EmailEmisor / EmailPassword con contraseña de aplicación de Gmail)
 
-                    if (esNuevo)
-                    {
-                        try
-                        {
-                            PacienteNegocio pacienteNeg = new PacienteNegocio();
-                            Paciente pac = pacienteNeg.ObtenerPacientePorId(nuevo.PacienteId);
-
-                            if (pac != null && pac.Usuario != null && !string.IsNullOrEmpty(pac.Usuario.Email))
-                            {
-                                string nombrePaciente = $"{pac.Usuario.Nombre} {pac.Usuario.Apellido}";
-                                string nombreMedico = ddlMedico.SelectedItem.Text;
-                                string fechaHoraStr = nuevo.FechaHora.ToString("dd/MM/yyyy HH:mm") + " hs";
-
-                                string urlBase = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath.TrimEnd('/');
-                                string urlConfirmacion = $"{urlBase}/ConfirmarTurno.aspx?codigo={nuevo.Codigo}";
-
-                                string asunto = "Confirmación de Turno Médico - " + nuevo.Codigo;
-                                string cuerpo = $@"
-                    <html>
-                    <body style='font-family: Arial, sans-serif; color: #333; line-height: 1.6;'>
-                        <div style='max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;'>
-                            <h2 style='color: #0d6efd; text-align: center;'>¡Hola, {nombrePaciente}!</h2>
-                            <p>Hemos registrado una solicitud de turno médico en nuestro sistema. A continuación se detallan los datos del turno:</p>
-                            
-                            <div style='background-color: #f8f9fa; padding: 15px; border-radius: 6px; margin: 20px 0; border-left: 4px solid #0d6efd;'>
-                                <p style='margin: 5px 0;'><strong>Código de Turno:</strong> {nuevo.Codigo}</p>
-                                <p style='margin: 5px 0;'><strong>Médico:</strong> {nombreMedico}</p>
-                                <p style='margin: 5px 0;'><strong>Fecha y Hora:</strong> {fechaHoraStr}</p>
-                            </div>
-
-                            <p style='text-align: center; margin: 30px 0;'>
-                                <a href='{urlConfirmacion}' style='background-color: #198754; color: white; padding: 12px 25px; text-decoration: none; border-radius: 50px; font-weight: bold; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.1);'>Confirmar mi Turno</a>
-                            </p>
-
-                            <p style='font-size: 0.9em; color: #666;'>Este enlace vence en 48 horas o al llegar la fecha del turno. Si tú no solicitaste este turno, por favor ignora este correo.</p>
-                            <hr style='border: none; border-top: 1px solid #eee; margin: 20px 0;' />
-                            <p style='font-size: 0.8em; color: #999; text-align: center;'>© 2026 Sistema Clínica. Todos los derechos reservados.</p>
-                        </div>
-                    </body>
-                    </html>";
-
-                                EmailService emailService = new EmailService();
-                                emailService.EnviarCorreo(pac.Usuario.Email, asunto, cuerpo);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            lblMensaje.Text = ex.ToString();
-                            lblMensaje.CssClass = "alert alert-danger d-block text-center";
-                            lblMensaje.Visible = true;
-                            errorEnvioMail = true;
-                        }
-                    }
-
-                    if (!errorEnvioMail)
-                    {
-                        Response.Redirect("Turnos.aspx", false);
-                    }
+                    Response.Redirect("Turnos.aspx", false);
                 }
             }
             catch (Exception ex)
