@@ -1,5 +1,5 @@
 ﻿:root {
-    --sidebar-width: 270px;
+    --sidebar-width: 250px;
     --topbar-height: 64px;
     --c-dark: #111827;
     --c-dark-2: #1f2937;
@@ -103,13 +103,13 @@ body {
 }
 
 .menu-seccion {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--c-dark-4);
     padding: 0 10px;
-    margin: 20px 0 8px;
+    margin: 18px 0 8px;
     display: block;
 }
 
@@ -120,20 +120,21 @@ body {
 .opcion-menu {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 11px 12px;
-    margin-bottom: 3px;
+    gap: 10px;
+    padding: 10px 12px;
+    margin-bottom: 5px;
     border-radius: var(--radius-md);
     border-left: 3px solid transparent;
     color: var(--c-subtle);
     text-decoration: none;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
+    line-height: 1.2;
     transition: all .15s ease;
 }
 
     .opcion-menu i {
-        font-size: 17px;
+        font-size: 16px;
         width: 18px;
         flex-shrink: 0;
         color: currentColor;

@@ -11,7 +11,7 @@ namespace Presentación
 {
 
 
-    public partial class PerfilMedico
+    public partial class PerfilPaciente
     {
 
         /// <summary>
@@ -42,22 +42,22 @@ namespace Presentación
         protected global::System.Web.UI.WebControls.Literal litNombreCompleto;
 
         /// <summary>
-        /// Control litEspecialidad.
+        /// Control litDni.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litEspecialidad;
+        protected global::System.Web.UI.WebControls.Literal litDni;
 
         /// <summary>
-        /// Control litMatricula.
+        /// Control litGenero.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litMatricula;
+        protected global::System.Web.UI.WebControls.Literal litGenero;
 
         /// <summary>
         /// Control badgeEstado.
@@ -87,49 +87,130 @@ namespace Presentación
         protected global::System.Web.UI.WebControls.Literal litTelefono;
 
         /// <summary>
-        /// Control pnlAvisoSinDisponibilidad.
+        /// Control litObraSocial.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlAvisoSinDisponibilidad;
+        protected global::System.Web.UI.WebControls.Literal litObraSocial;
 
         /// <summary>
-        /// Control rptDisponibilidad.
+        /// Control litDireccion.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptDisponibilidad;
+        protected global::System.Web.UI.WebControls.Literal litDireccion;
 
         /// <summary>
-        /// Control lblSinDisponibilidad.
+        /// Control litFechaNacimiento.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblSinDisponibilidad;
+        protected global::System.Web.UI.WebControls.Literal litFechaNacimiento;
 
         /// <summary>
-        /// Control rptAusencias.
+        /// Control litFechaAlta.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptAusencias;
+        protected global::System.Web.UI.WebControls.Literal litFechaAlta;
 
         /// <summary>
-        /// Control lblSinAusencias.
+        /// Control pnlProximoTurno.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblSinAusencias;
+        protected global::System.Web.UI.WebControls.Panel pnlProximoTurno;
+
+        /// <summary>
+        /// Control litFechaTurno.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litFechaTurno;
+
+        /// <summary>
+        /// Control litHoraTurno.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litHoraTurno;
+
+        /// <summary>
+        /// Control litMedico.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litMedico;
+
+        /// <summary>
+        /// Control litEspecialidad.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litEspecialidad;
+
+        /// <summary>
+        /// Control litEstadoTurno.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litEstadoTurno;
+
+        /// <summary>
+        /// Control lblSinTurno.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblSinTurno;
+
+        /// <summary>
+        /// Control litHistorias.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litHistorias;
+
+        /// <summary>
+        /// Control litUltimaConsulta.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litUltimaConsulta;
+
+        /// <summary>
+        /// Control litDiagnostico.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litDiagnostico;
 
         /// <summary>
         /// Control rptTurnos.
@@ -141,12 +222,12 @@ namespace Presentación
         protected global::System.Web.UI.WebControls.Repeater rptTurnos;
 
         /// <summary>
-        /// Control lblSinTurnos.
+        /// Control lblSinHistorial.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblSinTurnos;
+        protected global::System.Web.UI.WebControls.Label lblSinHistorial;
     }
 }

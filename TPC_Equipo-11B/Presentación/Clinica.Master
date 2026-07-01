@@ -50,19 +50,21 @@
 
                     <li id="liInicio" runat="server">
                         <a href="~/Default.aspx" runat="server" class="opcion-menu">
-                            <i class="bi bi-speedometer2" aria-hidden="true"></i>
+                            <i class="bi bi-house-door"></i>
                             <span>Inicio</span>
                         </a>
                     </li>
+
 
                     <li id="liSeccionGestion" runat="server"><span class="menu-seccion">Gestión</span></li>
 
                     <li id="liMedicos" runat="server">
                         <a href="~/Medicos.aspx" runat="server" class="opcion-menu">
-                            <i class="bi bi-heart-pulse" aria-hidden="true"></i>
+                            <i class="bi bi-person-vcard"></i>
                             <span>Médicos</span>
                         </a>
                     </li>
+
                     <li id="liPacientes" runat="server">
                         <a href="~/Pacientes.aspx" runat="server" class="opcion-menu">
                             <i class="bi bi-people" aria-hidden="true"></i>
@@ -71,14 +73,14 @@
                     </li>
                     <li id="liTurnos" runat="server">
                         <a href="~/Turnos.aspx" runat="server" class="opcion-menu">
-                            <i class="bi bi-calendar-check" aria-hidden="true"></i>
+                            <i class="bi bi-calendar2-check" aria-hidden="true"></i>
                             <span>Turnos</span>
                         </a>
                     </li>
 
                     <li id="liMiDisponibilidad" runat="server">
                         <a href="~/MiDisponibilidad.aspx" runat="server" class="opcion-menu">
-                            <i class="bi bi-calendar-check" aria-hidden="true"></i>
+                            <i class="bi bi-calendar-week"></i>
                             <span>Mi Disponibilidad</span>
                         </a>
                     </li>
@@ -87,36 +89,40 @@
 
                     <li id="liMiAgenda" runat="server">
                         <a href="~/MiAgenda.aspx" runat="server" class="opcion-menu">
-                            <i class="bi bi-calendar-check" aria-hidden="true"></i>
+                            <i class="bi bi-journal-medical"></i>
                             <span>Mi Agenda</span>
                         </a>
                     </li>
+
                     <li id="liHistoriaClinica" runat="server">
                         <a href="~/HistorialClinico.aspx" runat="server" class="opcion-menu">
-                            <i class="bi bi-file-text" aria-hidden="true"></i>
+                            <i class="bi bi-file-earmark-medical"></i>
                             <span>Historias Clínicas</span>
                         </a>
                     </li>
+
 
                     <li id="liSeccionAdministracion" runat="server"><span class="menu-seccion">Administración</span></li>
 
                     <li id="liUsuarios" runat="server">
                         <a href="~/Usuarios.aspx" runat="server" class="opcion-menu">
-                            <i class="bi bi-person-badge" aria-hidden="true"></i>
+                            <i class="bi bi-person-gear"></i>
                             <span>Usuarios</span>
                         </a>
                     </li>
+
                     <li id="liConfiguracion" runat="server">
                         <a href="~/Configuracion.aspx" runat="server" class="opcion-menu">
-                            <i class="bi bi-gear" aria-hidden="true"></i>
+                            <i class="bi bi-sliders"></i>
                             <span>Configuraciones</span>
                         </a>
                     </li>
-                    
+
+
                     <li id="liSeccionCuenta" runat="server"><span class="menu-seccion">Cuenta</span></li>
                     <li id="liMiPerfil" runat="server">
                         <a href="~/MiPerfil.aspx" runat="server" class="opcion-menu">
-                            <i class="bi bi-gear" aria-hidden="true"></i>
+                            <i class="bi bi-person-circle"></i>
                             <span>Mi Perfil</span>
                         </a>
                     </li>

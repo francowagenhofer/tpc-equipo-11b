@@ -78,7 +78,7 @@
             </div>
 
             <div class="col-md-2 d-flex align-items-end">
-                <asp:Button ID="btnLimpiar" runat="server" Text="Limpiar" CssClass="btn btn-outline-secondary btn-sm w-100" OnClick="btnLimpiar_Click" />
+                <asp:Button ID="btnLimpiar" runat="server" Text="Limpiar" CssClass="btn btn-outline-secondary w-100" OnClick="btnLimpiar_Click" />
             </div>
         </div>
 
@@ -109,11 +109,11 @@
                         </ItemTemplate>
                     </asp:TemplateField>
 
-                    <asp:TemplateField HeaderText="Teléfono">
+<%--                    <asp:TemplateField HeaderText="Teléfono">
                         <ItemTemplate>
                             <%# Eval("Usuario.Telefono") %>
                         </ItemTemplate>
-                    </asp:TemplateField>
+                    </asp:TemplateField>--%>
 
                     <asp:TemplateField HeaderText="Obra Social">
                         <ItemTemplate>
@@ -123,11 +123,11 @@
                         </ItemTemplate>
                     </asp:TemplateField>
 
-                    <asp:TemplateField HeaderText="Género">
+<%--                    <asp:TemplateField HeaderText="Género">
                         <ItemTemplate>
                             <%# Eval("Genero") != null ? Eval("Genero.Descripcion") : "No especificado" %>
                         </ItemTemplate>
-                    </asp:TemplateField>
+                    </asp:TemplateField>--%>
 
                     <asp:TemplateField HeaderText="Estado">
                         <ItemTemplate>

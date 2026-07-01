@@ -121,6 +121,7 @@ namespace Negocio {
                           U.Telefono,
                           U.Username,
                           U.ImagenUrl,
+                          U.FechaAlta,
                       
                           G.Descripcion AS Genero,
                           OS.Nombre AS ObraSocial
@@ -175,6 +176,7 @@ namespace Negocio {
                     aux.Usuario.Telefono = datos.Lector["Telefono"] != DBNull.Value ? (string)datos.Lector["Telefono"] : "";
                     aux.Usuario.Username = (string)datos.Lector["Username"];
                     aux.Usuario.ImagenUrl = datos.Lector["ImagenUrl"] != DBNull.Value ? (string)datos.Lector["ImagenUrl"] : "";
+                    aux.Usuario.FechaAlta = (DateTime)datos.Lector["FechaAlta"];
 
                     return aux;
                 }

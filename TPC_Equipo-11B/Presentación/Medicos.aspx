@@ -1,38 +1,6 @@
 ﻿<%@ Page Title="Médicos" Language="C#" MasterPageFile="~/Clinica.Master" AutoEventWireup="true" CodeBehind="Medicos.aspx.cs" Inherits="Presentación.Medicos" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <style>
-        .tabla-personalizada th {
-            background-color: #f8f9fa;
-            color: #495057;
-            font-weight: 600;
-        }
-
-        .badge-activo {
-            background-color: #e8f5e9;
-            color: #2e7d32;
-            padding: 0.35em 0.65em;
-            border-radius: 50rem;
-            font-size: 0.85em;
-        }
-
-        .table-pager {
-            text-align: center;
-        }
-
-            .table-pager table {
-                margin: 10px auto;
-            }
-
-            .table-pager a,
-            .table-pager span {
-                padding: 6px 10px;
-                margin: 0 3px;
-                border: 1px solid #dee2e6;
-                border-radius: 6px;
-                text-decoration: none;
-            }
-    </style>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="contenido" runat="server">
@@ -50,27 +18,26 @@
         </div>
 
         <asp:Panel ID="pnlAlertaSinDisponibilidad" runat="server" CssClass="alert alert-warning d-flex align-items-start gap-3 mb-4" Visible="false">
-    <i class="bi bi-exclamation-triangle-fill fs-4 mt-1"></i>
-    <div class="flex-grow-1">
-        <strong>Médicos sin disponibilidad configurada</strong>
-        <p class="mb-2 small">
-            Los siguientes médicos no podrán recibir turnos hasta que configuren sus horarios de atención semanal.
-        </p>
-        <asp:Repeater ID="rptMedicosSinDisponibilidad" runat="server">
-            <ItemTemplate>
-    <span class="badge bg-white text-dark border me-2 mb-1 d-inline-flex align-items-center gap-1">
-        Dr. <%# Eval("Usuario.Apellido") %>, <%# Eval("Usuario.Nombre") %> (Mat: <%# Eval("Matricula") %>)
+            <i class="bi bi-exclamation-triangle-fill fs-4 mt-1"></i>
+            <div class="flex-grow-1">
+                <strong>Médicos sin disponibilidad configurada</strong>
+                <p class="mb-2 small">
+                    Los siguientes médicos no podrán recibir turnos hasta que configuren sus horarios de atención semanal.
+                </p>
+                <asp:Repeater ID="rptMedicosSinDisponibilidad" runat="server">
+                    <ItemTemplate>
+                        <span class="badge bg-white text-dark border me-2 mb-1 d-inline-flex align-items-center gap-1">Dr. <%# Eval("Usuario.Apellido") %>, <%# Eval("Usuario.Nombre") %> (Mat: <%# Eval("Matricula") %>)
         <a href='PerfilMedico.aspx?id=<%# Eval("Id") %>' class="text-decoration-none ms-1" title="Ver perfil">
             <i class="bi bi-box-arrow-up-right"></i>
         </a>
-        <a href='MiDisponibilidad.aspx?idMedico=<%# Eval("Id") %>' class="text-decoration-none ms-1 text-primary" title="Configurar disponibilidad">
-            <i class="bi bi-calendar-plus"></i>
-        </a>
-    </span>
-</ItemTemplate>
-        </asp:Repeater>
-    </div>
-</asp:Panel>
+                            <a href='MiDisponibilidad.aspx?idMedico=<%# Eval("Id") %>' class="text-decoration-none ms-1 text-primary" title="Configurar disponibilidad">
+                                <i class="bi bi-calendar-plus"></i>
+                            </a>
+                        </span>
+                    </ItemTemplate>
+                </asp:Repeater>
+            </div>
+        </asp:Panel>
 
         <div class="row g-3 mb-4">
             <div class="col-md-3">
@@ -97,7 +64,7 @@
             </div>
 
             <div class="col-md-2 d-flex align-items-end">
-                <asp:Button ID="btnLimpiar" runat="server" Text="Limpiar" CssClass="btn btn-outline-secondary btn-sm w-100" OnClick="btnLimpiar_Click" />
+                <asp:Button ID="btnLimpiar" runat="server" Text="Limpiar" CssClass="btn btn-outline-secondary w-100" OnClick="btnLimpiar_Click" />
             </div>
         </div>
 
