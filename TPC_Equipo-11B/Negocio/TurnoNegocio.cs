@@ -125,7 +125,11 @@ namespace Negocio
                     
                         P.IDPaciente,
                         P.DNI,
+                        P.IDObraSocial,
                     
+                        OS.Nombre AS ObraSocial,
+
+                        
                         U_Pac.Nombre PacienteNombre,
                         U_Pac.Apellido PacienteApellido,
                     
@@ -143,6 +147,9 @@ namespace Negocio
                     INNER JOIN Usuarios U_Pac
                     ON P.IDUsuario=U_Pac.IDUsuario
                     
+                    LEFT JOIN ObrasSociales OS
+                    ON P.IDObraSocial = OS.IDObraSocial                    
+
                     INNER JOIN Medicos M
                     ON T.IDMedico=M.IDMedico
                     
@@ -184,6 +191,10 @@ namespace Negocio
                     aux.Paciente = new Paciente();
                     aux.Paciente.Id = (int)datos.Lector["IDPaciente"];
                     aux.Paciente.DNI = (string)datos.Lector["DNI"];
+                    aux.Paciente.ObraSocial = new ObraSocial();
+
+                    if (datos.Lector["ObraSocial"] != DBNull.Value)
+                        aux.Paciente.ObraSocial.Nombre = datos.Lector["ObraSocial"].ToString();
 
                     aux.Paciente.Usuario = new Usuario();
                     aux.Paciente.Usuario.Nombre = (string)datos.Lector["PacienteNombre"];
@@ -228,6 +239,10 @@ namespace Negocio
 
                         P.IDPaciente,
                         P.DNI,
+                        P.IDObraSocial,
+
+                        OS.Nombre AS ObraSocial,
+                        
 
                         U_Pac.IDUsuario AS IDUsuarioPaciente,
                         U_Pac.Nombre AS PacienteNombre,
@@ -247,6 +262,9 @@ namespace Negocio
 
                     INNER JOIN Usuarios U_Pac
                         ON P.IDUsuario = U_Pac.IDUsuario
+
+                    LEFT JOIN ObrasSociales OS
+                    ON P.IDObraSocial = OS.IDObraSocial
 
                     INNER JOIN Medicos M
                         ON T.IDMedico = M.IDMedico
@@ -290,6 +308,10 @@ namespace Negocio
                     aux.Paciente = new Paciente();
                     aux.Paciente.Id = (int)datos.Lector["IDPaciente"];
                     aux.Paciente.DNI = datos.Lector["DNI"].ToString();
+
+                    aux.Paciente.ObraSocial = new ObraSocial();
+                    if (datos.Lector["ObraSocial"] != DBNull.Value)
+                        aux.Paciente.ObraSocial.Nombre = datos.Lector["ObraSocial"].ToString();
 
                     aux.Paciente.Usuario = new Usuario();
                     aux.Paciente.Usuario.Id = (int)datos.Lector["IDUsuarioPaciente"];
@@ -603,26 +625,6 @@ namespace Negocio
 
 
         }
-        public bool CancelarTurno(int idTurno)
-        {
-            AccesoDatos datos = new AccesoDatos();
-            try
-            {
-                datos.setearConsulta("UPDATE Turnos SET IDEstadoTurno = 3, FechaModificacion = @fechaMod WHERE IDTurno = @id");
-                datos.setearParametro("@id", idTurno);
-                datos.setearParametro("@fechaMod", DateTime.Now);
-                datos.ejecutarAccion();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
-        }
         public class ResultadoConfirmacion
         {
             public bool Exito { get; set; }
@@ -688,6 +690,50 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+        public void ConfirmarTurno(int idTurno)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                        UPDATE Turnos
+                        SET IDEstadoTurno = (
+                            SELECT IDEstadoTurno
+                            FROM EstadoTurno
+                            WHERE Nombre = 'Confirmado' or Nombre = 'confirmado'
+                        )
+                        WHERE IDTurno = @IDTurno");
+
+                datos.setearParametro("@IDTurno", idTurno);
+                datos.ejecutarAccion();
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public bool CancelarTurno(int idTurno)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("UPDATE Turnos SET IDEstadoTurno = 3, FechaModificacion = @fechaMod WHERE IDTurno = @id");
+                datos.setearParametro("@id", idTurno);
+                datos.setearParametro("@fechaMod", DateTime.Now);
+                datos.ejecutarAccion();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+      
         public void FinalizarTurno(int idTurno)
         {
             AccesoDatos datos = new AccesoDatos();

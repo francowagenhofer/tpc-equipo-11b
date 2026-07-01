@@ -14,7 +14,7 @@ namespace Presentación
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            ValidarRoles("Medico", "Administrador");
+            ValidarRoles("Administrador", "Medico", "Paciente");
 
             if (!IsPostBack)
             {
@@ -27,8 +27,14 @@ namespace Presentación
         private void CargarAgenda()
         {
             TurnoNegocio negocio = new TurnoNegocio();
+            List<Turno> lista;
 
-            List<Turno> lista = negocio.ListarTurnosPorMedico(UsuarioLogueado.Medico.Id);
+            if (UsuarioLogueado.Rol.Nombre == "Medico")
+                lista = negocio.ListarTurnosPorMedico(UsuarioLogueado.Medico.Id);
+            else if (UsuarioLogueado.Rol.Nombre == "Paciente")
+                lista = negocio.ListarTurnosPorPaciente(UsuarioLogueado.Paciente.Id);
+            else
+                lista = negocio.ListarTurnos();
 
             if (!string.IsNullOrWhiteSpace(txtFecha.Text))
             {
@@ -37,14 +43,42 @@ namespace Presentación
             }
 
             string texto = txtBuscar.Text.Trim().ToLower();
+
             if (!string.IsNullOrWhiteSpace(texto))
-                lista = lista.FindAll(x => x.Paciente.Usuario.Nombre.ToLower().Contains(texto) || x.Paciente.Usuario.Apellido.ToLower().Contains(texto));
+            {
+                if (UsuarioLogueado.Rol.Nombre == "Paciente")
+                {
+                    lista = lista.FindAll(x =>
+                        x.Medico.Usuario.Nombre.ToLower().Contains(texto) ||
+                        x.Medico.Usuario.Apellido.ToLower().Contains(texto));
+                }
+                else
+                {
+                    lista = lista.FindAll(x =>
+                        x.Paciente.Usuario.Nombre.ToLower().Contains(texto) ||
+                        x.Paciente.Usuario.Apellido.ToLower().Contains(texto));
+                }
+            }
 
             if (ddlEstado.SelectedIndex > 0)
-                lista = lista.FindAll(x => x.EstadoTurno.Nombre == ddlEstado.SelectedItem.Text);
+                lista = lista.FindAll(x => x.EstadoTurno.Id == int.Parse(ddlEstado.SelectedValue));
 
             dgvAgenda.DataSource = lista;
             dgvAgenda.DataBind();
+
+            ConfigurarColumnasAgenda();
+        }
+
+
+        private void ConfigurarColumnasAgenda()
+        {
+            bool esPaciente = UsuarioLogueado.Rol.Nombre == "Paciente";
+
+            dgvAgenda.Columns[2].Visible = !esPaciente; // Paciente
+            dgvAgenda.Columns[3].Visible = !esPaciente; // Obra Social
+
+            dgvAgenda.Columns[4].Visible = esPaciente;  // Médico
+            dgvAgenda.Columns[5].Visible = esPaciente;  // Especialidad
         }
 
         private void CargarEstados()
@@ -62,7 +96,14 @@ namespace Presentación
         private void CargarResumen()
         {
             TurnoNegocio negocio = new TurnoNegocio();
-            List<Turno> lista = negocio.ListarTurnosPorMedico(UsuarioLogueado.Medico.Id);
+            List<Turno> lista;
+
+            if (UsuarioLogueado.Rol.Nombre == "Medico")
+                lista = negocio.ListarTurnosPorMedico(UsuarioLogueado.Medico.Id);
+            else if (UsuarioLogueado.Rol.Nombre == "Paciente")
+                lista = negocio.ListarTurnosPorPaciente(UsuarioLogueado.Paciente.Id);
+            else
+                lista = negocio.ListarTurnos();
 
             lblTurnosHoy.Text = lista.Count(x => x.FechaHora.Date == DateTime.Today).ToString();
             lblPendientes.Text = lista.Count(x => x.EstadoTurno.Nombre == "Pendiente").ToString();
@@ -83,7 +124,7 @@ namespace Presentación
             lblFecha.Text = turno.FechaHora.ToString("dd/MM/yyyy");
             lblHora.Text = turno.FechaHora.ToString("HH:mm");
             lblDni.Text = turno.Paciente.DNI;
-            lblPaciente.Text = turno.Paciente != null ? $"{turno.Paciente.Usuario.Apellido}, {turno.Paciente.Usuario.Nombre}": "-";
+            lblPaciente.Text = turno.Paciente != null ? $"{turno.Paciente.Usuario.Apellido}, {turno.Paciente.Usuario.Nombre}" : "-";
             lblObraSocial.Text = turno.Paciente?.ObraSocial?.Nombre ?? "-";
             lblEspecialidad.Text = turno.Especialidad?.Nombre ?? "-";
 
@@ -159,15 +200,15 @@ namespace Presentación
 
                 string script = @"
                     window.addEventListener('load', function () {
-                    
+
                         var elementoModal = document.getElementById('modalResumenTurno');
-                    
+
                         if (elementoModal && window.bootstrap) {
                             bootstrap.Modal.getOrCreateInstance(elementoModal).show();
                         }
-                    
+
                     });
-                    ";
+        ";
 
                 ClientScript.RegisterStartupScript(
                     GetType(),
@@ -176,11 +217,39 @@ namespace Presentación
                     true);
             }
 
-            if (e.CommandName == "Atender")
+            else if (e.CommandName == "Atender")
+            {
                 Response.Redirect($"AtenderTurno.aspx?id={idTurno}");
+            }
 
-            if (e.CommandName == "Historia")
-                Response.Redirect($"HistoriaClinica.aspx?idTurno={idTurno}");
+            else if (e.CommandName == "Historia")
+            {
+                HistoriaClinicaNegocio historiaNegocio = new HistoriaClinicaNegocio();
+                HistoriaClinica historia = historiaNegocio.ObtenerHCPorTurno(idTurno);
+
+                if (historia != null)
+                    Response.Redirect($"HistoriaClinicaDetalle.aspx?id={historia.Id}");
+            }
+
+            else if (e.CommandName == "Confirmar")
+            {
+                TurnoNegocio turnoNegocio = new TurnoNegocio();
+
+                turnoNegocio.ConfirmarTurno(idTurno);
+
+                CargarAgenda();
+                CargarResumen();
+            }
+
+            else if (e.CommandName == "Cancelar")
+            {
+                TurnoNegocio turnoNegocio = new TurnoNegocio();
+
+                turnoNegocio.CancelarTurno(idTurno);
+
+                CargarAgenda();
+                CargarResumen();
+            }
         }
 
         protected bool PuedeAtender(string estado)

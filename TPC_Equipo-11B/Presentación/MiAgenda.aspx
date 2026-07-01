@@ -213,7 +213,9 @@
                 OnRowCommand="dgvAgenda_RowCommand"
                 OnPageIndexChanging="dgvAgenda_PageIndexChanging">
 
+
                 <Columns>
+
                     <asp:TemplateField HeaderText="Fecha">
                         <ItemTemplate>
                             <%# ((DateTime)Eval("FechaHora")).ToString("dd/MM/yyyy") %>
@@ -228,7 +230,25 @@
 
                     <asp:TemplateField HeaderText="Paciente">
                         <ItemTemplate>
-                            <%# Eval("Paciente.Usuario.Nombre") %> <%# Eval("Paciente.Usuario.Apellido") %>
+                            <%# Eval("Paciente.Usuario.Apellido") %>, <%# Eval("Paciente.Usuario.Nombre") %>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                    <asp:TemplateField HeaderText="Obra Social">
+                        <ItemTemplate>
+                            <%# Eval("Paciente.ObraSocial.Nombre") %>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                    <asp:TemplateField HeaderText="Médico">
+                        <ItemTemplate>
+                            Dr. <%# Eval("Medico.Usuario.Apellido") %>, <%# Eval("Medico.Usuario.Nombre") %>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                    <asp:TemplateField HeaderText="Especialidad">
+                        <ItemTemplate>
+                            <%# Eval("Especialidad.Nombre") %>
                         </ItemTemplate>
                     </asp:TemplateField>
 
@@ -242,24 +262,48 @@
 
                     <asp:TemplateField HeaderText="Acciones">
                         <ItemTemplate>
-                            <div class="d-flex gap-2">
+
+                            <div class="d-flex flex-wrap gap-2">
+
                                 <asp:LinkButton
                                     ID="btnVer"
                                     runat="server"
                                     CssClass="btn btn-sm btn-outline-secondary"
                                     CommandName="Ver"
                                     CommandArgument='<%# Eval("Id") %>'>
-                                    <i class="bi bi-eye"></i>
+                                   <i class="bi bi-eye"></i> Ver
                                 </asp:LinkButton>
+
                                 <asp:LinkButton
                                     ID="btnAtender"
                                     runat="server"
                                     CssClass="btn btn-sm btn-primary"
                                     CommandName="Atender"
                                     CommandArgument='<%# Eval("Id") %>'
-                                    Visible='<%# PuedeAtender(Eval("EstadoTurno.Nombre").ToString()) %>'>
-                                    <i class="bi bi-clipboard2-pulse"></i>
+                                    Visible='<%# UsuarioLogueado.Rol.Nombre == "Medico" && PuedeAtender(Eval("EstadoTurno.Nombre").ToString()) %>'>
+                                     <i class="bi bi-clipboard2-pulse"></i> Atender
                                 </asp:LinkButton>
+
+                                <asp:LinkButton
+                                    ID="btnConfirmar"
+                                    runat="server"
+                                    CssClass="btn btn-sm btn-success"
+                                    CommandName="Confirmar"
+                                    CommandArgument='<%# Eval("Id") %>'
+                                    Visible='<%# UsuarioLogueado.Rol.Nombre == "Paciente" && Eval("EstadoTurno.Nombre").ToString() == "Pendiente" %>'>
+                                  <i class="bi bi-check-circle"></i> Confirmar
+                                </asp:LinkButton>
+
+                                <asp:LinkButton
+                                    ID="btnCancelar"
+                                    runat="server"
+                                    CssClass="btn btn-sm btn-danger"
+                                    CommandName="Cancelar"
+                                    CommandArgument='<%# Eval("Id") %>'
+                                    Visible='<%# UsuarioLogueado.Rol.Nombre == "Paciente" && (Eval("EstadoTurno.Nombre").ToString() == "Pendiente" || Eval("EstadoTurno.Nombre").ToString() == "Confirmado") %>'>
+                                  <i class="bi bi-x-circle"></i> Cancelar
+                                </asp:LinkButton>
+
                                 <asp:LinkButton
                                     ID="btnHistoria"
                                     runat="server"
@@ -267,9 +311,11 @@
                                     CommandName="Historia"
                                     CommandArgument='<%# Eval("Id") %>'
                                     Visible='<%# Eval("EstadoTurno.Nombre").ToString() == "Finalizado" %>'>
-                                     <i class="bi bi-file-earmark-medical"></i>
+                                 <i class="bi bi-file-earmark-medical"></i> Historia
                                 </asp:LinkButton>
+
                             </div>
+
                         </ItemTemplate>
                     </asp:TemplateField>
 
