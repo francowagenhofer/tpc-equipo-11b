@@ -9,11 +9,13 @@ namespace Dominio {
     {
         public int Id { get; set; }
         public int UsuarioId { get; set; }
+        public int EspecialidadId { get; set; }
         public string Matricula { get; set; } = string.Empty;
         public bool Activo { get; set; }
 
         public virtual Usuario Usuario { get; set; }
         public Especialidad Especialidad { get; set; }
+        public List<ObraSocial> ObrasSociales { get; set; } = new List<ObraSocial>();
 
     }
 }

@@ -8,13 +8,14 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="contenido" runat="server">
 
     <div class="card card-custom p-4 shadow-sm border-0 mx-auto" style="max-width: 600px;">
-        <h2 class="fw-bold mb-1"><asp:Literal ID="litTitulo" runat="server" Text="Registrar Nuevo Turno" /></h2>
+        <h2 class="fw-bold mb-1">
+            <asp:Literal ID="litTitulo" runat="server" Text="Registrar Nuevo Turno" /></h2>
         <p class="text-muted mb-4">Selecciona paciente, médico y la fecha del turno.</p>
 
         <asp:Label ID="lblMensaje" runat="server" CssClass="alert d-block text-center" Visible="false"></asp:Label>
 
         <div class="row g-3">
-            
+
             <!-- Paciente con Autocompletado Premium (Select Oculto) -->
             <div class="col-12 position-relative">
                 <label class="form-label fw-semibold">Paciente</label>
@@ -24,11 +25,11 @@
                 </div>
                 <!-- El DropDownList real queda oculto y sincronizado -->
                 <asp:DropDownList ID="ddlPaciente"
-    runat="server"
-    ClientIDMode="Static"
-    style="display:none;">
-</asp:DropDownList>
-                
+                    runat="server"
+                    ClientIDMode="Static"
+                    Style="display: none;">
+                </asp:DropDownList>
+
                 <!-- Lista de sugerencias dinámica -->
                 <ul id="sugerenciasPaciente" class="list-group position-absolute w-100 mt-1 shadow-lg" style="display: none; z-index: 1000; max-height: 200px; overflow-y: auto;">
                 </ul>
@@ -43,11 +44,11 @@
                 </div>
                 <!-- El DropDownList real queda oculto y sincronizado -->
                 <asp:DropDownList ID="ddlMedico"
-runat="server"
-ClientIDMode="Static"
-style="display:none;">
-</asp:DropDownList>
-                
+                    runat="server"
+                    ClientIDMode="Static"
+                    Style="display: none;">
+                </asp:DropDownList>
+
                 <!-- Lista de sugerencias dinámica -->
                 <ul id="sugerenciasMedico" class="list-group position-absolute w-100 mt-1 shadow-lg" style="display: none; z-index: 1000; max-height: 200px; overflow-y: auto;">
                 </ul>
@@ -57,21 +58,21 @@ style="display:none;">
             <div class="col-md-6">
                 <label class="form-label fw-semibold">Fecha</label>
                 <asp:TextBox
-ID="txtFecha"
-runat="server"
-ClientIDMode="Static"
-placeholder="Seleccione una fecha..."
-CssClass="form-control" />
+                    ID="txtFecha"
+                    runat="server"
+                    ClientIDMode="Static"
+                    placeholder="Seleccione una fecha..."
+                    CssClass="form-control" />
             </div>
 
             <div class="col-md-6">
                 <label class="form-label fw-semibold">Hora (Turnos de 60 min)</label>
                 <asp:DropDownList
-ID="ddlHora"
-runat="server"
-ClientIDMode="Static"
-CssClass="form-select">
-</asp:DropDownList>
+                    ID="ddlHora"
+                    runat="server"
+                    ClientIDMode="Static"
+                    CssClass="form-select">
+                </asp:DropDownList>
             </div>
 
             <div class="col-12 d-flex justify-content-end gap-2 mt-4">

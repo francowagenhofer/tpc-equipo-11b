@@ -207,8 +207,8 @@ namespace Negocio {
 
                         M.IDMedico,
                         M.Matricula,
-
-                        E.IDEspecialidad,
+                        M.IDEspecialidad,
+                        
                         E.Nombre AS NombreEspecialidad,
                         E.Descripcion AS DescripcionEspecialidad,
 
@@ -232,11 +232,8 @@ namespace Negocio {
                     LEFT JOIN Medicos M
                         ON U.IDUsuario = M.IDUsuario
 
-                    LEFT JOIN MedicoEspecialidad ME
-                        ON M.IDMedico = ME.IDMedico
-
                     LEFT JOIN Especialidades E
-                        ON ME.IDEspecialidad = E.IDEspecialidad
+                        ON M.IDEspecialidad = E.IDEspecialidad
 
                     LEFT JOIN Pacientes P
                         ON U.IDUsuario = P.IDUsuario
@@ -278,14 +275,12 @@ namespace Negocio {
 
                         aux.Medico.Id = (int)datos.Lector["IDMedico"];
                         aux.Medico.Matricula = datos.Lector["Matricula"].ToString();
+                        aux.Medico.EspecialidadId = (int)datos.Lector["IDEspecialidad"];
 
-                        if (datos.Lector["IDEspecialidad"] != DBNull.Value)
-                        {
-                            aux.Medico.Especialidad = new Especialidad();
-                            aux.Medico.Especialidad.Id = (int)datos.Lector["IDEspecialidad"];
-                            aux.Medico.Especialidad.Nombre = datos.Lector["NombreEspecialidad"].ToString();
-                            aux.Medico.Especialidad.Descripcion = datos.Lector["DescripcionEspecialidad"] != DBNull.Value ? datos.Lector["DescripcionEspecialidad"].ToString() : "";
-                        }
+                        aux.Medico.Especialidad = new Especialidad();
+                        aux.Medico.Especialidad.Id = (int)datos.Lector["IDEspecialidad"];
+                        aux.Medico.Especialidad.Nombre = datos.Lector["NombreEspecialidad"].ToString();
+                        aux.Medico.Especialidad.Descripcion = datos.Lector["DescripcionEspecialidad"] != DBNull.Value ? datos.Lector["DescripcionEspecialidad"].ToString() : "";
                     }
 
                     if (datos.Lector["IDPaciente"] != DBNull.Value)

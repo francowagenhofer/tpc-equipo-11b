@@ -125,25 +125,6 @@ CREATE TABLE Pacientes (
 GO
 
 ----------------------------------------------
---               MEDICOS                         
-----------------------------------------------
-
-CREATE TABLE Medicos (
-    IDMedico INT PRIMARY KEY IDENTITY(1,1),
-
-    IDUsuario INT NOT NULL UNIQUE,
-
-    Matricula VARCHAR(50) NOT NULL UNIQUE,
-
-    Activo BIT NOT NULL DEFAULT 1,
-
-    CONSTRAINT FK_Medicos_Usuarios
-        FOREIGN KEY (IDUsuario)
-        REFERENCES Usuarios(IDUsuario)
-);
-GO
-
-----------------------------------------------
 --              ESPECIALIDADES                      
 ----------------------------------------------
 
@@ -155,6 +136,31 @@ CREATE TABLE Especialidades (
     Descripcion VARCHAR(300),
 
     Activo BIT NOT NULL DEFAULT 1
+);
+GO
+
+----------------------------------------------
+--               MEDICOS                         
+----------------------------------------------
+
+CREATE TABLE Medicos (
+    IDMedico INT PRIMARY KEY IDENTITY(1,1),
+
+    IDUsuario INT NOT NULL UNIQUE,
+
+	IDEspecialidad INT NOT NULL, 
+    
+	Matricula VARCHAR(50) NOT NULL UNIQUE,
+
+    Activo BIT NOT NULL DEFAULT 1,
+
+    CONSTRAINT FK_Medicos_Usuarios
+        FOREIGN KEY (IDUsuario)
+        REFERENCES Usuarios(IDUsuario),
+
+    CONSTRAINT FK_Medicos_Especialidades
+        FOREIGN KEY (IDEspecialidad)
+        REFERENCES Especialidades(IDEspecialidad)
 );
 GO
 
@@ -178,30 +184,6 @@ CREATE TABLE MedicoObraSocial (
 		REFERENCES ObrasSociales(IDObraSocial),
 
 	UNIQUE(IDMedico, IDObraSocial)
-);
-GO
-
-----------------------------------------------
---             MEDICO_ESPECIALIDAD                    
-----------------------------------------------
-
-CREATE TABLE MedicoEspecialidad (
-    IDMedicoEspecialidad INT PRIMARY KEY IDENTITY(1,1),
-
-    IDMedico INT NOT NULL,
-
-    IDEspecialidad INT NOT NULL,
-
-    CONSTRAINT UQ_MedicoEspecialidad
-        UNIQUE (IDMedico, IDEspecialidad),
-
-    CONSTRAINT FK_MedicoEspecialidad_Medicos
-        FOREIGN KEY (IDMedico)
-        REFERENCES Medicos(IDMedico),
-
-    CONSTRAINT FK_MedicoEspecialidad_Especialidades
-        FOREIGN KEY (IDEspecialidad)
-        REFERENCES Especialidades(IDEspecialidad)
 );
 GO
 
@@ -231,7 +213,6 @@ CREATE TABLE DisponibilidadMedico (
 );
 GO
 
-
 ----------------------------------------------
 --          DIAS NO DISPONIBLES (MEDICOS                 
 ----------------------------------------------
@@ -243,7 +224,7 @@ CREATE TABLE AusenciasMedico (
 
     Fecha DATE NOT NULL DEFAULT GETDATE(),
 
-    Motivo NVARCHAR(500)
+    Motivo NVARCHAR(500),
 
 	CONSTRAINT FK_DiasNoDisponibles_Medicos
 		FOREIGN KEY (IDMedico)
@@ -261,7 +242,7 @@ CREATE TABLE EstadoTurno (
 
     Nombre VARCHAR(50) NOT NULL UNIQUE,
 
-	Activo BIT NOT NULL DEFAULT 1,
+	Activo BIT NOT NULL DEFAULT 1
 );
 GO
 
@@ -286,7 +267,7 @@ CREATE TABLE Turnos (
 
     FechaModificacion DATETIME NULL,
 
-	IDEspecialidad INT NULL,
+	IDEspecialidad INT NOT NULL,
 
 	-- Evita que un médico tenga dos turnos en la misma fecha y hora
     CONSTRAINT UQ_Turno_Medico_FechaHora

@@ -106,8 +106,8 @@ INSERT INTO Especialidades (Nombre,Descripcion) VALUES
 ('Nutricion','Nutricion');
 GO
 
-INSERT INTO MedicoEspecialidad (IDMedico,IDEspecialidad) VALUES (1,1),(2,2),(3,3),(4,4),(5,5),(6,6);
-GO
+--INSERT INTO MedicoEspecialidad (IDMedico,IDEspecialidad) VALUES (1,1),(2,2),(3,3),(4,4),(5,5),(6,6);
+--GO
 
 INSERT INTO MedicoObraSocial (IDMedico,IDObraSocial) VALUES
 (1,1),

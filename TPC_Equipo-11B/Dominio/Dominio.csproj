@@ -47,7 +47,6 @@
     <Compile Include="Genero.cs" />
     <Compile Include="HistoriaClinica.cs" />
     <Compile Include="Medico.cs" />
-    <Compile Include="MedicoEspecialidad.cs" />
     <Compile Include="MedicoObraSocial.cs" />
     <Compile Include="ObraSocial.cs" />
     <Compile Include="Paciente.cs" />

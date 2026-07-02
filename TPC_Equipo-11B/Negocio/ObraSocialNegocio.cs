@@ -17,14 +17,25 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("SELECT IDObraSocial, Nombre, Activo FROM ObrasSociales");
+                datos.setearConsulta(@"
+                    SELECT
+                        IDObraSocial,
+                        Nombre,
+                        TipoPlan,
+                        Activo
+                    FROM ObrasSociales
+                    WHERE Activo = 1
+                    ORDER BY Nombre, TipoPlan");
+
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
                 {
                     ObraSocial aux = new ObraSocial();
+
                     aux.Id = (int)datos.Lector["IDObraSocial"];
                     aux.Nombre = (string)datos.Lector["Nombre"];
+                    aux.TipoPlan = (string)datos.Lector["TipoPlan"];
                     aux.Activo = (bool)datos.Lector["Activo"];
 
                     lista.Add(aux);
@@ -34,47 +45,23 @@ namespace Negocio
             }
             catch (Exception ex)
             {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
 
-                throw ex;
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
-        }
-        public int ObtenerIdObraSocial(string nombre)
-        {
-            AccesoDatos datos = new AccesoDatos();
-            try
-            {
-                datos.setearConsulta("SELECT IDObraSocial FROM ObrasSociales WHERE Nombre = @Nombre AND Activo = 1");
-                datos.setearParametro("@Nombre", nombre);
-                datos.ejecutarLectura();
-                if (datos.Lector.Read())
-                {
-                    return (int)datos.Lector["IDObraSocial"];
-                }
-                else
-                {
-                    return -1;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
-        }
         public void AgregarObraSocial(ObraSocial nuevaObraSocial)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("INSERT INTO ObrasSociales (Nombre, Activo) VALUES (@Nombre, 1)");
+                datos.setearConsulta("INSERT INTO ObrasSociales (Nombre, TipoPlan, Activo)\r\nVALUES (@Nombre, @TipoPlan, 1)");
                 datos.setearParametro("@Nombre", nuevaObraSocial.Nombre);
+                datos.setearParametro("@TipoPlan", nuevaObraSocial.TipoPlan);
+
                 datos.ejecutarAccion();
             }
             catch (Exception ex)
@@ -86,6 +73,7 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+        
         public void ReactivarObraSocial(int id)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -104,13 +92,15 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+        
         public void ModificarObraSocial(ObraSocial obraSocial)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("UPDATE ObrasSociales SET Nombre = @Nombre WHERE IDObraSocial = @Id");
+                datos.setearConsulta("UPDATE ObrasSociales SET Nombre = @Nombre, TipoPlan = @TipoPlan WHERE IDObraSocial = @Id");
                 datos.setearParametro("@Nombre", obraSocial.Nombre);
+                datos.setearParametro("@TipoPlan", obraSocial.TipoPlan);
                 datos.setearParametro("@Id", obraSocial.Id);
                 datos.ejecutarAccion();
             }
@@ -150,17 +140,20 @@ namespace Negocio
             try
             {
                 datos.setearConsulta(@"
-            SELECT TOP 1 OS.Nombre
-            FROM Pacientes P
-            INNER JOIN ObrasSociales OS
-                ON P.IDObraSocial = OS.IDObraSocial
-            GROUP BY OS.Nombre
-            ORDER BY COUNT(*) DESC");
+                    SELECT TOP 1
+                        OS.Nombre + ' (' + OS.TipoPlan + ')' AS ObraSocial
+                    FROM Pacientes P
+                    INNER JOIN ObrasSociales OS
+                        ON P.IDObraSocial = OS.IDObraSocial
+                    WHERE P.Activo = 1
+                      AND OS.Activo = 1
+                    GROUP BY OS.Nombre, OS.TipoPlan
+                    ORDER BY COUNT(*) DESC");
 
                 datos.ejecutarLectura();
 
                 if (datos.Lector.Read())
-                    return datos.Lector["Nombre"].ToString();
+                    return datos.Lector["ObraSocial"].ToString();
 
                 return "Sin datos";
             }

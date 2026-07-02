@@ -118,7 +118,7 @@
             </div>
 
             <div class="col-md-2 d-flex align-items-end">
-                <asp:Button ID="btnLimpiar" runat="server" Text="Limpiar" CssClass="btn btn-outline-secondary btn-sm w-100" OnClick="btnLimpiar_Click" />
+                <asp:Button ID="btnLimpiar" runat="server" Text="Limpiar" CssClass="btn btn-outline-secondary w-100" OnClick="btnLimpiar_Click" />
             </div>
         </div>
 
@@ -161,16 +161,18 @@
                         </ItemTemplate>
                     </asp:TemplateField>
 
-                    <asp:TemplateField HeaderText="Acciones">
+                    <asp:TemplateField HeaderText="Acciones"
+                        ItemStyle-CssClass="text-center"
+                        HeaderStyle-CssClass="text-center">
                         <ItemTemplate>
-                            <div class="d-flex gap-2">
+                            <div class="d-flex justify-content-center gap-2">
                                 <!-- Botón Modificar (siempre visible) -->
                                 <asp:LinkButton ID="btnModificar" runat="server"
                                     CssClass="btn btn-sm btn-outline-primary"
                                     ToolTip="Modificar turno"
                                     CommandName="Modificar"
                                     CommandArgument='<%# Eval("Id") %>'>
-                <i class="bi bi-pencil"></i> Modificar
+                                    <i class="bi bi-pencil"></i> Modificar
                                 </asp:LinkButton>
                                 <!-- Botón Cancelar -->
                                 <asp:LinkButton ID="btnCancelar" runat="server"

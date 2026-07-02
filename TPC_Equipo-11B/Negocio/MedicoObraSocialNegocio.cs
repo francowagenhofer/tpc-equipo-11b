@@ -17,22 +17,25 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta(
-                    @"SELECT
-                          O.IDObraSocial,
-                          O.Nombre,
-                          O.TipoPlan,
-                          O.Activo
+                datos.setearConsulta(@"
+                    SELECT
+                        O.IDObraSocial,
+                        O.Nombre,
+                        O.TipoPlan,
+                        O.Activo
 
                     FROM MedicoObraSocial MOS
 
                     INNER JOIN ObrasSociales O
-                           ON MOS.IDObraSocial = O.IDObraSocial
+                        ON MOS.IDObraSocial = O.IDObraSocial
 
-                    WHERE MOS.IDMedico = @IDMedico
-                    AND O.Activo = 1
+                    WHERE
+                        MOS.IDMedico = @IDMedico
+                        AND O.Activo = 1
 
-                    ORDER BY O.Nombre");
+                    ORDER BY
+                O.Nombre,
+                O.TipoPlan");
 
                 datos.setearParametro("@IDMedico", idMedico);
 
@@ -40,14 +43,16 @@ namespace Negocio
 
                 while (datos.Lector.Read())
                 {
-                    ObraSocial aux = new ObraSocial();
+                    ObraSocial obra = new ObraSocial();
 
-                    aux.Id = (int)datos.Lector["IDObraSocial"];
-                    aux.Nombre = (string)datos.Lector["Nombre"];
-                    aux.TipoPlan = (string)datos.Lector["TipoPlan"];
-                    aux.Activo = (bool)datos.Lector["Activo"];
+                    obra.Id = (int)datos.Lector["IDObraSocial"];
+                    obra.Nombre = (string)datos.Lector["Nombre"];
+                    obra.TipoPlan = datos.Lector["TipoPlan"] != DBNull.Value
+                        ? (string)datos.Lector["TipoPlan"]
+                        : string.Empty;
+                    obra.Activo = (bool)datos.Lector["Activo"];
 
-                    lista.Add(aux);
+                    lista.Add(obra);
                 }
 
                 return lista;
@@ -61,7 +66,7 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-
+        
         public List<Medico> ListarMedicosPorObraSocial(int idObraSocial)
         {
             List<Medico> lista = new List<Medico>();
@@ -126,7 +131,7 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-
+       
         public void AsociarObraSocial(int idMedico, int idObraSocial)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -149,7 +154,7 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-
+        
         public void DesasociarObraSocial(int idMedico, int idObraSocial)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -158,12 +163,37 @@ namespace Negocio
             {
                 datos.setearConsulta(
                     @"DELETE
-              FROM MedicoObraSocial
-              WHERE IDMedico = @IDMedico
-              AND IDObraSocial = @IDObraSocial");
+                    FROM MedicoObraSocial
+                    WHERE IDMedico = @IDMedico
+                    AND IDObraSocial = @IDObraSocial");
 
                 datos.setearParametro("@IDMedico", idMedico);
                 datos.setearParametro("@IDObraSocial", idObraSocial);
+
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void EliminarTodasLasObrasSociales(int idMedico)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                    DELETE
+                    FROM MedicoObraSocial
+                    WHERE IDMedico = @IDMedico");
+
+                datos.setearParametro("@IDMedico", idMedico);
 
                 datos.ejecutarAccion();
             }
@@ -198,7 +228,7 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-
+        
         public bool TieneObrasSociales(int idMedico)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -219,5 +249,6 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
     }
 }

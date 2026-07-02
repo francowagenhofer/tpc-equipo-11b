@@ -110,16 +110,18 @@
                         </ItemTemplate>
                     </asp:TemplateField>
 
-                    <asp:TemplateField HeaderText="Acciones">
+                    <asp:TemplateField HeaderText="Acciones"
+                        ItemStyle-CssClass="text-center"
+                        HeaderStyle-CssClass="text-center">
                         <ItemTemplate>
-                            <div class="d-flex gap-2">
+                                <div class="d-flex justify-content-center gap-2">
                                 <asp:LinkButton
                                     ID="btnPerfil"
                                     runat="server"
                                     CssClass="btn btn-sm btn-outline-info"
                                     CommandName="Perfil"
                                     CommandArgument='<%# Eval("Id") %>'>
-                                    <i class="bi bi-person-vcard"></i>
+                                    <i class="bi bi-person-vcard me-1"></i> Perfil
                                 </asp:LinkButton>
 
                                 <asp:LinkButton
@@ -129,7 +131,7 @@
                                     CommandName="Editar"
                                     Visible='<%# (bool)Eval("Activo") %>'
                                     CommandArgument='<%# Eval("Id") %>'>
-                                    <i class="bi bi-pencil"></i>
+                                     <i class="bi bi-pencil me-1"></i> Editar
                                 </asp:LinkButton>
 
                                 <asp:LinkButton
@@ -139,7 +141,7 @@
                                     CommandName="Eliminar"
                                     Visible='<%# (bool)Eval("Activo") %>'
                                     CommandArgument='<%# Eval("Id") %>'>
-                                    <i class="bi bi-trash"></i>
+                                     <i class="bi bi-trash me-1"></i> Eliminar
                                 </asp:LinkButton>
 
                                 <asp:LinkButton
@@ -149,7 +151,7 @@
                                     CommandName="Reactivar"
                                     Visible='<%# !(bool)Eval("Activo") %>'
                                     CommandArgument='<%# Eval("Id") %>'>
-                                    <i class="bi bi-arrow-clockwise"></i>
+                                    <i class="bi bi-arrow-clockwise me-1"></i> Reactivar
                                 </asp:LinkButton>
                             </div>
                         </ItemTemplate>

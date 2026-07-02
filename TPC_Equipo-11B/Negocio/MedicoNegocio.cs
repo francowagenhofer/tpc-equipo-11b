@@ -10,21 +10,39 @@ namespace Negocio
         // Listado
         public List<Medico> ListarMedicos()
         {
-
             List<Medico> lista = new List<Medico>();
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                datos.setearConsulta(
-                    "SELECT M.IDMedico, M.IDUsuario, M.Matricula, M.Activo, " +
-                    "U.Nombre, U.Apellido, U.Email, U.Telefono, " +
-                    "E.IDEspecialidad, E.Nombre AS Especialidad " +
-                    "FROM Medicos M " +
-                    "INNER JOIN Usuarios U ON M.IDUsuario = U.IDUsuario " +
-                    "INNER JOIN MedicoEspecialidad ME ON M.IDMedico = ME.IDMedico " +
-                    "INNER JOIN Especialidades E ON ME.IDEspecialidad = E.IDEspecialidad " +
-                    "ORDER BY M.Activo DESC, U.Apellido, U.Nombre");
+                datos.setearConsulta(@"
+                    SELECT
+                        M.IDMedico,
+                        M.IDUsuario,
+                        M.IDEspecialidad,
+                        M.Matricula,
+                        M.Activo,
+
+                        U.Nombre,
+                        U.Apellido,
+                        U.Email,
+                        U.Telefono,
+
+                        E.Nombre AS Especialidad
+
+                    FROM Medicos M
+
+                    INNER JOIN Usuarios U
+                        ON M.IDUsuario = U.IDUsuario
+
+                    INNER JOIN Especialidades E
+                        ON M.IDEspecialidad = E.IDEspecialidad
+
+                    ORDER BY
+                        M.Activo DESC,
+                        U.Apellido,
+                        U.Nombre");
+
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
@@ -33,6 +51,7 @@ namespace Negocio
 
                     aux.Id = (int)datos.Lector["IDMedico"];
                     aux.UsuarioId = (int)datos.Lector["IDUsuario"];
+                    aux.EspecialidadId = (int)datos.Lector["IDEspecialidad"];
                     aux.Matricula = (string)datos.Lector["Matricula"];
                     aux.Activo = (bool)datos.Lector["Activo"];
 
@@ -41,9 +60,7 @@ namespace Negocio
                     aux.Usuario.Nombre = (string)datos.Lector["Nombre"];
                     aux.Usuario.Apellido = (string)datos.Lector["Apellido"];
                     aux.Usuario.Email = (string)datos.Lector["Email"];
-                    aux.Usuario.Telefono = datos.Lector["Telefono"] != DBNull.Value
-                        ? (string)datos.Lector["Telefono"]
-                        : "";
+                    aux.Usuario.Telefono = datos.Lector["Telefono"] != DBNull.Value ? (string)datos.Lector["Telefono"] : string.Empty;
 
                     aux.Especialidad = new Especialidad();
                     aux.Especialidad.Id = (int)datos.Lector["IDEspecialidad"];
@@ -56,14 +73,12 @@ namespace Negocio
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
             finally
             {
                 datos.cerrarConexion();
             }
-
         }
         public Medico ObtenerMedicoPorId(int idMedico)
         {
@@ -71,15 +86,32 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta(
-                    "SELECT M.IDMedico, M.IDUsuario, M.Matricula, M.Activo, " +
-                    "U.Nombre, U.Apellido, U.Email, U.Telefono, U.Username, U.ImagenUrl, " +
-                    "E.IDEspecialidad, E.Nombre AS Especialidad " +
-                    "FROM Medicos M " +
-                    "INNER JOIN Usuarios U ON M.IDUsuario = U.IDUsuario " +
-                    "INNER JOIN MedicoEspecialidad ME ON M.IDMedico = ME.IDMedico " +
-                    "INNER JOIN Especialidades E ON ME.IDEspecialidad = E.IDEspecialidad " +
-                    "WHERE M.IDMedico = @idMedico");
+                datos.setearConsulta(@"
+                    SELECT
+                        M.IDMedico,
+                        M.IDUsuario,
+                        M.IDEspecialidad,
+                        M.Matricula,
+                        M.Activo,
+
+                        U.Nombre,
+                        U.Apellido,
+                        U.Email,
+                        U.Telefono,
+                        U.Username,
+                        U.ImagenUrl,
+
+                        E.Nombre AS Especialidad
+
+                    FROM Medicos M
+
+                    INNER JOIN Usuarios U
+                        ON M.IDUsuario = U.IDUsuario
+
+                    INNER JOIN Especialidades E
+                        ON M.IDEspecialidad = E.IDEspecialidad
+
+                    WHERE M.IDMedico = @idMedico");
 
                 datos.setearParametro("@idMedico", idMedico);
 
@@ -91,10 +123,12 @@ namespace Negocio
 
                     medico.Id = (int)datos.Lector["IDMedico"];
                     medico.UsuarioId = (int)datos.Lector["IDUsuario"];
+                    medico.EspecialidadId = (int)datos.Lector["IDEspecialidad"];
                     medico.Matricula = (string)datos.Lector["Matricula"];
                     medico.Activo = (bool)datos.Lector["Activo"];
 
                     medico.Usuario = new Usuario();
+
                     medico.Usuario.Id = (int)datos.Lector["IDUsuario"];
                     medico.Usuario.Nombre = (string)datos.Lector["Nombre"];
                     medico.Usuario.Apellido = (string)datos.Lector["Apellido"];
@@ -103,16 +137,21 @@ namespace Negocio
 
                     medico.Usuario.Telefono =
                         datos.Lector["Telefono"] != DBNull.Value
-                        ? (string)datos.Lector["Telefono"] : "";
-                   
+                        ? (string)datos.Lector["Telefono"]
+                        : string.Empty;
+
                     medico.Usuario.ImagenUrl =
                         datos.Lector["ImagenUrl"] != DBNull.Value
-                        ? (string)datos.Lector["ImagenUrl"] : "";
-
+                        ? (string)datos.Lector["ImagenUrl"]
+                        : string.Empty;
 
                     medico.Especialidad = new Especialidad();
                     medico.Especialidad.Id = (int)datos.Lector["IDEspecialidad"];
                     medico.Especialidad.Nombre = (string)datos.Lector["Especialidad"];
+
+                    // Cargar obras sociales del médico
+                    MedicoObraSocialNegocio negocioMedicoOS = new MedicoObraSocialNegocio();
+                    medico.ObrasSociales = negocioMedicoOS.ListarObrasSocialesPorMedico(medico.Id);
 
                     return medico;
                 }
@@ -135,21 +174,30 @@ namespace Negocio
             ValidarAlta(medico);
 
             UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
+            MedicoObraSocialNegocio medicoObraSocialNegocio = new MedicoObraSocialNegocio();
 
             int idUsuario = usuarioNegocio.RegistrarUsuario(medico.Usuario);
-            int idMedico = AgregarRegistroMedico(idUsuario, medico.Matricula);
+            int idMedico = AgregarRegistroMedico(idUsuario, medico.Especialidad.Id, medico.Matricula);
 
-            AgregarEspecialidad(idMedico, medico.Especialidad.Id);
+            foreach (ObraSocial obra in medico.ObrasSociales)
+                medicoObraSocialNegocio.AsociarObraSocial(idMedico, obra.Id);
         }
-        private int AgregarRegistroMedico(int idUsuario, string matricula)
+        private int AgregarRegistroMedico(int idUsuario, int idEspecialidad, string matricula)
         {
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                datos.setearConsulta("INSERT INTO Medicos (IDUsuario, Matricula, Activo) VALUES (@idUsuario, @matricula, 1); SELECT SCOPE_IDENTITY();");
+                datos.setearConsulta(@"
+                    INSERT INTO Medicos
+                        (IDUsuario, IDEspecialidad, Matricula, Activo)
+                    VALUES
+                        (@idUsuario, @idEspecialidad, @matricula, 1);
+
+                    SELECT SCOPE_IDENTITY();");
 
                 datos.setearParametro("@idUsuario", idUsuario);
+                datos.setearParametro("@idEspecialidad", idEspecialidad);
                 datos.setearParametro("@matricula", matricula);
 
                 datos.ejecutarLectura();
@@ -158,24 +206,6 @@ namespace Negocio
                     return Convert.ToInt32(datos.Lector[0]);
 
                 throw new Exception("No se pudo obtener el ID del médico.");
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
-        }
-        private void AgregarEspecialidad(int idMedico, int idEspecialidad)
-        {
-            AccesoDatos datos = new AccesoDatos();
-
-            try
-            {
-                datos.setearConsulta("INSERT INTO MedicoEspecialidad (IDMedico, IDEspecialidad) VALUES (@idMedico, @idEspecialidad)");
-
-                datos.setearParametro("@idMedico", idMedico);
-                datos.setearParametro("@idEspecialidad", idEspecialidad);
-
-                datos.ejecutarAccion();
             }
             finally
             {
@@ -206,10 +236,16 @@ namespace Negocio
             ValidarModificacion(medico);
 
             UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
+            MedicoObraSocialNegocio medicoObraSocialNegocio = new MedicoObraSocialNegocio();
+
             usuarioNegocio.ModificarUsuario(medico.Usuario);
+
             ModificarRegistroMedico(medico);
 
-            ModificarEspecialidad(medico.Id, medico.Especialidad.Id);
+            medicoObraSocialNegocio.EliminarTodasLasObrasSociales(medico.Id);
+
+            foreach (ObraSocial obra in medico.ObrasSociales)
+                medicoObraSocialNegocio.AsociarObraSocial(medico.Id, obra.Id);
         }
         private void ModificarRegistroMedico(Medico medico)
         {
@@ -217,28 +253,16 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("UPDATE Medicos SET Matricula = @matricula WHERE IDMedico = @idMedico");
+                datos.setearConsulta(@"
+                    UPDATE Medicos
+                    SET
+                        Matricula = @matricula,
+                        IDEspecialidad = @idEspecialidad
+                    WHERE IDMedico = @idMedico");
 
                 datos.setearParametro("@idMedico", medico.Id);
                 datos.setearParametro("@matricula", medico.Matricula);
-
-                datos.ejecutarAccion();
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
-        }
-        private void ModificarEspecialidad(int idMedico, int idEspecialidad)
-        {
-            AccesoDatos datos = new AccesoDatos();
-
-            try
-            {
-                datos.setearConsulta("UPDATE MedicoEspecialidad SET IDEspecialidad = @idEspecialidad WHERE IDMedico = @idMedico");
-
-                datos.setearParametro("@idMedico", idMedico);
-                datos.setearParametro("@idEspecialidad", idEspecialidad);
+                datos.setearParametro("@idEspecialidad", medico.Especialidad.Id);
 
                 datos.ejecutarAccion();
             }
@@ -282,6 +306,9 @@ namespace Negocio
 
             if (medico.Especialidad == null || medico.Especialidad.Id == 0)
                 throw new Exception("Debe seleccionar una especialidad.");
+
+            if (medico.ObrasSociales == null || medico.ObrasSociales.Count == 0)
+                throw new Exception("Debe seleccionar al menos una obra social.");
         }
         private void ValidarModificacion(Medico medico)
         {
@@ -297,6 +324,9 @@ namespace Negocio
 
             if (medico.Especialidad == null || medico.Especialidad.Id == 0)
                 throw new Exception("Debe seleccionar una especialidad.");
+
+            if (medico.ObrasSociales == null || medico.ObrasSociales.Count == 0)
+                throw new Exception("Debe seleccionar al menos una obra social.");
         }
         private void ValidarEliminacion(int idMedico)
         {
@@ -341,7 +371,7 @@ namespace Negocio
 
             if (medico.Activo)
                 throw new Exception("El médico ya se encuentra activo.");
-        }   
+        }
 
         private bool ExisteMatricula(string matricula)
         {

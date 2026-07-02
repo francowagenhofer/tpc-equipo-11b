@@ -18,6 +18,7 @@ namespace Presentación
             if (!IsPostBack)
             {
                 CargarEspecialidades();
+                CargarObrasSociales();
 
                 if (Request.QueryString["id"] != null)
                 {
@@ -51,6 +52,18 @@ namespace Presentación
             }
         }
 
+        private void CargarObrasSociales()
+        {
+            ObraSocialNegocio negocio = new ObraSocialNegocio();
+
+            cblObrasSociales.DataSource = negocio.ListarObrasSociales();
+
+            cblObrasSociales.DataTextField = "NombreCompleto";
+            cblObrasSociales.DataValueField = "Id";
+
+            cblObrasSociales.DataBind();
+        }
+
         private void CargarMedico(int idMedico)
         {
             MedicoNegocio negocio = new MedicoNegocio();
@@ -75,10 +88,15 @@ namespace Presentación
 
             ddlEspecialidad.SelectedValue = medico.Especialidad.Id.ToString();
 
+            foreach (ListItem item in cblObrasSociales.Items)
+            {
+                item.Selected = medico.ObrasSociales.Any(o => o.Id.ToString() == item.Value);
+            }
+
             if (!string.IsNullOrEmpty(medico.Usuario.ImagenUrl))
             {
-                imgPreview.ImageUrl = medico.Usuario.ImagenUrl;
-                imgPreview.Visible = true;
+                //imgPreview.ImageUrl = medico.Usuario.ImagenUrl;
+                //imgPreview.Visible = true;
                 ViewState["ImagenActual"] = medico.Usuario.ImagenUrl;
             }
         }
@@ -121,6 +139,7 @@ namespace Presentación
                     fuImagen.SaveAs(Server.MapPath(rutaImagen));
                 }
 
+
                 Medico medico = new Medico();
 
                 if (esEdicion)
@@ -135,6 +154,19 @@ namespace Presentación
                 {
                     Id = int.Parse(ddlEspecialidad.SelectedValue)
                 };
+
+                medico.ObrasSociales = new List<ObraSocial>();
+
+                foreach (ListItem item in cblObrasSociales.Items)
+                {
+                    if (item.Selected)
+                    {
+                        medico.ObrasSociales.Add(new ObraSocial
+                        {
+                            Id = int.Parse(item.Value)
+                        });
+                    }
+                }
 
                 medico.Usuario = new Usuario();
 

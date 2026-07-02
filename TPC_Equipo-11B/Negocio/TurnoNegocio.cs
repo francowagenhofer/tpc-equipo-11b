@@ -809,6 +809,7 @@ namespace Negocio {
             }
         }
 
+
         // ─── Dashboard ────────────────────────────────────────────────────────
 
         public int CantidadTurnosHoy()
