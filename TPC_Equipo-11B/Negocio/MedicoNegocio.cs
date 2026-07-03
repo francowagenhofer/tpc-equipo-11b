@@ -7,79 +7,6 @@ namespace Negocio
 {
     public class MedicoNegocio
     {
-        // Listado
-        public List<Medico> ListarMedicos()
-        {
-            List<Medico> lista = new List<Medico>();
-            AccesoDatos datos = new AccesoDatos();
-
-            try
-            {
-                datos.setearConsulta(@"
-                    SELECT
-                        M.IDMedico,
-                        M.IDUsuario,
-                        M.IDEspecialidad,
-                        M.Matricula,
-                        M.Activo,
-
-                        U.Nombre,
-                        U.Apellido,
-                        U.Email,
-                        U.Telefono,
-
-                        E.Nombre AS Especialidad
-
-                    FROM Medicos M
-
-                    INNER JOIN Usuarios U
-                        ON M.IDUsuario = U.IDUsuario
-
-                    INNER JOIN Especialidades E
-                        ON M.IDEspecialidad = E.IDEspecialidad
-
-                    ORDER BY
-                        M.Activo DESC,
-                        U.Apellido,
-                        U.Nombre");
-
-                datos.ejecutarLectura();
-
-                while (datos.Lector.Read())
-                {
-                    Medico aux = new Medico();
-
-                    aux.Id = (int)datos.Lector["IDMedico"];
-                    aux.UsuarioId = (int)datos.Lector["IDUsuario"];
-                    aux.EspecialidadId = (int)datos.Lector["IDEspecialidad"];
-                    aux.Matricula = (string)datos.Lector["Matricula"];
-                    aux.Activo = (bool)datos.Lector["Activo"];
-
-                    aux.Usuario = new Usuario();
-                    aux.Usuario.Id = (int)datos.Lector["IDUsuario"];
-                    aux.Usuario.Nombre = (string)datos.Lector["Nombre"];
-                    aux.Usuario.Apellido = (string)datos.Lector["Apellido"];
-                    aux.Usuario.Email = (string)datos.Lector["Email"];
-                    aux.Usuario.Telefono = datos.Lector["Telefono"] != DBNull.Value ? (string)datos.Lector["Telefono"] : string.Empty;
-
-                    aux.Especialidad = new Especialidad();
-                    aux.Especialidad.Id = (int)datos.Lector["IDEspecialidad"];
-                    aux.Especialidad.Nombre = (string)datos.Lector["Especialidad"];
-
-                    lista.Add(aux);
-                }
-
-                return lista;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
-        }
         public Medico ObtenerMedicoPorId(int idMedico)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -157,6 +84,162 @@ namespace Negocio
                 }
 
                 return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        
+        // Listado 
+        public List<Medico> ListarMedicos()
+        {
+            List<Medico> lista = new List<Medico>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT
+                        M.IDMedico,
+                        M.IDUsuario,
+                        M.IDEspecialidad,
+                        M.Matricula,
+                        M.Activo,
+
+                        U.Nombre,
+                        U.Apellido,
+                        U.Email,
+                        U.Telefono,
+
+                        E.Nombre AS Especialidad
+
+                    FROM Medicos M
+
+                    INNER JOIN Usuarios U
+                        ON M.IDUsuario = U.IDUsuario
+
+                    INNER JOIN Especialidades E
+                        ON M.IDEspecialidad = E.IDEspecialidad
+
+                    ORDER BY
+                        M.Activo DESC,
+                        U.Apellido,
+                        U.Nombre");
+
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Medico aux = new Medico();
+
+                    aux.Id = (int)datos.Lector["IDMedico"];
+                    aux.UsuarioId = (int)datos.Lector["IDUsuario"];
+                    aux.EspecialidadId = (int)datos.Lector["IDEspecialidad"];
+                    aux.Matricula = (string)datos.Lector["Matricula"];
+                    aux.Activo = (bool)datos.Lector["Activo"];
+
+                    aux.Usuario = new Usuario();
+                    aux.Usuario.Id = (int)datos.Lector["IDUsuario"];
+                    aux.Usuario.Nombre = (string)datos.Lector["Nombre"];
+                    aux.Usuario.Apellido = (string)datos.Lector["Apellido"];
+                    aux.Usuario.Email = (string)datos.Lector["Email"];
+                    aux.Usuario.Telefono = datos.Lector["Telefono"] != DBNull.Value ? (string)datos.Lector["Telefono"] : string.Empty;
+
+                    aux.Especialidad = new Especialidad();
+                    aux.Especialidad.Id = (int)datos.Lector["IDEspecialidad"];
+                    aux.Especialidad.Nombre = (string)datos.Lector["Especialidad"];
+
+                    lista.Add(aux);
+                }
+
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public List<Medico> ListarPorEspecialidadYObraSocial(int idEspecialidad, int idObraSocial)
+        {
+            List<Medico> lista = new List<Medico>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+                    SELECT DISTINCT
+                        M.IDMedico,
+                        M.IDUsuario,
+                        M.IDEspecialidad,
+                        M.Matricula,
+                        M.Activo,
+
+                        U.Nombre,
+                        U.Apellido,
+                        U.Email,
+                        U.Telefono,
+
+                        E.Nombre AS Especialidad
+
+                    FROM Medicos M
+
+                    INNER JOIN Usuarios U
+                        ON M.IDUsuario = U.IDUsuario
+
+                    INNER JOIN Especialidades E
+                        ON M.IDEspecialidad = E.IDEspecialidad
+
+                    INNER JOIN MedicoObraSocial MOS
+                        ON M.IDMedico = MOS.IDMedico
+
+                    WHERE
+                        M.Activo = 1
+                        AND M.IDEspecialidad = @idEspecialidad
+                        AND MOS.IDObraSocial = @idObraSocial
+
+                    ORDER BY
+                        U.Apellido,
+                        U.Nombre");
+
+                datos.setearParametro("@idEspecialidad", idEspecialidad);
+                datos.setearParametro("@idObraSocial", idObraSocial);
+
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Medico aux = new Medico();
+
+                    aux.Id = (int)datos.Lector["IDMedico"];
+                    aux.UsuarioId = (int)datos.Lector["IDUsuario"];
+                    aux.EspecialidadId = (int)datos.Lector["IDEspecialidad"];
+                    aux.Matricula = (string)datos.Lector["Matricula"];
+                    aux.Activo = (bool)datos.Lector["Activo"];
+
+                    aux.Usuario = new Usuario();
+                    aux.Usuario.Id = (int)datos.Lector["IDUsuario"];
+                    aux.Usuario.Nombre = (string)datos.Lector["Nombre"];
+                    aux.Usuario.Apellido = (string)datos.Lector["Apellido"];
+                    aux.Usuario.Email = (string)datos.Lector["Email"];
+                    aux.Usuario.Telefono = datos.Lector["Telefono"] != DBNull.Value ? datos.Lector["Telefono"].ToString() : "";
+
+                    aux.Especialidad = new Especialidad();
+                    aux.Especialidad.Id = (int)datos.Lector["IDEspecialidad"];
+                    aux.Especialidad.Nombre = datos.Lector["Especialidad"].ToString();
+
+                    lista.Add(aux);
+                }
+
+                return lista;
             }
             catch (Exception ex)
             {

@@ -551,7 +551,8 @@ namespace Negocio {
                         IDMedico,
                         FechaHora,
                         IDEstadoTurno,
-                        FechaCreacion
+                        FechaCreacion,
+                        IDEspecialidad
                     )
                     VALUES
                     (
@@ -560,13 +561,15 @@ namespace Negocio {
                         @idMedico,
                         @fechaHora,
                         2,
-                        GETDATE()
+                        GETDATE(),
+                        @idEspecialidad
                     )");
 
                 datos.setearParametro("@codigo", nuevo.Codigo);
                 datos.setearParametro("@idPaciente", nuevo.PacienteId);
                 datos.setearParametro("@idMedico", nuevo.MedicoId);
                 datos.setearParametro("@fechaHora", nuevo.FechaHora);
+                datos.setearParametro("@idEspecialidad", nuevo.Especialidad);
 
                 datos.ejecutarAccion();
                 return true;
@@ -807,6 +810,41 @@ namespace Negocio {
             {
                 datos.cerrarConexion();
             }
+        }
+
+        // ─── Nuevo Turno ────────────────────────────────────────────────────────
+
+        public DateTime? ObtenerPrimerHorarioDisponible(int idMedico)
+        {
+            // Busca disponibilidad desde hoy durante los próximos 60 días
+            for (int i = 0; i < 60; i++)
+            {
+                DateTime fecha = DateTime.Today.AddDays(i);
+
+                List<DateTime> ocupadas = ObtenerHorasOcupadas(idMedico, fecha);
+
+                // Horarios de una hora
+                for (int hora = 8; hora <= 19; hora++)
+                {
+                    DateTime candidato = fecha.AddHours(hora);
+
+                    // Si es hoy, no ofrecer horarios que ya pasaron
+                    if (candidato <= DateTime.Now)
+                        continue;
+
+                    // El médico no trabaja o está ausente
+                    if (!MedicoDisponibleEnFechaHora(idMedico, candidato))
+                        continue;
+
+                    // Ya existe un turno reservado
+                    if (ocupadas.Any(x => x == candidato))
+                        continue;
+
+                    return candidato;
+                }
+            }
+
+            return null;
         }
 
 
