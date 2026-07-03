@@ -38,6 +38,10 @@ namespace Negocio
                     aux.TipoPlan = (string)datos.Lector["TipoPlan"];
                     aux.Activo = (bool)datos.Lector["Activo"];
 
+
+                    System.Diagnostics.Debug.WriteLine(
+                      $"{aux.Id} - {aux.Nombre} - {aux.TipoPlan}");
+
                     lista.Add(aux);
                 }
 

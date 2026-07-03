@@ -69,7 +69,13 @@ namespace Presentacion
 
             foreach (ObraSocial obra in negocio.ListarObrasSociales())
             {
-                ddlFiltroObraSocial.Items.Add(new ListItem(obra.Nombre + " (" + obra.TipoPlan + ")", obra.Id.ToString()));
+                ddlFiltroObraSocial.Items.Add(new ListItem($"{obra.Nombre} - {obra.TipoPlan}", obra.Id.ToString()));
+            }
+
+            foreach (ListItem item in ddlFiltroObraSocial.Items)
+            {
+                System.Diagnostics.Debug.WriteLine(
+                    item.Text + " -> " + item.Value);
             }
         }
 
@@ -99,7 +105,7 @@ namespace Presentacion
                 }
 
                 ddlPaciente.Items.Clear();
-                ddlPaciente.Items.Add(new ListItem("-- Seleccione un paciente --", ""));
+                ddlPaciente.Items.Add(new ListItem("Seleccione un paciente", ""));
 
                 foreach (Paciente paciente in lista.OrderBy(p => p.Usuario.Apellido).ThenBy(p => p.Usuario.Nombre))
                 {
@@ -126,7 +132,7 @@ namespace Presentacion
                 List<Especialidad> lista = negocio.ListarEspecialidades();
 
                 ddlEspecialidad.Items.Clear();
-                ddlEspecialidad.Items.Add(new ListItem("-- Seleccione una especialidad --", ""));
+                ddlEspecialidad.Items.Add(new ListItem("Seleccione una especialidad", ""));
 
                 foreach (Especialidad especialidad in lista.OrderBy(e => e.Nombre))
                 {
@@ -144,7 +150,7 @@ namespace Presentacion
             try
             {
                 MedicoNegocio negocio = new MedicoNegocio();
-                List<Medico> lista = negocio.ListarPorEspecialidadYObraSocial(idEspecialidad, idObraSocial);
+                List<Medico> lista = negocio.ListarMedicosDisponibles(idEspecialidad, idObraSocial);
 
                 rptMedicos.DataSource = lista;
                 rptMedicos.DataBind();
@@ -162,6 +168,11 @@ namespace Presentacion
             {
                 MostrarMensaje("Error al cargar profesionales: " + ex.Message, "danger");
             }
+        }
+        
+        protected void txtBuscarPaciente_TextChanged(object sender, EventArgs e)
+        {
+            CargarPacientes();
         }
 
         protected void ddlFiltroObraSocial_SelectedIndexChanged(object sender, EventArgs e)
@@ -196,11 +207,11 @@ namespace Presentacion
 
                 lblPacienteSeleccionado.Text = paciente.Usuario.Apellido + ", " + paciente.Usuario.Nombre;
                 lblDNI.Text = paciente.DNI;
-                lblEdad.Text = CalcularEdad(paciente.FechaNacimiento) + " anios";
+                lblEdad.Text = CalcularEdad(paciente.FechaNacimiento) + " años";
 
                 if (paciente.ObraSocial != null)
                 {
-                    lblObraSocial.Text = paciente.ObraSocial.Nombre + " (" + paciente.ObraSocial.TipoPlan + ")";
+                    lblObraSocial.Text = $"{paciente.ObraSocial.Nombre} - {paciente.ObraSocial.TipoPlan}";
                     ddlFiltroObraSocial.SelectedValue = paciente.ObraSocial.Id.ToString();
                 }
                 else
@@ -302,7 +313,27 @@ namespace Presentacion
 
             if (medico != null)
             {
-                lblMedicoSeleccionado.Text = "Dr. " + medico.Usuario.Apellido + ", " + medico.Usuario.Nombre + " - MP " + medico.Matricula;
+                lblMedicoSeleccionado.Text = "Dr. " + medico.Usuario.Apellido + ", " + medico.Usuario.Nombre + " - " + medico.Matricula;
+            }
+
+            if (!string.IsNullOrEmpty(ddlFiltroObraSocial.SelectedValue))
+            {
+                MedicoObraSocialNegocio coberturaNegocio = new MedicoObraSocialNegocio();
+
+                int idObraSocialPaciente = Convert.ToInt32(ddlFiltroObraSocial.SelectedValue);
+
+                if (coberturaNegocio.AtiendeObraSocial(idMedico, idObraSocialPaciente))
+                {
+                    lblCoberturaTurno.Text = ddlFiltroObraSocial.SelectedItem.Text;
+                }
+                else
+                {
+                    lblCoberturaTurno.Text = "Consulta Particular";
+                }
+            }
+            else
+            {
+                lblCoberturaTurno.Text = "-";
             }
 
             CargarProximoTurnoDisponible(idMedico);
@@ -379,7 +410,6 @@ namespace Presentacion
 
             CargarHorasDisponibles(idMedico, DateTime.Parse(txtFecha.Text));
         }
-
 
         private void ReiniciarAgenda()
         {
@@ -618,6 +648,7 @@ namespace Presentacion
             rptMedicos.DataSource = null;
             rptMedicos.DataBind();
             pnlSinMedicos.Visible = false;
+            lblCoberturaTurno.Text = "-";
         }
 
         private void RecargarMedicosManteniendoSeleccion()

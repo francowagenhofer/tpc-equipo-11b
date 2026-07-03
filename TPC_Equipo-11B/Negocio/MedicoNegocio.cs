@@ -168,7 +168,7 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-        public List<Medico> ListarPorEspecialidadYObraSocial(int idEspecialidad, int idObraSocial)
+        public List<Medico> ListarMedicosDisponibles(int idEspecialidad, int idObraSocial)
         {
             List<Medico> lista = new List<Medico>();
             AccesoDatos datos = new AccesoDatos();
@@ -204,7 +204,16 @@ namespace Negocio
                     WHERE
                         M.Activo = 1
                         AND M.IDEspecialidad = @idEspecialidad
-                        AND MOS.IDObraSocial = @idObraSocial
+                        AND
+                        (
+                            MOS.IDObraSocial = @idObraSocial
+                            OR MOS.IDObraSocial =
+                            (
+                                SELECT IDObraSocial
+                                FROM ObrasSociales
+                                WHERE Nombre = 'Particular'
+                            )
+                        )
 
                     ORDER BY
                         U.Apellido,

@@ -569,7 +569,7 @@ namespace Negocio {
                 datos.setearParametro("@idPaciente", nuevo.PacienteId);
                 datos.setearParametro("@idMedico", nuevo.MedicoId);
                 datos.setearParametro("@fechaHora", nuevo.FechaHora);
-                datos.setearParametro("@idEspecialidad", nuevo.Especialidad);
+                datos.setearParametro("@idEspecialidad", nuevo.EspecialidadId);
 
                 datos.ejecutarAccion();
                 return true;

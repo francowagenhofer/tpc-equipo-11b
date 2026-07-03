@@ -35,7 +35,8 @@ namespace Negocio {
                           U.ImagenUrl,
                       
                           G.Descripcion AS Genero,
-                          OS.Nombre AS ObraSocial
+                          OS.Nombre AS ObraSocial,
+                          OS.TipoPlan
                       
                       FROM Pacientes P
                       
@@ -76,6 +77,7 @@ namespace Negocio {
                         aux.ObraSocial = new ObraSocial();
                         aux.ObraSocial.Id = (int)datos.Lector["IDObraSocial"];
                         aux.ObraSocial.Nombre = (string)datos.Lector["ObraSocial"];
+                        aux.ObraSocial.TipoPlan = (string)datos.Lector["TipoPlan"];
                     }
                     aux.Activo = (bool)datos.Lector["Activo"];
 
@@ -98,6 +100,7 @@ namespace Negocio {
                 datos.cerrarConexion();
             }
         }
+
         public Paciente ObtenerPacientePorId(int idPaciente)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -124,7 +127,8 @@ namespace Negocio {
                           U.FechaAlta,
                       
                           G.Descripcion AS Genero,
-                          OS.Nombre AS ObraSocial
+                          OS.Nombre AS ObraSocial,
+                          OS.TipoPlan
                       
                       FROM Pacientes P
                       
@@ -164,6 +168,7 @@ namespace Negocio {
                         aux.ObraSocial = new ObraSocial();
                         aux.ObraSocial.Id = (int)datos.Lector["IDObraSocial"];
                         aux.ObraSocial.Nombre = (string)datos.Lector["ObraSocial"];
+                        aux.ObraSocial.TipoPlan = (string)datos.Lector["TipoPlan"];
                     }
 
                     aux.Activo = (bool)datos.Lector["Activo"];

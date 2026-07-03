@@ -309,7 +309,7 @@
                 <div class="row g-3 align-items-end">
                     <div class="col-lg-5">
                         <label class="form-label fw-semibold" for="<%= txtBuscarPaciente.ClientID %>">Buscar paciente</label>
-                        <asp:TextBox ID="txtBuscarPaciente" runat="server" CssClass="form-control" placeholder="DNI, apellido o nombre" />
+                        <asp:TextBox ID="txtBuscarPaciente" runat="server" CssClass="form-control" placeholder="DNI, apellido o nombre" OnTextChanged="txtBuscarPaciente_TextChanged" />
                     </div>
                     <div class="col-lg-4">
                         <label class="form-label fw-semibold" for="<%= ddlFiltroObraSocial.ClientID %>">Obra social</label>
@@ -335,20 +335,23 @@
                                 <div class="pacientes-lista">
                             </HeaderTemplate>
                             <ItemTemplate>
-                                <asp:LinkButton ID="btnSeleccionarPaciente" runat="server"
-                                    CssClass="paciente-row"
-                                    CommandName="SeleccionarPaciente"
-                                    CommandArgument='<%# Eval("Id") %>'
-                                    CausesValidation="false">
-                                <div>
-                                    <div class="fw-semibold"><%# Eval("Usuario.Apellido") %>, <%# Eval("Usuario.Nombre") %></div>
-                                    <div class="paciente-meta">
-                                        <span>DNI <%# Eval("DNI") %></span>
-                                        <span><%# Eval("ObraSocial.Nombre") %> <%# Eval("ObraSocial.TipoPlan") %></span>
+                                <div class="paciente-row">
+                                    <div>
+                                        <div class="fw-semibold"><%# Eval("Usuario.Apellido") %>, <%# Eval("Usuario.Nombre") %></div>
+                                        <div class="paciente-meta">
+                                            <span>DNI <%# Eval("DNI") %></span>
+                                            <span><%# Eval("ObraSocial.Nombre") %> <%# Eval("ObraSocial.TipoPlan") %></span>
+                                        </div>
                                     </div>
+                                    <asp:LinkButton
+                                        ID="btnSeleccionarPaciente"
+                                        runat="server"
+                                        CommandName="SeleccionarPaciente"
+                                        CommandArgument='<%# Eval("Id") %>'
+                                        CausesValidation="false"
+                                        CssClass="btn btn-sm btn-outline-primary"
+                                        Text="Seleccionar" />
                                 </div>
-                                <span class="btn btn-sm btn-outline-primary">Seleccionar</span>
-                                </asp:LinkButton>
                             </ItemTemplate>
                             <FooterTemplate>
                                 </div>
@@ -397,13 +400,21 @@
 
                 <div class="seleccion-linea mt-3">
                     <div class="row g-2">
-                        <div class="col-md-5">
+                        <div class="col-md-4">
                             <small class="text-muted d-block">Especialidad</small>
                             <asp:Label ID="lblEspecialidadSeleccionada" runat="server" Text="-" CssClass="fw-semibold" />
                         </div>
-                        <div class="col-md-7">
+                        <div class="col-md-4">
                             <small class="text-muted d-block">Profesional</small>
                             <asp:Label ID="lblMedicoSeleccionado" runat="server" Text="Sin seleccionar" CssClass="fw-semibold" />
+                        </div>
+                           <div class="col-md-4">
+                            <small class="text-muted d-block">Cobertura</small>
+                            <asp:Label
+                                ID="lblCoberturaTurno"
+                                runat="server"
+                                Text="-"
+                                CssClass="fw-semibold" />
                         </div>
                     </div>
                 </div>
@@ -527,6 +538,9 @@
     </div>
 
     <script type="text/javascript">
+
+
+
         (function () {
             const fecha = document.getElementById("txtFecha");
             const medico = document.getElementById("hfMedicoSeleccionado");
@@ -534,6 +548,11 @@
             const ayudaFecha = document.getElementById("ayudaFecha");
             const horaHidden = document.getElementById("hfHoraSeleccionada");
             const idTurnoActual = <%= Request.QueryString["id"] != null ? Request.QueryString["id"] : "0" %>;
+
+<%--
+            const txt = document.getElementById("<%= txtBuscarPaciente.ClientID %>");
+        txt.addEventListener("input", function () {
+            __doPostBack("<%= txtBuscarPaciente.UniqueID %>", "");});--%>
 
             function hoyIso() {
                 const hoy = new Date();
